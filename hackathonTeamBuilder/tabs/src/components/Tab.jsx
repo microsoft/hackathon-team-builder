@@ -1,4 +1,5 @@
 import React from "react";
+import TBApp from "./teambuilder/TBApp";
 import {
  List
 } from '@fluentui/react-northstar';
@@ -143,6 +144,7 @@ render() {
     
     There are {categories.length} categories
     <hr/>
+    <TBApp/>
     <Welcome showFunction={ false } />
   </div>;
 }

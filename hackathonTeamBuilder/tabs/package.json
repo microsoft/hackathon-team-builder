@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.3.16",
+    "graphql": "^15.5.0",
+    "msal": "^1.4.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^1.2.1",
     "@fluentui/react-northstar": "^0.54.0",
     "@microsoft/teams-js": "^1.6.0",
     "@microsoft/teamsfx": "^0.2.0",
