@@ -1,6 +1,7 @@
 import React from 'react';
 import { Accordion, Icon, Card } from 'semantic-ui-react'
 import TeamListItem from './teamlistitem';
+var _ = require('agile');
 
 class TeamsList extends React.Component {
   constructor(props){
@@ -33,8 +34,8 @@ class TeamsList extends React.Component {
   }
   }
 
-  joinOrLeaveTeam=(type,id)=>{
-    this.props.Callback(type,id);
+  joinOrLeaveTeam=(type, id, name, isCreate, islead)=>{
+    this.props.Callback(type, id, name, isCreate, islead);
   }
 
   editTeam=(e)=>{
@@ -50,6 +51,9 @@ class TeamsList extends React.Component {
 }
   // {this.getTeamListItems(this.state.teams[c])}
   getChallengesList=()=>{
+    const n = this.state.challenges.sort();
+    
+    
     return this.state.challenges.map((c, index)=>(
       <div key={index} >
       <Accordion.Title        
@@ -70,16 +74,19 @@ class TeamsList extends React.Component {
     ));
   }
   getTeamListItems=(teamlist)=>{
-  return teamlist.map( (team) => ( 
-    <TeamListItem 
-      Callback={this.joinOrLeaveTeam} 
-      edit={this.editTeam}
-      key={team.id}
-      team={team}
-      isTeamMember={team.id===this.props.myteam}
-      hasTeam={this.props.myteam>0}
-      />
-  ))
+    const t = _.orderBy(teamlist, 'msTeamsChannel')
+    return t.map( (team) => ( 
+      <TeamListItem 
+        Callback={this.joinOrLeaveTeam} 
+        edit={this.editTeam}
+        key={team.id}
+        membership={this.props.membership}
+        team={team}
+        isTeamMember={team.id===this.props.myteam}
+        hasTeam={this.props.myteam>0}
+        islead={this.props.islead}
+        />
+    ))
   }
   
   render() {
