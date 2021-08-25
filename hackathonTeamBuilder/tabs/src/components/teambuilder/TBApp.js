@@ -59,6 +59,7 @@ class TBApp extends Component {
       },
     });
     const credential = new TeamsUserCredential();
+    //credential.login(this.state.apiScope);
     credential.getUserInfo()
       .then((res)=>{
         let nUser = this.state.user;
