@@ -1,13 +1,44 @@
 import React from "react";
 import {loadConfiguration , TeamsUserCredential} from "@microsoft/teamsfx";
-import TBApp from "./teambuilder/TBApp";
 import {
   Button,
  List,GroupedList,Accordion,ItemLayout,Image,Flex,Header,Text,Label
 } from '@fluentui/react-northstar';
 
 
-class Tab extends React.Component {
+class TeamsListPanelFluent extends React.Component {
+
+
+    constructor(props){
+        super(props);
+        this.state = {
+          teams: [],
+          challenges:[],
+          activeIndex: -1
+        }
+      }
+
+
+      componentDidUpdate(prevProps,prevState) {
+        if(prevProps.teams !== this.props.teams){
+          if(this.props.teams){
+            console.log(this.props.teams);
+            let newt=this.groupBy(this.props.teams,'challengeName');
+            let newc= Object.getOwnPropertyNames(newt);
+            console.log("newt");
+            console.log(newt);
+            console.log("newc");
+            console.log(newc);
+            this.setState({
+              teams:newt,
+              challenges:newc
+            });
+        }
+      }
+      }
+
+   
+      
   groupBy(array, property) {
     var hash = {};
     for (var i = 0; i < array.length; i++) {
@@ -56,7 +87,7 @@ getUsersTeams(jsonData){
     //obj.key3 = "value3";
 
   }
- // console.log(myKeyValuePairs);
+  //console.log(myKeyValuePairs);
   return myKeyValuePairs;
 }
 
@@ -65,7 +96,7 @@ getUsersTeams(jsonData){
 render() {
   
  
-  
+ 
 var users=this.getUsersTeams(teams);
 //console.log("users");
 //console.log(users);
@@ -134,8 +165,8 @@ var users=this.getUsersTeams(teams);
  // let users=this.getTeams(teams);
   return <div>
     
-    <TBApp key="12"/>
-   
+ 
+    <Accordion defaultActiveIndex={[0]} panels={panels} />
    
     
      
@@ -144,4 +175,6 @@ var users=this.getUsersTeams(teams);
   </div>;
 }
 }
-export default Tab;
+export default TeamsListPanelFluent;
+
+

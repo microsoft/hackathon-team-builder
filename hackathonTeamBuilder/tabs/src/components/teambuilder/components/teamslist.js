@@ -24,8 +24,13 @@ class TeamsList extends React.Component {
   componentDidUpdate(prevProps,prevState) {
     if(prevProps.teams !== this.props.teams){
       if(this.props.teams){
+        //console.log(this.props.teams);
         let newt=this.groupBy(this.props.teams,'challengeName');
         let newc= Object.getOwnPropertyNames(newt);
+        //console.log("newt");
+        //console.log(newt);
+        //console.log("newc");
+        //console.log(newc);
         this.setState({
           teams:newt,
           challenges:newc

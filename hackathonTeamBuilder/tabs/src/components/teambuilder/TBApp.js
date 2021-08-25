@@ -9,6 +9,7 @@ import { Message } from 'semantic-ui-react'
 import User from './apis/user';
 import Team from './apis/team';
 import {loadConfiguration , TeamsUserCredential} from "@microsoft/teamsfx";
+import TeamListItemFluent from './components/TeamsListItemFluent';
 
 class TBApp extends Component {
   constructor(props) {
@@ -195,27 +196,13 @@ class TBApp extends Component {
       return (
         // <div class="ui active centered inline loader"></div> 
         <Message header='Contact Support!' content='User is not found or TeamBuilder API is down. Please ask for help in general channel.' />
-      );
+      ); //<TeamsList edit={this.toggleShowCreate} membership={this.changeTeamMembership} Callback={this.changeTeamMembership}  />
     } else if (this.state.enableTeamBuilder) {
       return (
         <div className="ui">
-          <div id="TeamBuilder">
-            {this.state.user.myteam ?
-              <div hidden={this.state.showCreate}>
-                <h2>Your Team </h2>
-                <div className="ui special fluid">
-                  <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
-                    islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
-
-                </div>
-              </div>
-              :
-              <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
-            }
-            <TeamForm visible={this.state.showCreate} activityPoints={this.activityPoints} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} cancel={this.toggleShowCreate} />
-            <br /><h2>All Teams</h2>
-            <TeamsList edit={this.toggleShowCreate} membership={this.changeTeamMembership} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} islead={this.state.user.islead} />
-          </div>
+          <TeamListItemFluent myteam={this.state.user.myteam} teams={this.state.team.allteams} islead={this.state.user.islead}/>
+          
+          
         </div>
       );
     } else {
