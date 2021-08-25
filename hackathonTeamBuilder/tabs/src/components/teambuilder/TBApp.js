@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as Msal from "msal";
+
 import TeamsList from './components/teamslist';
 import gamification from './apis/gamification';
 import TeamForm from './components/createteam';
@@ -8,6 +8,7 @@ import GitHubUserEntry from './components/gituserentry-modal-hook';
 import { Message } from 'semantic-ui-react'
 import User from './apis/user';
 import Team from './apis/team';
+import {loadConfiguration , TeamsUserCredential} from "@microsoft/teamsfx";
 
 class TBApp extends Component {
   constructor(props) {
@@ -19,9 +20,9 @@ class TBApp extends Component {
         //    redirectUri:"/loggedin" 
       }
     };
-    let msalI = new Msal.UserAgentApplication(msalConfig);
+    
     this.state = {
-      msalInstance: msalI,
+    
       user: new User(),
       team: new Team(),
       username: "",
@@ -49,30 +50,36 @@ class TBApp extends Component {
   }
 
   componentDidMount() {
-    if (this.state.msalInstance.getAccount()) {
-      let id = this.state.msalInstance.getAccount();
-      let nUser = this.state.user;
-      nUser.email = id.userName;
-      this.getAccessToken()
-        .then((token)=>{
-        
-        this.setState({
-          loggedin: true,
-          user: nUser,
-          email: id.userName,
-          username: id.name,
-          team: new Team(token)
-      }, () => {
-        this.getUserInfo();
+    loadConfiguration({
+      authentication: {
+        initiateLoginEndpoint: process.env.REACT_APP_START_LOGIN_PAGE_URL,
+        simpleAuthEndpoint: process.env.REACT_APP_TEAMSFX_ENDPOINT,
+        clientId: process.env.REACT_APP_CLIENT_ID,
+      
+      },
+    });
+    const credential = new TeamsUserCredential();
+    credential.getUserInfo()
+      .then((res)=>{
+        let nUser = this.state.user;
+        nUser.email = res.preferredUserName;
+        this.setState(
+          {loggedin:true,user:nUser,email:res.preferredUserName,username:res.displayName})
+        credential.getToken(this.state.apiScope)
+          .then((res)=>{
+            this.setState({token:res.token});
+            this.setState({
+              team: new Team(res.token)
+          }, () => {
+            this.getUserInfo();
+          });
+          });
       });
-    })
-
-    } else {
-      let loginRequest = {
-        scopes: ["user.read"] // optional Array<string>
-      };
-      //this.state.msalInstance.loginRedirect(loginRequest);
-    }
+    
+    
+      
+     
+      
   }
 
   getAccessToken = async () => {
@@ -85,7 +92,7 @@ class TBApp extends Component {
   }
 
   getUserInfo = async () => {
-    let authToken = await this.getAccessToken();
+    let authToken = this.state.token;
 
     this.state.user.getUserID(authToken)
       .then(() => {
