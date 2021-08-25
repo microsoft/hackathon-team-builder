@@ -5,20 +5,21 @@
   "dependencies": {
     "@apollo/client": "^3.3.16",
     "@fluentui/react": "^8.29.1",
+    "agile": "^0.0.2",
+    "graphql": "^15.5.0",
+    "msal": "^1.4.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^1.2.1",
     "@fluentui/react-northstar": "^0.54.0",
     "@microsoft/teams-js": "^1.6.0",
     "@microsoft/teamsfx": "^0.2.0",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",
-    "graphql": "^15.5.0",
-    "msal": "^1.4.0",
     "msteams-react-base-component": "^3.1.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^4.0.3",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^1.2.1"
+    "react-scripts": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

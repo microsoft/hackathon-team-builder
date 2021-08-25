@@ -1,5 +1,5 @@
 import nh4h from './nh4h';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from '@apollo/client';
 import { gql } from '@apollo/client';
 const TEAMSQUERY=gql `
 query{
@@ -16,30 +16,51 @@ class Team {
   allteams;
   graphclient;
 
-  constructor(){
+  constructor(authToken){
+    const httpLink = new HttpLink({ uri: 'https://nh4hgrap.azurewebsites.net/api/hack' });
+
+    const authLink = new ApolloLink((operation, forward) => {    
+      // Use the setContext method to set the HTTP headers.
+      operation.setContext({
+        headers: {
+          authorization: authToken ? `Bearer ${authToken}` : ''
+        }
+      });
+    
+      // Call the next link in the middleware chain.
+      return forward(operation);
+    });
+
     this.allteams=[];
     this.graphclient = new ApolloClient({
-      uri: Team.GRAPHAPIURL,
-      cache: new InMemoryCache()
+      link: authLink.concat(httpLink),
+      cache: new InMemoryCache(),
+      
     });
   }
 
-  getAllTeams=()=>{
+  getAllTeams = () => {
    return this.graphclient.query({
       query:TEAMSQUERY
     }).then((response)=>{
       this.allteams=response.data.teams;
     });
   }
-  createNewTeam=(body)=>{
-    return nh4h.post(Team.APIURL, body)
+
+  createNewTeam = (authToken, body) => {    
+    let apiClient = nh4h(authToken);
+
+    return apiClient.post(Team.APIURL, body)
           .then((response)=>{
+            console.log("in team createNewTeam", response)
             this.teamid=response.data.teamId;
           });
     
   }
-  editTeam=(teamid,body)=>{
-    return nh4h.put('/solutions/'+teamid,body );
+
+  editTeam = (authToken, teamid, body) => {
+    let apiClient = nh4h(authToken);    
+    return apiClient.put('/solutions/'+teamid,body );
   }
 }
 export default Team;

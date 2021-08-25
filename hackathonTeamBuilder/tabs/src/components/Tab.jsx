@@ -1,6 +1,6 @@
 import React from "react";
-
-//import TBApp from "./teambuilder/TBApp";
+import {loadConfiguration , TeamsUserCredential} from "@microsoft/teamsfx";
+import TBApp from "./teambuilder/TBApp";
 import {
   Button,
  List,GroupedList,Accordion,ItemLayout,Image,Flex,Header,Text,Label
@@ -66,6 +66,21 @@ getUsersTeams(jsonData){
 
 render() {
   
+  loadConfiguration({
+    authentication: {
+      initiateLoginEndpoint: '.',
+      simpleAuthEndpoint: "https://login.microsoftonline.com/e773e193-89d3-44d9-ae4e-17766699f674",
+      clientId: 'b3544b0c-1209-4fe8-b799-8f63a0179fa0',
+    },
+  });
+  const credential = new TeamsUserCredential();
+  const token="hi";
+  const scopes=["api://05fc1a93-6c0e-4af6-9424-368474961462/user_impersonation"];
+  const token = credential.getToken(scopes)
+  .then((res)=>{
+    console.log(res);
+    console.log(res);
+  }); 
 
  
 var users=this.getUsersTeams(teams);
@@ -136,7 +151,13 @@ console.log(users);
  // let users=this.getTeams(teams);
   return <div>
     
-    
+     {token?
+      <div>
+        got token
+      </div>
+      :<h2>Fetching Token</h2>
+    }
+    <TBApp/>
     <Accordion defaultActiveIndex={[0]} panels={panels} />
    
     
