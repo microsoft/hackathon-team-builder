@@ -74,7 +74,7 @@ render() {
     },
   });
   const credential = new TeamsUserCredential();
-  const token="hi";
+  //const token="hi";
   const scopes=["api://05fc1a93-6c0e-4af6-9424-368474961462/user_impersonation"];
   const token = credential.getToken(scopes)
   .then((res)=>{
