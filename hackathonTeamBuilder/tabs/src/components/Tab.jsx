@@ -66,71 +66,11 @@ render() {
   
  
   
-var users=this.getUsersTeams(teams);
-//console.log("users");
-//console.log(users);
-  const panels = [
-   
-    {
-      key: 'd',
-      title: 'Track 4 - New Models and Settings for Care',
-      content:<Flex gap="gap.medium" padding="padding.medium" debug>
-      <Flex.Item size="size.large">
-        <div
-          style={{
-            position: 'relative',
-          }}
-        >
-          <Header as="h3" content="Mentah" />
-          <Text  content="Access to and ability to receive mental healthcare, while helping patients to avoid stigma or judgments which might be associated with receiving said care and providing care where the patients are. One of the primary objectives is also to avoid undue burden or extra stress healthcare professionals." />
-          
-        </div>
-      </Flex.Item>
-  
-      <Flex.Item  >
-        
-        <Flex   gap="gap.medium" padding="padding.medium" vAlign="stretch"> 
 
 
-        <Flex  space="between"> 
-          <Header as="h4" content="Team 4.02" />
-          
-   
-          
-  
-          
-        </Flex>
-
-        
-          
-        <Flex   gap="gap.medium" padding="padding.medium">
-        {
-        users[1].users.map(color => (
-        <span key={color}>
-          <Label color="green" content={color.name} />{' '}
-        </span>
-      ))}
-     
-        
-
-        
-      </Flex>
-          
-  
-          
-        </Flex>
-
-        
-      </Flex.Item>
-
-      
-    </Flex>,
-    },
-  ];
-
-  let cmeta=this.groupBy(teams,'challengeName');
-  let categories= Object.getOwnPropertyNames(cmeta);
-  let test=this.getValues(teams);
+  //let cmeta=this.groupBy(teams,'challengeName');
+  //let categories= Object.getOwnPropertyNames(cmeta);
+  //let test=this.getValues(teams);
  // let users=this.getTeams(teams);
   return <div>
     

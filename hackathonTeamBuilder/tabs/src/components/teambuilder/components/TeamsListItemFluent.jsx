@@ -22,17 +22,13 @@ class TeamsListItemFluent extends React.Component {
       componentDidUpdate(prevProps,prevState) {
         if(prevProps.teams !== this.props.teams){
           if(this.props.teams){
-            console.log(this.props.teams);
             let newt=this.groupBy(this.props.teams,'challengeName');
             let newc= Object.getOwnPropertyNames(newt);
-            console.log("newt hey");
-            console.log(newt);
-            console.log("newc");
-            console.log(newc);
-            this.setState({
-              teams:newt,
-              challenges:newc
-            });
+           
+            //this.props.teams=newt;
+            
+    
+  
         }
       }
       }
@@ -95,155 +91,66 @@ getUsersTeams(jsonData){
 
 render() {
   
- console.log(this.state.teams);
- 
-var users=this.getUsersTeams(teams2);
+ //console.log(this.state.teams);
+  
+
+//var users=this.getUsersTeams(teams2);
 //console.log("users");
 //console.log(users);
-  const panels = [
-   
-    {
-      key: 'd',
-      title: "this.props.newc",
-      content:<Flex gap="gap.medium" padding="padding.medium" debug>
-      <Flex.Item size="size.large">
-        <div
-          style={{
-            position: 'relative',
-          }}
-        >
-          <Header as="h3" content="Mentah" />
-          <Text  content="Access to and ability to receive mental healthcare, while helping patients to avoid stigma or judgments which might be associated with receiving said care and providing care where the patients are. One of the primary objectives is also to avoid undue burden or extra stress healthcare professionals." />
-          
-        </div>
-      </Flex.Item>
   
-      <Flex.Item  >
-        
-        <Flex   gap="gap.medium" padding="padding.medium" vAlign="stretch"> 
-
-
-        <Flex  space="between"> 
-          <Header as="h4" content="Team 4.02" />
-          
-   
-          
-  
-          
-        </Flex>
-
-        
-          
-        <Flex   gap="gap.medium" padding="padding.medium">
-        {
-        users[1].users.map(color => (
-        <span key={color}>
-          <Label color="green" content={color.name} />{' '}
-        </span>
-      ))}
-     
-        
-
-        
-      </Flex>
-          
-  
-          
-        </Flex>
-
-        
-      </Flex.Item>
-
-      
-    </Flex>,
-    },
-  ];
 
   let cmeta=this.groupBy(this.props.teams,'challengeName');
-  let categories= Object.getOwnPropertyNames(cmeta);
-  let test=this.getValues(this.props.teams);
+ 
+  //this.props.teams=cmeta;
+
+  
+  
  // let users=this.getTeams(teams);
   return <div>
+
+
+      {cmeta!=null
+            ?   <Accordion  panels=
+                    {
+                    Object.entries(cmeta).map(([key,value]) => (
+                        {
+                        title: key,
+                        content:<div>
+                            {
+                            value.map(team => (
+                            <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
+                                <Flex.Item size="size.quarter">
+                                    <div style={{position: 'relative',}} >
+                                        <Header as="h3" content= {team.teamName} />
+                                        <Text  content={team.teamDescription} />
+                                    </div>
+                                </Flex.Item>
+                            
+                                <Flex.Item>
+                                        <Flex   gap="gap.medium" padding="padding.medium">
+                                            <div style={{position: 'relative',}} >
+                                                <Header as="h4" content={team.msTeamsChannel} />
+                                                    {
+                                                        team.Users.hackers.map(user => (
+                                                        <span key={user}>
+                                                            <Label color="green" content={user.name} />{' '}
+                                                        </span>
+                                                    ))}
+                                            </div>
+                                        </Flex>
+                                </Flex.Item>
+                            </Flex>
+                            ))}
+                        </div>
+                        }
+                    ))}
+                />
+            : <Button />
+          }
+
     
  
-    <Accordion defaultActiveIndex={[0]} panels=
-   
-    {
-        users[1].users.map(color => (
-
-
-            
-
-            {
-                key: 'd',
-                title: color.name,
-                content:<Flex gap="gap.medium" padding="padding.medium" debug>
-                <Flex.Item size="size.large">
-                  <div
-                    style={{
-                      position: 'relative',
-                    }}
-                  >
-                    <Header as="h3" content="Mentah" />
-                    <Text  content="Access to and ability to receive mental healthcare, while helping patients to avoid stigma or judgments which might be associated with receiving said care and providing care where the patients are. One of the primary objectives is also to avoid undue burden or extra stress healthcare professionals." />
-                    
-                  </div>
-                </Flex.Item>
-            
-                <Flex.Item  >
-                  
-                  <Flex   gap="gap.medium" padding="padding.medium" vAlign="stretch"> 
-          
-          
-                  <Flex  space="between"> 
-                    <Header as="h4" content="Team 4.02" />
-                    
-             
-                    
-            
-                    
-                  </Flex>
-          
-                  
-                    
-                  <Flex   gap="gap.medium" padding="padding.medium">
-                  {
-                  users[1].users.map(color => (
-                  <span key={color}>
-                    <Label color="green" content={color.name} />{' '}
-                  </span>
-                ))}
-               
-                  
-          
-                  
-                </Flex>
-                    
-            
-                    
-                  </Flex>
-          
-                  
-                </Flex.Item>
-          
-                
-              </Flex>,
-              }
-
-
-
-
-
-
-
-
-
-
-
-
-      ))}
-     
-      />
+  
     
   </div>;
 }
