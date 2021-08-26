@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react'
-import { loadConfiguration, TeamsUserCredential } from "@microsoft/teamsfx";
+import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamsList from './components/teamslist';
 import TeamForm from './components/createteam';
 import TeamListItem from './components/teamlistitem';
