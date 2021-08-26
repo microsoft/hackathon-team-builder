@@ -76,16 +76,35 @@ getUsersTeams(jsonData){
 
 
 render() {
-    const customTheme = {
+    const dontLeadButton = {
         siteVariables: {
           colorScheme: {
             brand: {
-              'background': 'darkred',
+              'background': 'darkorange',
+            }
+          }
+        }
+      }
+
+      const leadButton = {
+        siteVariables: {
+          colorScheme: {
+            brand: {
+              'background': 'green',
             }
           }
         }
       }
       
+      const editButton = {
+        siteVariables: {
+          colorScheme: {
+            brand: {
+              'background': 'darkblue',
+            }
+          }
+        }
+      }
   let cmeta=this.groupBy(this.props.teams,'challengeName');
  console.log(cmeta);
   return <div>
@@ -141,8 +160,8 @@ render() {
                                                
                                                 </span>
                                             ))}
-                                            {!this.props.isTeamMember ? (
-                                                !this.props.hasTeam ? (
+                                            {!this.props.isTeamMember ? (//this.props.isTeamMember
+                                                !this.props.hasTeam ? (//this.props.hasTeam 
                                                     <Flex   gap="gap.medium" padding="padding.medium">
                                                     <Button primary 
                                                         onClick={() => {
@@ -156,37 +175,106 @@ render() {
                                                         Join
                                                     </Button>
                                                     </Flex>
-                                                ) : (<Button />)
-                                            ) : (<br></br>)    
-                                            }
-
-                                                {this.props.islead ? (
-                                             
-                                             <Flex   gap="gap.medium" padding="padding.medium">
-                                                 <Provider theme={mergeThemes(teamsTheme, customTheme)}>
-                                             <Button primary 
-                                                 onClick={() => {
-                                                    this.joinOrLeaveTeam(
-                                                        true,
-                                                        this.props.team.id,
-                                                        this.props.team.teamName,
-                                                        0,
-                                                        1
-                                                      );
-                                                 }}
-                                                 >
-                                                 Don't Lead
-                                             </Button>
-                                             </Provider>
-                                             </Flex>
+                                                ) : (
 
 
+                                                           <br> </br>
+
+
+
+                                                )
                                             ) : (
 
-                                               <br></br>
+                                            <Flex   gap="gap.medium" padding="padding.medium">
+                                                <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
+                                                <Button primary 
+                                                        onClick={() => {
+                                                            this.joinOrLeaveTeam(
+                                                            false,
+                                                            team.id,
+                                                            team.teamName
+                                                            );
+                                                        }}
+                                                        >
+                                                        Leave
+                                                    </Button>
+                                                    </Provider>
+                                                <Provider theme={mergeThemes(teamsTheme, editButton)}>
+                                                <Button primary 
+                                                onClick={() => {
+                                                    this.editTeam()
+                                                   
+                                                }}
+                                                >
+                                                Edit
+                                            </Button>
+                                            </Provider>
+                                                {
+                                                    this.props.islead ? (//this.props.islead
 
-                                            )    
+                                                        <Flex   gap="gap.medium" padding="padding.medium">
+                                                        <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
+                                                    <Button primary 
+                                                        onClick={() => {
+                                                           this.joinOrLeaveTeam(
+                                                               true,
+                                                               team.id,
+                                                               team.teamName,
+                                                               0,
+                                                               1
+                                                             );
+                                                        }}
+                                                        >
+                                                        Don't Lead
+                                                    </Button>
+                                                    </Provider>
+                                                    </Flex>
+        
+                                                    ):(
+        
+        
+                                                    
+                                                        <Provider theme={mergeThemes(teamsTheme, leadButton)}>
+                                                    <Button primary 
+                                                        onClick={() => {
+                                                           this.joinOrLeaveTeam(
+                                                               true,
+                                                               team.id,
+                                                               team.teamName,
+                                                               0,
+                                                               1
+                                                             );
+                                                        }}
+                                                        >
+                                                        Lead
+                                                    </Button>
+                                                    </Provider>
+        
+                                                    )
+                                                }
+
+                                            
+                                            </Flex>
+                                              
+                                              
+
+
+
+
+                                              
+
+                                            )
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                  
                                             }
+
+                                           
                                             
                                         </div>
                                     </Flex>
