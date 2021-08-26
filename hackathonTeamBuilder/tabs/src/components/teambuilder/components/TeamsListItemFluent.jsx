@@ -33,7 +33,12 @@ class TeamsListItemFluent extends React.Component {
       }
       }
 
-   
+      joinOrLeaveTeam=(type, id, name, isCreate, islead)=>{
+        this.props.Callback(type, id, name, isCreate, islead);
+      }
+      editTeam=(e)=>{
+        this.props.edit();
+       }    
       
   groupBy(array, property) {
     var hash = {};
@@ -109,44 +114,64 @@ render() {
   return <div>
 
 
-      {cmeta!=null
-            ?   <Accordion  panels=
+
+    {cmeta!=null
+        ?   <Accordion  panels=
+                {
+                Object.entries(cmeta).map(([key,value]) => (
                     {
-                    Object.entries(cmeta).map(([key,value]) => (
+                    title: key,
+                    content:<div>
                         {
-                        title: key,
-                        content:<div>
-                            {
-                            value.map(team => (
-                            <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
-                                <Flex.Item size="size.quarter">
-                                    <div style={{position: 'relative',}} >
-                                        <Header as="h3" content= {team.teamName} />
-                                        <Text  content={team.teamDescription} />
-                                    </div>
-                                </Flex.Item>
-                            
-                                <Flex.Item>
-                                        <Flex   gap="gap.medium" padding="padding.medium">
-                                            <div style={{position: 'relative',}} >
-                                                <Header as="h4" content={team.msTeamsChannel} />
-                                                    {
-                                                        team.Users.hackers.map(user => (
-                                                        <span key={user}>
-                                                            <Label color="green" content={user.name} />{' '}
-                                                        </span>
-                                                    ))}
-                                            </div>
-                                        </Flex>
-                                </Flex.Item>
-                            </Flex>
-                            ))}
-                        </div>
-                        }
-                    ))}
-                />
-            : <Button />
-          }
+                        value.map(team => (
+                        <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
+                            <Flex.Item size="size.quarter">
+                                <div style={{position: 'relative',}} >
+                                    <Header as="h3" content= {team.teamName} />
+                                    <Text  content={team.teamDescription} />
+                                </div>
+                            </Flex.Item>
+                        
+                            <Flex.Item>
+                                    <Flex   gap="gap.medium" padding="padding.medium">
+                                        <div style={{position: 'relative',}}>
+                                            <Header as="h4" content={team.msTeamsChannel} />
+                                            {
+                                                team.Users.hackers.map(user => (
+                                                <span key={user}>
+                                                    <Label color="green" content={user.name} />{' '}
+                                                </span>
+                                            ))}
+                                            {!this.props.isTeamMember ? (
+                                                !this.props.hasTeam ? (
+                                                    <Flex   gap="gap.medium" padding="padding.medium">
+                                                    <Button primary 
+                                                        onClick={() => {
+                                                            this.joinOrLeaveTeam(
+                                                            true,
+                                                            team.id,
+                                                            team.teamName
+                                                            );
+                                                        }}
+                                                        >
+                                                        Join
+                                                    </Button>
+                                                    </Flex>
+                                                ) : (<Button />)
+                                            ) : (<Button />)    
+                                            }
+                                        </div>
+                                    </Flex>
+                            </Flex.Item>
+
+                        </Flex>
+                        ))}
+                    </div>
+                    }
+                ))}
+            />
+        : <Button />
+        }
 
     
  

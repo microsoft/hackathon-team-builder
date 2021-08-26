@@ -200,9 +200,10 @@ class TBApp extends Component {
     } else if (this.state.enableTeamBuilder) {
       return (
         <div className="ui">
-          <TeamListItemFluent myteam={this.state.user.myteam} teams={this.state.team.allteams} islead={this.state.user.islead}/>
+          <TeamListItemFluent edit={this.toggleShowCreate} membership={this.changeTeamMembership} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} islead={this.state.user.islead}/>
           
-          
+
+
         </div>
       );
     } else {
