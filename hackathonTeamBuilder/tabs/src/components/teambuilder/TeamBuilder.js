@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react'
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamsList from './components/teamslist';
@@ -19,15 +19,10 @@ function TeamBuilder() {
   const [showCreate, setShowCreate] = useState(false);
   const [t, setT] = useState(null);
   const [hackToken, setHackToken] = useState('');
+  const [existingTeamNames, setExistingTeamNames] = useState([]);
 
   const teamClient = Team();
   const credential = new TeamsUserCredential();
-
-  //   this.state = {
-  //     myteam: -1,
-  //     skillsWantedOptions: [],
-  //   };
-  // }
 
   // Helper functions ----------------------------------------
   async function activityPoints(activityId) {
@@ -44,6 +39,7 @@ function TeamBuilder() {
   async function getTeams(authToken) {
     let teams = await teamClient.getAllTeams(authToken);
     setTeam({...team, allteams: teams});
+    setExistingTeamNames(teams.map((t) => t.teamName));
     setMyTeam();
   }
 
@@ -61,7 +57,6 @@ function TeamBuilder() {
     body.modifiedBy = user.email;
     await teamClient.editTeam(hackToken, user.myteam, body);
 
-    //window.location.reload(false); // refreshes page to put the form in clean state
     setShowCreate(!showCreate);
     await getTeams(hackToken);
   }
@@ -119,18 +114,12 @@ function TeamBuilder() {
 
     getUserInfo();
 
-  }, []);
-
-  // let existingTeamNames = [];
-  // for (let team of team.allteams) {
-  //   existingTeamNames.push(team.teamName);
-  // }
+  }, []);  
 
   let buttonText = !showCreate ? 'Create a Team!' : 'Never Mind';
 
   if (!user.found) {
     return (
-      // <div class="ui active centered inline loader"></div> 
       <Message header='Contact Support!' content='User is not found or TeamBuilder API is down. Please ask for help in general channel.' />
     );
   } else if (enableTeamBuilder) {
@@ -149,7 +138,7 @@ function TeamBuilder() {
             :
             <button onClick={toggleShowCreate} className="ui positive button">{buttonText}</button>
           }
-          {/* <TeamForm visible={showCreate} activityPoints={activityPoints} teamNames={existingTeamNames} team={t} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} /> */}
+          <TeamForm visible={showCreate} activityPoints={activityPoints} teamNames={existingTeamNames} team={t} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
           <br /><h2>All Teams</h2>
           <TeamsList edit={toggleShowCreate} membership={changeTeamMembership} Callback={changeTeamMembership} myteam={user.myteam} teams={team.allteams} islead={user.islead} />
         </div>
