@@ -3,6 +3,7 @@ import React from "react";
 import { Provider, teamsTheme, Loader } from "@fluentui/react-northstar";
 import { HashRouter as Router, Redirect, Route } from "react-router-dom";
 import { useTeamsFx } from "./sample/lib/useTeamsFx";
+import { loadConfiguration } from "@microsoft/teamsfx";
 import Privacy from "./Privacy";
 import TermsOfUse from "./TermsOfUse";
 import Tab from "./Tab";
@@ -15,6 +16,7 @@ import TabConfig from "./TabConfig";
  */
 export default function App() {
   const { theme, loading } = useTeamsFx();
+
   return (
     <Provider theme={theme || teamsTheme} styles={{ backgroundColor: "#eeeeee" }}>
       <Router>

@@ -1,6 +1,7 @@
 import nh4h from './nh4h';
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from '@apollo/client';
 import { gql } from '@apollo/client';
+import graphapi from './graphapi';
 const TEAMSQUERY=gql `
 query{
   teams:getAllTeams{teamName id:teamId teamDescription   githubURL 
@@ -14,33 +15,14 @@ class Team {
     
   teamid;
   allteams;
-  graphclient;
 
-  constructor(authToken){
-    const httpLink = new HttpLink({ uri: 'https://nh4hgrap.azurewebsites.net/api/hack' });
-
-    const authLink = new ApolloLink((operation, forward) => {    
-      // Use the setContext method to set the HTTP headers.
-      operation.setContext({
-        headers: {
-          authorization: authToken ? `Bearer ${authToken}` : ''
-        }
-      });
-    
-      // Call the next link in the middleware chain.
-      return forward(operation);
-    });
-
+  constructor(){   
     this.allteams=[];
-    this.graphclient = new ApolloClient({
-      link: authLink.concat(httpLink),
-      cache: new InMemoryCache(),
-      
-    });
   }
 
-  getAllTeams = () => {
-   return this.graphclient.query({
+  getAllTeams = (authToken) => {
+    let client = graphapi(authToken);
+   return client.query({
       query:TEAMSQUERY
     }).then((response)=>{
       this.allteams=response.data.teams;
