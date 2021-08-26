@@ -16,7 +16,15 @@ import TabConfig from "./TabConfig";
  */
 export default function App() {
   const { theme, loading } = useTeamsFx();
-
+  
+  loadConfiguration({
+    authentication: {
+      initiateLoginEndpoint: process.env.REACT_APP_START_LOGIN_PAGE_URL,
+      simpleAuthEndpoint: process.env.REACT_APP_TEAMSFX_ENDPOINT,
+      clientId: process.env.REACT_APP_CLIENT_ID
+    }
+  });
+  
   return (
     <Provider theme={theme || teamsTheme} styles={{ backgroundColor: "#eeeeee" }}>
       <Router>

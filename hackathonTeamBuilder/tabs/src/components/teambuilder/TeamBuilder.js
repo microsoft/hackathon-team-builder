@@ -12,27 +12,18 @@ import Team from './apis/team';
 
 function TeamBuilder() {
   const [user, setUser] = useState(new User());
-  const [team, setTeam] = useState(new Team());
+  const [team, setTeam] = useState({});
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [enableTeamBuilder, setEnableTeamBuilder] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [t, setT] = useState(null);
   const [hackToken, setHackToken] = useState('');
-  const [shouldRefresh, setRefresh] = useState(true);
 
-  loadConfiguration({
-    authentication: {
-      initiateLoginEndpoint: process.env.REACT_APP_START_LOGIN_PAGE_URL,
-      simpleAuthEndpoint: process.env.REACT_APP_TEAMSFX_ENDPOINT,
-      clientId: process.env.REACT_APP_CLIENT_ID
-    }
-  });
-
+  const teamClient = Team();
   const credential = new TeamsUserCredential();
 
   //   this.state = {
-  //     t: null,
   //     myteam: -1,
   //     skillsWantedOptions: [],
   //   };
@@ -51,26 +42,28 @@ function TeamBuilder() {
   }
 
   async function getTeams(authToken) {
-    await team.getAllTeams(authToken);
+    let teams = await teamClient.getAllTeams(authToken);
+    setTeam({...team, allteams: teams});
     setMyTeam();
   }
 
   async function CreateNewTeam(body) {
     body.createdBy = user.email;
-    await team.createNewTeam(hackToken, body);
+    let newTeamId = await teamClient.createNewTeam(hackToken, body);
+    setTeam({...team, teamid: newTeamId});
 
-    await changeTeamMembership(true, team.teamid, body.teamName, 1, 1);
+    await changeTeamMembership(true, newTeamId, body.teamName, 1, 1);
     setShowCreate(!showCreate);
-    await team.getAllTeams(hackToken);
+    await getTeams(hackToken);
   }
 
   async function editTeam(body) {
     body.modifiedBy = user.email;
-    await team.editTeam(hackToken, user.myteam, body);
+    await teamClient.editTeam(hackToken, user.myteam, body);
 
     //window.location.reload(false); // refreshes page to put the form in clean state
     setShowCreate(!showCreate);
-    await team.getAllTeams(hackToken);
+    await getTeams(hackToken);
   }
 
   async function changeTeamMembership(join, id, name, isFromCreate = 0, islead = 0) {
@@ -80,7 +73,7 @@ function TeamBuilder() {
     }
 
     await user.changeTeamMembership(hackToken, join, id, name, isFromCreate, islead);
-    setRefresh(true);
+    //setRefresh(true);
   }
 
   function toggleShowCreate() {
@@ -94,6 +87,7 @@ function TeamBuilder() {
   }
 
   function setMyTeam() {
+    if (!team.allteams) return;
     let myTeamObj = team.allteams.find(obj => obj.id === user.myteam);
     setT(myTeamObj);
   }
@@ -121,12 +115,9 @@ function TeamBuilder() {
         setEnableTeamBuilder(false);
       }
 
-      setRefresh(false);
     }; // End getUserInfo()   
 
-    if (shouldRefresh) {
-      getUserInfo();
-    }
+    getUserInfo();
 
   }, []);
 
