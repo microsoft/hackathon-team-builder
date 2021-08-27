@@ -5,5 +5,19 @@
             "User.Read"
         ],
         "application": []
+    },
+    {
+        "resource": "api://f5b001f0-53b7-421c-9f76-4301dfae1dd8",
+        "delegated" : [
+            "api://f5b001f0-53b7-421c-9f76-4301dfae1dd8/user_impersonation"
+        ],
+        "application": []
+    },
+    {
+        "resource": "api://05fc1a93-6c0e-4af6-9424-368474961462",
+        "delegated" : [
+            "api://05fc1a93-6c0e-4af6-9424-368474961462/user_impersonation"
+        ],
+        "application": []
     }
 ]
