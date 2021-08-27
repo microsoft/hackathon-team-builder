@@ -42,6 +42,14 @@
             "options": {
                 "cwd": "${workspaceFolder}/tabs"
             }
+        },
+        {
+            "type": "teamsfx",
+            "command": "auth start",
+            "problemMatcher": [
+                "$teamsfx-auth-watch"
+            ],
+            "label": "teamsfx: auth start"
         }
     ]
 }

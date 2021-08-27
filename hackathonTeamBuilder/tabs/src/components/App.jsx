@@ -3,6 +3,7 @@ import React from "react";
 import { Provider, teamsTheme, Loader } from "@fluentui/react-northstar";
 import { HashRouter as Router, Redirect, Route } from "react-router-dom";
 import { useTeamsFx } from "./sample/lib/useTeamsFx";
+import { loadConfiguration } from "@microsoft/teamsfx";
 import Privacy from "./Privacy";
 import TermsOfUse from "./TermsOfUse";
 import Tab from "./Tab";
@@ -15,6 +16,15 @@ import TabConfig from "./TabConfig";
  */
 export default function App() {
   const { theme, loading } = useTeamsFx();
+  
+  loadConfiguration({
+    authentication: {
+      initiateLoginEndpoint: process.env.REACT_APP_START_LOGIN_PAGE_URL,
+      simpleAuthEndpoint: process.env.REACT_APP_TEAMSFX_ENDPOINT,
+      clientId: process.env.REACT_APP_CLIENT_ID
+    }
+  });
+  
   return (
     <Provider theme={theme || teamsTheme} styles={{ backgroundColor: "#eeeeee" }}>
       <Router>
