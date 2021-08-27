@@ -3,7 +3,7 @@ import { Message } from 'semantic-ui-react'
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
-import TeamListItem from './components/teamlistitem';
+import TeamListItem from './components/TeamListItem';
 import GitHubUserEntry from './components/gituserentry-modal-hook';
 import { HackAPIScope } from './apis/nh4h';
 import gamification, { GameAPIScope } from './apis/gamification';

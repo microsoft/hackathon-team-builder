@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Icon, Card } from 'semantic-ui-react'
+import { Accordion } from '@fluentui/react-northstar';
 import TeamListItem from './TeamListItem';
 var _ = require('agile');
 
@@ -45,23 +45,11 @@ function TeamsList(props) {
   function getChallengesList() {
     challenges.sort();
 
-    return challenges.map((c, index) => (
-      <div key={index} >
-        <Accordion.Title
-          active={activeIndex === index}
-          index={index}
-          onClick={handleClick}
-        >
-          <h3><Icon name='dropdown' />{c}</h3>
-        </Accordion.Title>
-        <Accordion.Content
-          active={activeIndex === index}
-        >
-          <Card.Group>
-            {getTeamListItems(teams[c])}
-          </Card.Group>
-        </Accordion.Content>
-      </div>
+    return challenges.map((c) => (
+      {
+        title: c,
+        content: getTeamListItems(teams[c])
+      }      
     ));
   }
 
@@ -85,8 +73,8 @@ function TeamsList(props) {
     <Accordion
       fluid
       styled
-      exclusive={false}>
-      {getChallengesList()}
+      exclusive={false}
+      panels={getChallengesList()}>
     </Accordion>
   );
 }
