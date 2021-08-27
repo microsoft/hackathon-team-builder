@@ -9,16 +9,10 @@ import {
 } from "semantic-ui-react";
 
 function TeamListItem(props) {
-  const DEF_TEAMSLINK =
-    "https://teams.microsoft.com/l/channel/19%3a6c83ba5af8664dc3b1a0d8a8a0774094%40thread.tacv2/General?groupId=abc0763c-f446-424c-ba5f-e374147c11a0&tenantId=e773e193-89d3-44d9-ae4e-17766699f674";
-
-  function getTeamsLink() {
-    return props.teamslink ? props.teamslink : DEF_TEAMSLINK;
-  }
 
   const hackers = [];
   if (props.team) {
-    if (props.team.Users.hackers.length == 0) {
+    if (props.team.Users.hackers.length === 0) {
       hackers.push(
         <Label>
           No Members or Lead
@@ -27,7 +21,7 @@ function TeamListItem(props) {
     }
     for (let user of props.team.Users.hackers) {
 
-      if (user.islead == 1) {
+      if (user.islead === 1) {
         hackers.push(
           <Label color="green" key={user.name}>
             {user.name}

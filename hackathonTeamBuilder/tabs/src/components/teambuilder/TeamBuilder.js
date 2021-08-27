@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react'
 import { TeamsUserCredential } from "@microsoft/teamsfx";
-import TeamsList from './components/teamslist';
-import TeamForm from './components/createteam';
+import TeamList from './components/TeamList';
+import CreateTeam from './components/CreateTeam';
 import TeamListItem from './components/teamlistitem';
 import GitHubUserEntry from './components/gituserentry-modal-hook';
 import { HackAPIScope } from './apis/nh4h';
@@ -138,9 +138,9 @@ function TeamBuilder() {
             :
             <button onClick={toggleShowCreate} className="ui positive button">{buttonText}</button>
           }
-          <TeamForm visible={showCreate} activityPoints={activityPoints} teamNames={existingTeamNames} team={t} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
+          <CreateTeam visible={showCreate} activityPoints={activityPoints} teamNames={existingTeamNames} team={t} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
           <br /><h2>All Teams</h2>
-          <TeamsList edit={toggleShowCreate} membership={changeTeamMembership} Callback={changeTeamMembership} myteam={user.myteam} teams={team.allteams} islead={user.islead} />
+          <TeamList edit={toggleShowCreate} membership={changeTeamMembership} Callback={changeTeamMembership} myteam={user.myteam} teams={team.allteams} islead={user.islead} />
         </div>
       </div>
     );

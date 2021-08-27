@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, Icon, Card } from 'semantic-ui-react'
-import TeamListItem from './teamlistitem';
+import TeamListItem from './TeamListItem';
 var _ = require('agile');
 
 function TeamsList(props) {
