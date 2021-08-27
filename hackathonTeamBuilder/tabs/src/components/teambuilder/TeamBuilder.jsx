@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Message } from 'semantic-ui-react'
+import { Message } from 'semantic-ui-react';
+import { Button } from '@fluentui/react-northstar';
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
@@ -136,7 +137,7 @@ function TeamBuilder() {
               </div>
             </div>
             :
-            <button onClick={toggleShowCreate} className="ui positive button">{buttonText}</button>
+            <Button primary onClick={toggleShowCreate}>{buttonText}</Button>
           }
           <CreateTeam visible={showCreate} activityPoints={activityPoints} teamNames={existingTeamNames} team={t} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
           <br /><h2>All Teams</h2>

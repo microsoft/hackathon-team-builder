@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dropdown, Label } from 'semantic-ui-react';
+import { Dropdown, Label, Button } from '@fluentui/react-northstar';
 
 function TeamForm(props) {
 
@@ -166,7 +166,11 @@ function TeamForm(props) {
     else {
       return true;
     }
+  }
 
+  function cancelClick(e) {
+    e.preventDefault();
+    props.cancel();
   }
 
   return (
@@ -221,8 +225,8 @@ function TeamForm(props) {
               :
               (isValid() ?
                 <div>
-                  <button className="ui primary button" type="submit">{props.team ? 'Save' : 'Create Team'}</button>
-                  <Label as='a' size='large' style={{ "padding": "12px 15px" }} onClick={props.cancel}>Cancel</Label>
+                  <Button primary type="submit">{props.team ? 'Save' : 'Create Team'}</Button>
+                  <Button onClick={cancelClick}>Cancel</Button>
                 </div>
                 :
                 <ul>
