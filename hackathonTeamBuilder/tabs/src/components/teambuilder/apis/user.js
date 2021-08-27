@@ -51,10 +51,8 @@ class User {
     let apiClient = nh4h(authToken);    
     return apiClient.post(User.APIURL + 'msemail', body)
       .then((response) => {
-
         if (response.data.returnError) {          
           this.found = false;
-          console.log("AM I HERE")
         } else {
           this.found = true;
           this.userid = response.data.userId;

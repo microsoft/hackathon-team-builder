@@ -71,7 +71,7 @@ function TeamListItem(props) {
               <Header as="h4" content={team.msTeamsChannel} />
               { hackers }
               {!props.isTeamMember ? (
-                props.hasTeam ? (
+                !props.hasTeam ? (
                   <Flex gap="gap.medium" padding="padding.medium">
                     <Button primary
                       onClick={() => {

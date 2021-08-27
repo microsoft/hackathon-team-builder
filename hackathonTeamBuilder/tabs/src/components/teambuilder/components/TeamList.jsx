@@ -60,10 +60,9 @@ function TeamsList(props) {
         Callback={joinOrLeaveTeam}
         edit={editTeam}
         key={team.id}
-        membership={props.membership}
         team={team}
         isTeamMember={team.id === props.myteam}
-        hasTeam={props.myteam > 0}
+        hasTeam={props.myteam}
         islead={props.islead}
       />
     ))

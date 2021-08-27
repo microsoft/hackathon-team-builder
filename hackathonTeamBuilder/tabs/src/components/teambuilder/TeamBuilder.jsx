@@ -14,11 +14,11 @@ import Team from './apis/team';
 function TeamBuilder() {
   const [user, setUser] = useState(new User());
   const [team, setTeam] = useState({});
+  const [myTeam, setMyTeam] = useState(null);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [enableTeamBuilder, setEnableTeamBuilder] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
-  const [t, setT] = useState(null);
   const [hackToken, setHackToken] = useState('');
   const [existingTeamNames, setExistingTeamNames] = useState([]);
 
@@ -31,8 +31,8 @@ function TeamBuilder() {
       UserEmail: email,
       ActivityId: activityId
     }
-    let token = await credential.getToken(GameAPIScope);
-    let client = gamification(token);
+    let auth = await credential.getToken(GameAPIScope);
+    let client = gamification(auth.token);
     // += TODO: Get activity name and show it to user! 
     await client.post("/useractivity/Points", body);
   }
@@ -41,7 +41,7 @@ function TeamBuilder() {
     let teams = await teamClient.getAllTeams(authToken);
     setTeam({...team, allteams: teams});
     setExistingTeamNames(teams.map((t) => t.teamName));
-    setMyTeam();
+    setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
   }
 
   async function CreateNewTeam(body) {
@@ -69,7 +69,8 @@ function TeamBuilder() {
     }
 
     await user.changeTeamMembership(hackToken, join, id, name, isFromCreate, islead);
-    //setRefresh(true);
+    await user.getTeam(hackToken);
+    setMyTeam(findTeam(user.myteam));
   }
 
   function toggleShowCreate() {
@@ -82,10 +83,10 @@ function TeamBuilder() {
     setEnableTeamBuilder(true);
   }
 
-  function setMyTeam() {
-    if (!team.allteams) return;
-    let myTeamObj = team.allteams.find(obj => obj.id === user.myteam);
-    setT(myTeamObj);
+  function findTeam(teamId) {
+    if (!team.allteams) return null;
+    let myTeamObj = team.allteams.find(obj => obj.id === teamId);
+    return myTeamObj;
   }
 
   // End Helper Functions-------------------------------------
@@ -127,21 +128,22 @@ function TeamBuilder() {
     return (
       <div className="ui">
         <div id="TeamBuilder">
-          {user.myteam ?
-            <div hidden={showCreate}>
+          {myTeam ?
+            <div>
               <h2>Your Team </h2>
               <div className="ui special fluid">
                 <TeamListItem Callback={changeTeamMembership} edit={toggleShowCreate}
-                  islead={user.islead} team={t} isTeamMember={true} />
-
+                  islead={user.islead} team={myTeam} isTeamMember={true} />
               </div>
             </div>
             :
             <Button primary onClick={toggleShowCreate}>{buttonText}</Button>
           }
-          <CreateTeam visible={showCreate} activityPoints={activityPoints} teamNames={existingTeamNames} team={t} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
+          {showCreate && 
+            <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
+          }
           <br /><h2>All Teams</h2>
-          <TeamList edit={toggleShowCreate} membership={changeTeamMembership} Callback={changeTeamMembership} myteam={user.myteam} teams={team.allteams} islead={user.islead} />
+          <TeamList edit={toggleShowCreate} Callback={changeTeamMembership} myteam={myTeam} teams={team.allteams} islead={user.islead} />
         </div>
       </div>
     );
