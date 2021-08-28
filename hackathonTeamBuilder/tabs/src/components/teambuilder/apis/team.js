@@ -13,9 +13,6 @@ function Team() {
 
   const APIURL = '/solutions';
 
-  var teamid = 0;
-  var allteams = [];
-
   async function getAllTeams(authToken) {
     let client = graphapi(authToken);
     let response = await client.query({ query: TEAMSQUERY });

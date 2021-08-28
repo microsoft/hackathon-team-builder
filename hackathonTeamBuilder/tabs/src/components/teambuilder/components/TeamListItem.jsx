@@ -116,7 +116,6 @@ function TeamListItem(props) {
                   </Provider>
                   {
                     props.islead ? (
-                      <Flex gap="gap.medium" padding="padding.medium">
                         <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
                           <Button primary
                             onClick={() => {
@@ -125,14 +124,13 @@ function TeamListItem(props) {
                                 team.id,
                                 team.teamName,
                                 0,
-                                1
+                                0
                               );
                             }}
                           >
                             Don't Lead
                           </Button>
                         </Provider>
-                      </Flex>
                     ) : (
                       <Provider theme={mergeThemes(teamsTheme, leadButton)}>
                         <Button primary

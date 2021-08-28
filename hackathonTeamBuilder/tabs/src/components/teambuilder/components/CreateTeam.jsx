@@ -5,22 +5,32 @@ function TeamForm(props) {
 
   function initChannelOptions() {
     const channelItems = [];
-    for (let i = 1; i < 21; i++) { channelItems.push({ key: 'Team 1.' + ('0' + i).slice(-2), text: 'Team 1.' + ('0' + i).slice(-2), value: 'Team 1.' + ('0' + i).slice(-2) }); }
-    for (let i = 1; i < 21; i++) { channelItems.push({ key: 'Team 2.' + ('0' + i).slice(-2), text: 'Team 2.' + ('0' + i).slice(-2), value: 'Team 2.' + ('0' + i).slice(-2) }); }
-    for (let i = 1; i < 21; i++) { channelItems.push({ key: 'Team 3.' + ('0' + i).slice(-2), text: 'Team 3.' + ('0' + i).slice(-2), value: 'Team 3.' + ('0' + i).slice(-2) }); }
-    for (let i = 1; i < 21; i++) { channelItems.push({ key: 'Team 4.' + ('0' + i).slice(-2), text: 'Team 4.' + ('0' + i).slice(-2), value: 'Team 4.' + ('0' + i).slice(-2) }); }
-    for (let i = 1; i < 21; i++) { channelItems.push({ key: 'Team 5.' + ('0' + i).slice(-2), text: 'Team 5.' + ('0' + i).slice(-2), value: 'Team 5.' + ('0' + i).slice(-2) }); }
+    for (let i = 1; i < 21; i++) { channelItems.push('Team 1.' + ('0' + i).slice(-2)); }
+    for (let i = 1; i < 21; i++) { channelItems.push('Team 2.' + ('0' + i).slice(-2)); }
+    for (let i = 1; i < 21; i++) { channelItems.push('Team 3.' + ('0' + i).slice(-2)); }
+    for (let i = 1; i < 21; i++) { channelItems.push('Team 4.' + ('0' + i).slice(-2)); }
+    for (let i = 1; i < 21; i++) { channelItems.push('Team 5.' + ('0' + i).slice(-2)); }
     return channelItems;
   }
 
   function initChallengeNameOptions() {
     return [
-      { key: 'Education', text: 'Track 1 - Vaccine Education & Delivery', value: 'Track 1 - Vaccine Education & Delivery' },
-      { key: 'MedicalDeserts', text: 'Track 2 - Medical Deserts', value: 'Track 2 - Medical Deserts' },
-      { key: 'Equity', text: 'Track 3 - Health Equity & Racial Disparities', value: 'Track 3 - Health Equity & Racial Disparities' },
-      { key: 'Care', text: 'Track 4 - New Models and Settings for Care', value: 'Track 4 - New Models and Settings for Care' },
-      { key: 'Open', text: 'Track 5 - Open Topic', value: 'Track 5 - Open Topic' }
+      { header: 'Education', content: 'Track 1 - Vaccine Education & Delivery'},
+      { header: 'MedicalDeserts', content: 'Track 2 - Medical Deserts'},
+      { header: 'Equity', content: 'Track 3 - Health Equity & Racial Disparities'},
+      { header: 'Care', content: 'Track 4 - New Models and Settings for Care'},
+      { header: 'Open', content: 'Track 5 - Open Topic'}
     ]
+  }
+
+  function initValidation() {
+    return {
+      challengeName: 'Select a challenge area.',
+      msTeamsChannel: 'Select a team channel.',
+      teamName: 'Team Name cannot be empty.',
+      teamDescription: 'Team Description cannot be empty.',
+
+    }
   }
 
   const [teamName, setTeamName] = useState('');
@@ -28,21 +38,29 @@ function TeamForm(props) {
   const [challengeName, setChallengeName] = useState('');
   const [channelOptions, setChannelOptions] = useState(initChannelOptions());
   const [challengeNameOptions, setChallengeNameOptions] = useState(initChallengeNameOptions());
-  const [skillsWanted, setSkillsWanted] = useState([]);
+  const [skillsWanted, setSkillsWanted] = useState('');
   const [msTeamsChannel, setChannel] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [created, setCreated] = useState(false);
 
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState(initValidation());
 
   useEffect(() => {
     if (props.team) {
       let t = props.team;
+      let currentErrors = formErrors;
 
       setTeamName(t.teamName);
       setTeamDescription(t.teamDescription);
       setChallengeName(t.challengeName);
       setChannel(t.msTeamsChannel);
+
+      if (t.teamName && t.teamName !== '') delete currentErrors['teamName'];
+      if (t.teamDescription && t.teamDescription !== '') delete currentErrors['teamDescription'];
+      if (t.challengeName && t.challengeName !== '') delete currentErrors['challengeName'];
+      if (t.msTeamsChannel && t.msTeamsChannel !== '') delete currentErrors['msTeamsChannel'];
+
+      setFormErrors(currentErrors);
     }
   }, [props.team]);
 
@@ -51,15 +69,6 @@ function TeamForm(props) {
     let currentFormErrors = formErrors;
 
     switch (name) {
-      case 'msTeamsChannel':
-        setChannel(value);
-        if (!value || value === '') {
-          currentFormErrors[name] = 'Team Channel cannot be empty';
-        }
-        else {
-          delete currentFormErrors[name];
-        }
-        break;
       case 'teamName':
         setTeamName(value);
         if (!value || value === '') {
@@ -86,19 +95,35 @@ function TeamForm(props) {
     setFormErrors(currentFormErrors);
   }
 
-  function handleInputChangeTrack(event) {
-    const { name, value } = event.target;
+  function handleDropDownChange(event, option) {
+    const { name, value } = option;
+    let currentFormErrors = formErrors;
+
     switch (name) {
       case 'challengeName':
-        setChallengeName(value);
+        delete currentFormErrors[name];
+        setChallengeName(value.content);
+        updateDropDown(value.content.match(/(\d+)/)[0]);
+        break;
+      case 'msTeamsChannel':
+        setChannel(value);
+        if (!value || value === '') {
+          currentFormErrors[name] = 'Team Channel cannot be empty';
+        }
+        else {
+          delete currentFormErrors[name];
+        }
+        break;
+      default:
+        break;
     }
 
-    updateDropDown(value.match(/(\d+)/)[0])
+    setFormErrors(currentFormErrors);
   }
 
   function updateDropDown(n) {
     let options = [];
-    for (let i = 1; i < 21; i++) { options.push({ key: 'Team ' + n + '.' + ('0' + i).slice(-2), text: 'Team ' + n + '.' + ('0' + i).slice(-2), value: 'Team ' + n + '.' + ('0' + i).slice(-2) }); }
+    for (let i = 1; i < 21; i++) { options.push('Team ' + n + '.' + ('0' + i).slice(-2)); }
     setChannelOptions(options);
   }
 
@@ -174,7 +199,7 @@ function TeamForm(props) {
   }
 
   return (
-    <div hidden={!props.visible} className="ui segment">
+    <div className="ui segment">
       {!created ?
         <form onSubmit={handleSubmit} className="ui form">
           {!props.team ? "" :
@@ -185,20 +210,20 @@ function TeamForm(props) {
           {props.team ? "" :
             <div className="field">
               <label>Challenge Area</label>
-              <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={challengeNameOptions} onChange={handleInputChangeTrack} defaultValue={challengeName} />
+              <Dropdown name="challengeName" placeholder='Select a challenge' fluid checkable items={challengeNameOptions} onChange={handleDropDownChange} defaultValue={challengeName} />
             </div>
           }
 
           <div className="field">
             <label>Assigned Team Channel</label>
-            <Dropdown name="msTeamsChannel" fluid selection options={channelOptions} onChange={handleInputChange} placeholder={msTeamsChannel} />
+            <Dropdown name="msTeamsChannel" fluid checkable items={channelOptions} onChange={handleDropDownChange} placeholder={msTeamsChannel} />
 
           </div>
 
           {props.team ? "" :
             <div className="field">
               <label>Team Name</label>
-              <input id="teamName" value={teamName} name="teamName" type="text" onChange={handleInputChange} className={
+              <input required id="teamName" value={teamName} name="teamName" type="text" onChange={handleInputChange} className={
                 formErrors && (formErrors.teamName || formErrors.duplicateName || formErrors.invalidName)
                   ? 'form-control error'
                   : 'form-control'
@@ -208,7 +233,7 @@ function TeamForm(props) {
 
           <div className="field">
             <label>Team description</label>
-            <textarea value={teamDescription} name="teamDescription" rows="2" onChange={handleInputChange}></textarea>
+            <textarea required value={teamDescription} name="teamDescription" rows="2" onChange={handleInputChange}></textarea>
           </div>
           {/* <div className="field">
               <label>We are looking for people with these skills (comma seperated (ex: C#, HIPAA, EPIC)</label>
@@ -223,13 +248,8 @@ function TeamForm(props) {
             {submitting ?
               <span className="ui">Creating...</span>
               :
-              (isValid() ?
-                <div>
-                  <Button primary type="submit">{props.team ? 'Save' : 'Create Team'}</Button>
-                  <Button onClick={cancelClick}>Cancel</Button>
-                </div>
-                :
-                <ul>
+              <div>
+                {!isValid() && <ul>
                   {Object.entries(formErrors || {}).map(([prop, value]) => {
                     return (
                       <li className='error-message' key={prop}>
@@ -238,7 +258,13 @@ function TeamForm(props) {
                     );
                   })}
                 </ul>
-              )
+                }
+                <div>
+                  <Button primary type="submit" disabled={!isValid()}>{props.team ? 'Save' : 'Create Team'}</Button>
+                  <Button onClick={cancelClick}>Cancel</Button>
+                </div>
+
+              </div>
             }
           </div>
         </form>

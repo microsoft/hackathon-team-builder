@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react';
-import { Button } from '@fluentui/react-northstar';
+import { Button, Loader } from '@fluentui/react-northstar';
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
@@ -21,6 +21,7 @@ function TeamBuilder() {
   const [showCreate, setShowCreate] = useState(false);
   const [hackToken, setHackToken] = useState('');
   const [existingTeamNames, setExistingTeamNames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const teamClient = Team();
   const credential = new TeamsUserCredential();
@@ -70,7 +71,7 @@ function TeamBuilder() {
 
     await user.changeTeamMembership(hackToken, join, id, name, isFromCreate, islead);
     await user.getTeam(hackToken);
-    setMyTeam(findTeam(user.myteam));
+    await getTeams(hackToken);
   }
 
   function toggleShowCreate() {
@@ -81,12 +82,6 @@ function TeamBuilder() {
     body.UserId = user.userid;
     await user.saveGitUserId(hackToken, user.userid, body);
     setEnableTeamBuilder(true);
-  }
-
-  function findTeam(teamId) {
-    if (!team.allteams) return null;
-    let myTeamObj = team.allteams.find(obj => obj.id === teamId);
-    return myTeamObj;
   }
 
   // End Helper Functions-------------------------------------
@@ -112,14 +107,17 @@ function TeamBuilder() {
         setEnableTeamBuilder(false);
       }
 
+      setLoading(false);
     }; // End getUserInfo()   
 
+    setLoading(true);
     getUserInfo();
 
   }, []);  
 
   let buttonText = !showCreate ? 'Create a Team!' : 'Never Mind';
 
+  {loading && <Loader label="Loading data..."/>}
   if (!user.found) {
     return (
       <Message header='Contact Support!' content='User is not found or TeamBuilder API is down. Please ask for help in general channel.' />
