@@ -21,7 +21,6 @@ function TeamBuilder() {
   const [showCreate, setShowCreate] = useState(false);
   const [hackToken, setHackToken] = useState('');
   const [existingTeamNames, setExistingTeamNames] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const teamClient = Team();
   const credential = new TeamsUserCredential();
@@ -115,17 +114,14 @@ function TeamBuilder() {
         setEnableTeamBuilder(false);
       }
 
-      setLoading(false);
     }; // End getUserInfo()   
 
-    setLoading(true);
     getUserInfo();
 
   }, []);  
 
   let buttonText = !showCreate ? 'Create a Team!' : 'Never Mind';
 
-  {loading && <Loader label="Loading data..."/>}
   if (!user.found) {
     return (
       <Message header='Contact Support!' content='User is not found or TeamBuilder API is down. Please ask for help in general channel.' />

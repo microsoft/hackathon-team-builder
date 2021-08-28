@@ -5,16 +5,8 @@ var _ = require('agile');
 
 function TeamsList(props) {
 
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [teams, setTeams] = useState([]);
   const [challenges, setChallenges] = useState([]);
-
-  function handleClick(e, titleProps) {
-    const { index } = titleProps;
-    const newIndex = activeIndex === index ? -1 : index;
-
-    setActiveIndex(newIndex);
-  }
 
   function groupBy(array, property) {
     var hash = {};
