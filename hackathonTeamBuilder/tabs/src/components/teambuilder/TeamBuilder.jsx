@@ -50,7 +50,7 @@ function TeamBuilder() {
     let newTeamId = await teamClient.createNewTeam(hackToken, body);
     setTeam({...team, teamid: newTeamId});
 
-    await changeTeamMembership(true, newTeamId, body.teamName, 1, 1);
+    await updateTeamMembership(true, newTeamId, body.teamName, 1, 1);
     setShowCreate(!showCreate);
     await getTeams(hackToken);
   }
@@ -63,13 +63,21 @@ function TeamBuilder() {
     await getTeams(hackToken);
   }
 
-  async function changeTeamMembership(join, id, name, isFromCreate = 0, islead = 0) {
+  async function handleChangeTeamMembership(join, id, name, isFromCreate = 0, islead = 0) {
     if (join) {
       // Activity Id for joining a team is 13
       await activityPoints(13);
     }
 
-    await user.changeTeamMembership(hackToken, join, id, name, isFromCreate, islead);
+    await updateTeamMembership(join, id, name, isFromCreate, islead);
+  }
+
+  async function handleLeadChange(id, name, islead) {
+    await updateTeamMembership(true, id, name, 0, islead);
+  }
+
+  async function updateTeamMembership(join, id, name, isCreate, islead) {
+    await user.changeTeamMembership(hackToken, join, id, name, isCreate, islead);
     await user.getTeam(hackToken);
     await getTeams(hackToken);
   }
@@ -130,8 +138,8 @@ function TeamBuilder() {
             <div>
               <h2>Your Team </h2>
               <div className="ui special fluid">
-                <TeamListItem Callback={changeTeamMembership} edit={toggleShowCreate}
-                  islead={user.islead} team={myTeam} isTeamMember={true} />
+                <TeamListItem Callback={handleChangeTeamMembership} edit={toggleShowCreate}
+                  islead={user.islead} team={myTeam} isTeamMember={true} onLeadChange={handleLeadChange} />
               </div>
             </div>
             :
@@ -141,7 +149,7 @@ function TeamBuilder() {
             <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
           }
           <br /><h2>All Teams</h2>
-          <TeamList edit={toggleShowCreate} Callback={changeTeamMembership} myteam={myTeam} teams={team.allteams} islead={user.islead} />
+          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={team.allteams} islead={user.islead} />
         </div>
       </div>
     );

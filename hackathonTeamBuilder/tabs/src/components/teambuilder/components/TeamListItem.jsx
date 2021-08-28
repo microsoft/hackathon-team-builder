@@ -119,11 +119,9 @@ function TeamListItem(props) {
                         <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
                           <Button primary
                             onClick={() => {
-                              props.Callback(
-                                true,
+                              props.onLeadChange(
                                 team.id,
                                 team.teamName,
-                                0,
                                 0
                               );
                             }}
@@ -135,11 +133,9 @@ function TeamListItem(props) {
                       <Provider theme={mergeThemes(teamsTheme, leadButton)}>
                         <Button primary
                           onClick={() => {
-                            props.Callback(
-                              true,
+                            props.onLeadChange(
                               team.id,
                               team.teamName,
-                              0,
                               1
                             );
                           }}
