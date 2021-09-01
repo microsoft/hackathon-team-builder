@@ -110,8 +110,7 @@ function TeamForm(props) {
       teamName: teamName,
       teamDescription: teamDescription,
       challengeName: challengeName,
-      skillsWanted: skillsWanted,
-      msTeamsChannel: msTeamsChannel
+      skillsWanted: skillsWanted
     }
     props.createTeam(body);
   }
@@ -121,8 +120,7 @@ function TeamForm(props) {
       teamName: props.team.teamName,
       teamDescription: teamDescription,
       challengeName: challengeName,
-      skillsWanted: skillsWanted,
-      msTeamsChannel: msTeamsChannel
+      skillsWanted: skillsWanted
     };
     props.editTeam(body);
   }
