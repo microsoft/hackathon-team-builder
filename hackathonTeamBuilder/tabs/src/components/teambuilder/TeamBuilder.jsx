@@ -10,6 +10,7 @@ import { HackAPIScope } from './apis/nh4h';
 import gamification, { GameAPIScope } from './apis/gamification';
 import User from './apis/user';
 import Team from './apis/team';
+import Challenge from './apis/challenge';
 import {createTeamButtonText} from './components/Themes'
 
 function TeamBuilder() {
@@ -22,8 +23,10 @@ function TeamBuilder() {
   const [showCreate, setShowCreate] = useState(false);
   const [hackToken, setHackToken] = useState('');
   const [existingTeamNames, setExistingTeamNames] = useState([]);
+  const [challengeOptions, setChallengeOptions] = useState([]);
 
   const teamClient = Team();
+  const challengeClient = Challenge();
   const credential = new TeamsUserCredential();
 
   // Helper functions ----------------------------------------
@@ -35,7 +38,8 @@ function TeamBuilder() {
     let auth = await credential.getToken(GameAPIScope);
     let client = gamification(auth.token);
     // += TODO: Get activity name and show it to user! 
-    await client.post("/useractivity/Points", body);
+    // Not required for this iteration
+    // await client.post("/useractivity/Points", body);
   }
 
   async function getTeams(authToken) {
@@ -43,6 +47,11 @@ function TeamBuilder() {
     setTeam({...team, allteams: teams});
     setExistingTeamNames(teams.map((t) => t.teamName));
     setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
+  }
+
+  async function fetchChallengeOptions(authToken) {
+    let items = await challengeClient.getAllChallenges(authToken);
+    setChallengeOptions(items);
   }
 
   async function CreateNewTeam(body) {
@@ -96,11 +105,13 @@ function TeamBuilder() {
   // End Helper Functions-------------------------------------
 
   useEffect(() => {
-    const getUserInfo = async () => {
+    const loadData = async () => {
       //credential.login(HackAPIScope); // uncomment for user consent
 
       let tokenResp = await credential.getToken(HackAPIScope);
       setHackToken(tokenResp.token);
+
+      await fetchChallengeOptions(tokenResp.token);
 
       let info = await credential.getUserInfo();
       user.email = info.preferredUserName; // usually email address
@@ -119,7 +130,7 @@ function TeamBuilder() {
 
     }; // End getUserInfo()   
 
-    getUserInfo();
+    loadData();
 
   }, []);  
 
@@ -169,7 +180,7 @@ function TeamBuilder() {
             
           }
           {showCreate && 
-            <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
+            <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
           }
           <br /><h2>All Teams</h2>
           <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={team.allteams} islead={user.islead} />
