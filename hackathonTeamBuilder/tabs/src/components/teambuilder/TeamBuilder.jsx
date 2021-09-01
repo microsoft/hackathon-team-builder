@@ -89,6 +89,7 @@ function TeamBuilder() {
   async function saveGitUser(body) {
     body.UserId = user.userid;
     await user.saveGitUserId(hackToken, user.userid, body);
+    await user.getUserID(hackToken);
     setEnableTeamBuilder(true);
   }
 
@@ -107,10 +108,11 @@ function TeamBuilder() {
       setUsername(info.displayName)
 
       await user.getUserID(tokenResp.token);
+      await user.getTeam(tokenResp.token);
+      await getTeams(tokenResp.token);
+
       if (user.githubuser) {
-        await user.getTeam(tokenResp.token);
         setEnableTeamBuilder(true);
-        await getTeams(tokenResp.token);
       } else {
         setEnableTeamBuilder(false);
       }
@@ -178,8 +180,8 @@ function TeamBuilder() {
     return (
       <div className="ui">
         {user.githubuser ?
-          <div class="ui active centered inline loader"></div> :
-          <GitHubUserEntry saveGH={saveGitUser} userid={user.userid} activityPoints={activityPoints} Callback={getTeams} />
+          <div class="ui active centered inline loader"></div> : 
+          <GitHubUserEntry saveGH={saveGitUser} userid={user.userid} activityPoints={activityPoints} />
         }
       </div>
     );
