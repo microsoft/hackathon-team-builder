@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react';
-import { Button, Loader, Flex } from '@fluentui/react-northstar';
+import { Button, Loader, Flex, Header,TeamCreateIcon } from '@fluentui/react-northstar';
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
@@ -10,6 +10,7 @@ import { HackAPIScope } from './apis/nh4h';
 import gamification, { GameAPIScope } from './apis/gamification';
 import User from './apis/user';
 import Team from './apis/team';
+import {createTeamButtonText} from './components/Themes'
 
 function TeamBuilder() {
   const [user, setUser] = useState(new User());
@@ -120,7 +121,7 @@ function TeamBuilder() {
 
   }, []);  
 
-  let buttonText = !showCreate ? 'Create a Team!' : 'Never Mind';
+  let buttonText = !showCreate ? createTeamButtonText : 'Never Mind';
 
   if (!user.found) {
     return (
@@ -131,15 +132,21 @@ function TeamBuilder() {
       <div className="ui">
         <div id="TeamBuilder">
           {myTeam ?
+          
+          <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
+          <Flex.Item >
             <div>
-              <h2>Your Team </h2>
+            <Header as="h3" content="Your Team" />
               <div className="ui special fluid">
                 <TeamListItem Callback={handleChangeTeamMembership} edit={toggleShowCreate}
                   islead={user.islead} team={myTeam} isTeamMember={true} onLeadChange={handleLeadChange} />
               </div>
             </div>
+            </Flex.Item>
+            </Flex>
             :
             <div > 
+           
 
               <Flex gap="gap.medium" padding="padding.large">
       
@@ -148,7 +155,7 @@ function TeamBuilder() {
                       <div>
                     <br></br>
                     <br></br>
-                    <Button fluid loader="Generate interface" primary onClick={toggleShowCreate}>{buttonText}</Button>
+                    <Button icon={<TeamCreateIcon />}  fluid loader="Generate interface" primary onClick={toggleShowCreate}>{buttonText}</Button>
 
                     </div>
                     </Flex.Item>
