@@ -3,30 +3,10 @@ import { Dropdown, Label, Button } from '@fluentui/react-northstar';
 
 function TeamForm(props) {
 
-  function initChannelOptions() {
-    const channelItems = [];
-    for (let i = 1; i < 21; i++) { channelItems.push('Team 1.' + ('0' + i).slice(-2)); }
-    for (let i = 1; i < 21; i++) { channelItems.push('Team 2.' + ('0' + i).slice(-2)); }
-    for (let i = 1; i < 21; i++) { channelItems.push('Team 3.' + ('0' + i).slice(-2)); }
-    for (let i = 1; i < 21; i++) { channelItems.push('Team 4.' + ('0' + i).slice(-2)); }
-    for (let i = 1; i < 21; i++) { channelItems.push('Team 5.' + ('0' + i).slice(-2)); }
-    return channelItems;
-  }
-
-  function initChallengeNameOptions() {
-    return [
-      { header: 'Education', content: 'Track 1 - Vaccine Education & Delivery'},
-      { header: 'MedicalDeserts', content: 'Track 2 - Medical Deserts'},
-      { header: 'Equity', content: 'Track 3 - Health Equity & Racial Disparities'},
-      { header: 'Care', content: 'Track 4 - New Models and Settings for Care'},
-      { header: 'Open', content: 'Track 5 - Open Topic'}
-    ]
-  }
-
   function initValidation() {
     return {
       challengeName: 'Select a challenge area.',
-      msTeamsChannel: 'Select a team channel.',
+      //msTeamsChannel: 'Select a team channel.',
       teamName: 'Team Name cannot be empty.',
       teamDescription: 'Team Description cannot be empty.',
     }
@@ -35,8 +15,7 @@ function TeamForm(props) {
   const [teamName, setTeamName] = useState('');
   const [teamDescription, setTeamDescription] = useState('');
   const [challengeName, setChallengeName] = useState('');
-  const [channelOptions, setChannelOptions] = useState(initChannelOptions());
-  const [challengeNameOptions, setChallengeNameOptions] = useState(initChallengeNameOptions());
+  const [challengeNameOptions, setChallengeNameOptions] = useState([]);
   const [skillsWanted, setSkillsWanted] = useState('');
   const [msTeamsChannel, setChannel] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -45,6 +24,13 @@ function TeamForm(props) {
   const [formErrors, setFormErrors] = useState(initValidation());
 
   useEffect(() => {
+    if (props.challengeOptions){
+      let items = props.challengeOptions.map((c) => {
+        return { header: c.name, content: c.description, value: c.id }
+      });
+      setChallengeNameOptions(items);
+    }
+
     if (props.team) {
       let t = props.team;
       let currentErrors = formErrors;
@@ -61,7 +47,7 @@ function TeamForm(props) {
 
       setFormErrors(currentErrors);
     }
-  }, [props.team]);
+  }, [props.team, props.challengeOptions]);
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -102,7 +88,6 @@ function TeamForm(props) {
       case 'challengeName':
         delete currentFormErrors[name];
         setChallengeName(value.content);
-        updateDropDown(value.content.match(/(\d+)/)[0]);
         break;
       case 'msTeamsChannel':
         setChannel(value);
@@ -118,12 +103,6 @@ function TeamForm(props) {
     }
 
     setFormErrors(currentFormErrors);
-  }
-
-  function updateDropDown(n) {
-    let options = [];
-    for (let i = 1; i < 21; i++) { options.push('Team ' + n + '.' + ('0' + i).slice(-2)); }
-    setChannelOptions(options);
   }
 
   function newTeam() {
@@ -211,13 +190,7 @@ function TeamForm(props) {
               <label>Challenge Area</label>
               <Dropdown name="challengeName" placeholder='Select a challenge' fluid checkable items={challengeNameOptions} onChange={handleDropDownChange} defaultValue={challengeName} />
             </div>
-          }
-
-          <div className="field">
-            <label>Assigned Team Channel</label>
-            <Dropdown name="msTeamsChannel" fluid checkable items={channelOptions} onChange={handleDropDownChange} placeholder={msTeamsChannel} />
-
-          </div>
+          }          
 
           {props.team ? "" :
             <div className="field">
@@ -234,10 +207,7 @@ function TeamForm(props) {
             <label>Team description</label>
             <textarea required value={teamDescription} name="teamDescription" rows="2" onChange={handleInputChange}></textarea>
           </div>
-          {/* <div className="field">
-              <label>We are looking for people with these skills (comma seperated (ex: C#, HIPAA, EPIC)</label>
-              <input value={skillsWanted} name="skillsWanted" type="text" onChange={handleInputChange} />
-            </div> */}
+          
           {props.team ? "" :
             <div className="field">
 
