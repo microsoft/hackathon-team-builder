@@ -59,16 +59,11 @@ function TeamListItem(props) {
  
   return (
       <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
-        <Flex.Item size="size.quarter">
-          <div style={{ position: 'relative', }} >
+        <Flex.Item >
+          <div style={{ position: 'static', }} >
             <Header as="h3" content={team.teamName} />
             <Text content={team.teamDescription} />
-          </div>
-        </Flex.Item>
-        <Flex.Item>
-          <Flex gap="gap.medium" padding="padding.medium">
-            <div style={{ position: 'relative', }}>
-              <Header as="h4" content={team.msTeamsChannel} />
+            <Header as="h4" content={team.msTeamsChannel} />
               { hackers }
               {!props.isTeamMember ? (
                 !props.hasTeam ? (
@@ -148,9 +143,10 @@ function TeamListItem(props) {
                 </Flex>
               )
               }
-            </div>
-          </Flex>
+          </div>
         </Flex.Item>
+        
+     
       </Flex>
   );
 

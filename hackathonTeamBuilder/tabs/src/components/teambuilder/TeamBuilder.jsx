@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react';
-import { Button, Loader } from '@fluentui/react-northstar';
+import { Button, Loader, Flex } from '@fluentui/react-northstar';
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
@@ -139,7 +139,25 @@ function TeamBuilder() {
               </div>
             </div>
             :
-            <Button primary onClick={toggleShowCreate}>{buttonText}</Button>
+            <div > 
+
+              <Flex gap="gap.medium" padding="padding.large">
+      
+                    
+                    <Flex.Item size="size.half">
+                      <div>
+                    <br></br>
+                    <br></br>
+                    <Button fluid loader="Generate interface" primary onClick={toggleShowCreate}>{buttonText}</Button>
+
+                    </div>
+                    </Flex.Item>
+
+                
+                  </Flex>
+              
+            </div>
+            
           }
           {showCreate && 
             <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
