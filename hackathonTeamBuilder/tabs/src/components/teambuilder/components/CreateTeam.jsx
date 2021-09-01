@@ -29,7 +29,6 @@ function TeamForm(props) {
       msTeamsChannel: 'Select a team channel.',
       teamName: 'Team Name cannot be empty.',
       teamDescription: 'Team Description cannot be empty.',
-
     }
   }
 

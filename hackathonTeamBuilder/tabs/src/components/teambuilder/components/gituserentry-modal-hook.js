@@ -79,7 +79,6 @@ const GitHubUserEntryHook = (props) => {
     props.saveGH(body);
      // Activity Id for adding GitHub user is 11
     props.activityPoints(11); 
-    props.Callback();
   };
 
   return (
