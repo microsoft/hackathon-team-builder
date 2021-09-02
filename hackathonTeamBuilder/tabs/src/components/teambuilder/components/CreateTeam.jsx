@@ -26,7 +26,7 @@ function TeamForm(props) {
   useEffect(() => {
     if (props.challengeOptions){
       let items = props.challengeOptions.map((c) => {
-        return { header: c.name, content: c.description, value: c.id }
+        return { header: c.name, content: c.description, value: c.id, prefix: c.track }
       });
       setChallengeNameOptions(items);
     }
@@ -43,7 +43,6 @@ function TeamForm(props) {
       if (t.teamName && t.teamName !== '') delete currentErrors['teamName'];
       if (t.teamDescription && t.teamDescription !== '') delete currentErrors['teamDescription'];
       if (t.challengeName && t.challengeName !== '') delete currentErrors['challengeName'];
-      if (t.msTeamsChannel && t.msTeamsChannel !== '') delete currentErrors['msTeamsChannel'];
 
       setFormErrors(currentErrors);
     }
@@ -87,7 +86,7 @@ function TeamForm(props) {
     switch (name) {
       case 'challengeName':
         delete currentFormErrors[name];
-        setChallengeName(value.content);
+        setChallengeName(value.prefix);
         break;
       case 'msTeamsChannel':
         setChannel(value);

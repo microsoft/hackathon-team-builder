@@ -5,7 +5,7 @@ import graphapi from './graphapi';
 function Challenge() {
   const CHALLENGEQUERY = gql `
   query{
-    challenges:getChallenges{id name description}
+    challenges:getChallenges{id track name description}
   }
   `;
 
