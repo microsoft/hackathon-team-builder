@@ -9,5 +9,8 @@
     "devDependencies": {
         "@microsoft/teamsfx-cli": "0.*"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "@fluentui/react": "^8.30.2"
+    }
 }
