@@ -11,7 +11,7 @@ import gamification, { GameAPIScope } from './apis/gamification';
 import User from './apis/user';
 import Team from './apis/team';
 import {createTeamButtonText} from './components/Themes'
-import { SearchIcon } from '@fluentui/react-icons-northstar'
+import { SearchIcon, ExclamationCircleIcon } from '@fluentui/react-icons-northstar'
 import {
   getTheme,
   mergeStyleSets,
@@ -169,59 +169,6 @@ function TeamBuilder() {
             <div > 
            
            
-
-
-
-           <Dialog
-           open
-           closeOnOutsideClick={true}
-    cancelButton="Cancel"
-    confirmButton="Confirm"
-    content={<Form
-      onSubmit={() => {
-        alert('Form submitted')
-      }}
-    >
-      <FormField>
-        <div> 
-        
-        <Input  icon={<SearchIcon />} placeholder="@..."  />
-        <br /><br />
-        </div>
-              
-                <Label pointing>
-                  Don't have one? It's easy! Here's <a target="_blank" href="https://github.com/join">how</a> :)
-                </Label> <br /><br />
-                
-              </FormField>
-
-              <FormField  style={{"display": "none"}}>
-                
-                <Label >Select your username: </Label>
-                  <Dropdown id="selected-user" placeholder={placeholdertxt} 
-              checkable
-                  getA11ySelectionMessage={{
-                    onAdd: item => `${item} has been selected.`,
-                  }}
-                  closeOnChange selection options={letsgo} item />
-              </FormField>
-
-
-
-  
-
-      <FormInput label="Last name" name="lastName" id="last-name-inline" inline required />
-      <FormCheckbox label="I agree to the Terms and Conditions" id="conditions-inline" />
-      <FormButton content="Submit" />
-    </Form>}
-    header="Do you have a GitHub Account?"
-    trigger={<Button content="Open a dialog" />}
-  />
-
-
-
-
-
 
 
 

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.16",
+    "@fluentui/docs-components": "^0.57.0",
     "@fluentui/react": "^8.30.2",
     "@fluentui/react-northstar": "^0.54.0",
     "@microsoft/teams-js": "^1.6.0",

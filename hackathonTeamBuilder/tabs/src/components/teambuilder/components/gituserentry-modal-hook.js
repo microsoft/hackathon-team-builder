@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import gitapi from '../apis/gitapi';
-import { Button, Modal, Input, Dropdown, Menu, Label, Form, Divider } from 'semantic-ui-react';
+//import { useBooleanKnob } from '@fluentui/docs-components'
+import { useBooleanKnob } from '@stardust-ui/docs-components' 
 import nh4h from '../apis/nh4h';
-
+import { Flex, Header,TeamCreateIcon, Dialog,Form, FormInput, FormCheckbox, FormButton, FormField, Input,Label,Menu,Dropdown,List, Image } from '@fluentui/react-northstar';
+import { SearchIcon, ExclamationCircleIcon } from '@fluentui/react-icons-northstar'
+//import { createCallbackLogFormatter } from '@fluentui/code-sandbox'
 
 const GitHubUserEntryHook = (props) => {
   const placeholdertxt = "Select your user id";
@@ -26,24 +29,21 @@ const GitHubUserEntryHook = (props) => {
     }
   };
 
-  const [state, dispatch] = React.useReducer(modalReducer, 
-    {
-      open: true,
-      dimmer: 'blurring',
-      size: 'tiny',
-      type:"OPEN_MODAL"
-    }
-  );
-  const {dimmer, open, size} = state;
+  const [open, setOpen] = useBooleanKnob({
+    name: 'open',
+  })
 
+  var selectedIndex = -1;
+  var selectedUser;
+  
   //////////////////////////
 
   // Enable Let's Go button
   const letsgo = () => {
     let user = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
   
-    var letsgobutton = document.getElementById("letsgo");
-    letsgobutton.className = "ui positive button active";
+    //var letsgobutton = document.getElementById("letsgo");
+    //letsgobutton.className = "ui positive button active";
   };
 
   // Retrieve Github user
@@ -51,27 +51,31 @@ const GitHubUserEntryHook = (props) => {
     let ghuser = document.getElementById("gituserid-input").value;
     var tempghuserlist = [];
     
+    
     gitapi.get("/users?q=" + ghuser + "&per_page=100").then((resp) => {
       resp.data.items.map(i => {
         setId(i.id); 
         tempghuserlist.push({ key: i.login , text: i.login , value: i.login, image: { avatar: true, src: i.avatar_url }});
         setUserList(tempghuserlist);
-        
+        console.log(tempghuserlist);
         // Display the populated Github user dropdown
         document.getElementById("displayusers").style["display"] = "";
-      })       
+      })     
+     
       
     }).catch (err => {
       console.log("err:", err);
     })
+
+  
   }
   
   const saveGitUserId = () => {
     // Loading status
     setSavingStatus(true);
-   
+   console.log(selectedUser);
     // Reading Github username from dropdown
-    let username = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
+    let username = selectedUser;
     let body = {
       UserId: props.userid,
       GitHubUser: username,
@@ -81,46 +85,74 @@ const GitHubUserEntryHook = (props) => {
      // Activity Id for adding GitHub user is 11
     props.activityPoints(11); 
     props.Callback();
+    setOpen(false);
   };
-
+ 
   return (
     <div>
-      <Modal
-        dimmer={dimmer}
-        open={open}
-        size={size}
-      >
-        <Modal.Header>Do you have a GitHub Account?</Modal.Header>
-        <Modal.Content>
-          <div className="ui ">
-            <Form>
-              <Form.Field>
-                <Input id="gituserid-input" label='@' placeholder='Search username' action={{ onClick: () => getGitHubUser(), icon:"search" }} />
-                <Label pointing>
+      <Dialog
+           open
+           closeOnOutsideClick={true}
+    confirmButton="I'm Ready!"
+    onConfirm={saveGitUserId}
+    content={<Form
+     
+    
+    >
+      <FormField>
+        <div> 
+        
+        <Input id="gituserid-input" fluid  placeholder="@..."  />
+        <FormButton fluid primary content="Search" onClick={() => getGitHubUser()}/>
+        <br /><br />
+        </div>
+              
+                <Label  >
                   Don't have one? It's easy! Here's <a target="_blank" href="https://github.com/join">how</a> :)
                 </Label> <br /><br />
+                <Label >Select your username: </Label>
+                {selectedIndex ?
+                <List selectable id="selected-user"
                 
-              </Form.Field>
-              <Form.Field id="displayusers" style={{"display": "none"}}>
-                <Divider />
-                <Label color='teal' pointing="right">Select your username: </Label>
-                <Menu compact>
-                  <Dropdown id="selected-user" placeholder={placeholdertxt} onChange={letsgo} closeOnChange selection options={ghuserlist} item />
-                </Menu>      
-              </Form.Field>
-            </Form>
-          </div>   
-          
-        </Modal.Content>
-        <Modal.Actions>
-           <Label id="error" style={{"display": "none"}} prompt pointing="right">
-              Uh oh. Reselect your id and please try again.
-          </Label> 
-          <Button id="letsgo" className="disabled inactive" positive onClick={() => { saveGitUserId(); }} loading={isSaving}>
-            I'm ready!
-          </Button>
-        </Modal.Actions>
-      </Modal>
+                selectedIndex={selectedIndex}
+                defaultSelectedIndex={0} 
+                onSelectedIndexChange={(e, newProps) => {
+                  
+                  
+                    selectedUser=ghuserlist[newProps.selectedIndex].text
+                    selectedIndex= newProps.selectedIndex
+                  
+                }}
+                items={
+                  
+                  ghuserlist.map( (user) => {
+                    return {
+                      media: (
+                        <Image
+                          src={user.image.src}
+                          avatar
+                        />
+                      ),
+                        header: user.key,
+                    }
+                })
+                  
+                  } />
+                  : <div> </div>}
+
+              </FormField>
+
+              <FormField id="displayusers" style={{"display": "none"}}>
+                
+                <Label >Select your username: </Label>
+                <List selectable defaultSelectedIndex={0} items={ghuserlist} />
+                 
+              </FormField>
+
+    </Form>}
+    header="Do you have a GitHub Account?"
+ 
+  />
     </div>
   )
 }
