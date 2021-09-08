@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const GameAPIScope = 'api://f5b001f0-53b7-421c-9f76-4301dfae1dd8/user_impersonation';
+export const GameAPIScope = 'api://05acec15-d6fb-4dae-a9b3-5886a7709df9/user_impersonation';
 
 export default function(accessToken) {
     return axios.create({

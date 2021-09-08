@@ -1,7 +1,7 @@
 import { ApolloLink, HttpLink, InMemoryCache, ApolloClient } from "@apollo/client";
 
 export default function(authToken) {
-    const httpLink = new HttpLink({ uri: 'https://nh4hgrap.azurewebsites.net/api/hack' });
+    const httpLink = new HttpLink({ uri: 'https://nh4h-graphql-fjjjjjwgkmniu.azurewebsites.net/api/hack' });
 
     const authLink = new ApolloLink((operation, forward) => {    
       // Use the setContext method to set the HTTP headers.
