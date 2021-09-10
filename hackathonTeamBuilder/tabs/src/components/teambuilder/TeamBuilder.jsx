@@ -10,6 +10,7 @@ import { HackAPIScope } from './apis/nh4h';
 import gamification, { GameAPIScope } from './apis/gamification';
 import User from './apis/user';
 import Team from './apis/team';
+import Challenge from './apis/challenge';
 import {createTeamButtonText} from './components/Themes'
 import { SearchIcon, ExclamationCircleIcon } from '@fluentui/react-icons-northstar'
 import {
@@ -34,8 +35,10 @@ function TeamBuilder() {
   const [showCreate, setShowCreate] = useState(false);
   const [hackToken, setHackToken] = useState('');
   const [existingTeamNames, setExistingTeamNames] = useState([]);
+  const [challengeOptions, setChallengeOptions] = useState([]);
 
   const teamClient = Team();
+  const challengeClient = Challenge();
   const credential = new TeamsUserCredential();
 
 
@@ -56,7 +59,8 @@ function TeamBuilder() {
     let auth = await credential.getToken(GameAPIScope);
     let client = gamification(auth.token);
     // += TODO: Get activity name and show it to user! 
-    await client.post("/useractivity/Points", body);
+    // Not required for this iteration
+    // await client.post("/useractivity/Points", body);
   }
 
   async function getTeams(authToken) {
@@ -64,6 +68,11 @@ function TeamBuilder() {
     setTeam({...team, allteams: teams});
     setExistingTeamNames(teams.map((t) => t.teamName));
     setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
+  }
+
+  async function fetchChallengeOptions(authToken) {
+    let items = await challengeClient.getAllChallenges(authToken);
+    setChallengeOptions(items);
   }
 
   async function CreateNewTeam(body) {
@@ -110,17 +119,20 @@ function TeamBuilder() {
   async function saveGitUser(body) {
     body.UserId = user.userid;
     await user.saveGitUserId(hackToken, user.userid, body);
+    await user.getUserID(hackToken);
     setEnableTeamBuilder(true);
   }
 
   // End Helper Functions-------------------------------------
 
   useEffect(() => {
-    const getUserInfo = async () => {
+    const loadData = async () => {
       //credential.login(HackAPIScope); // uncomment for user consent
 
       let tokenResp = await credential.getToken(HackAPIScope);
       setHackToken(tokenResp.token);
+
+      await fetchChallengeOptions(tokenResp.token);
 
       let info = await credential.getUserInfo();
       user.email = info.preferredUserName; // usually email address
@@ -128,17 +140,18 @@ function TeamBuilder() {
       setUsername(info.displayName)
 
       await user.getUserID(tokenResp.token);
+      await user.getTeam(tokenResp.token);
+      await getTeams(tokenResp.token);
+
       if (user.githubuser) {
-        await user.getTeam(tokenResp.token);
         setEnableTeamBuilder(true);
-        await getTeams(tokenResp.token);
       } else {
         setEnableTeamBuilder(false);
       }
 
     }; // End getUserInfo()   
 
-    getUserInfo();
+    loadData();
 
   }, []);  
 
@@ -192,7 +205,7 @@ function TeamBuilder() {
             
           }
           {showCreate && 
-            <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} />
+            <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
           }
           <br /><h2>All Teams</h2>
           <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={team.allteams} islead={user.islead} />
@@ -203,8 +216,8 @@ function TeamBuilder() {
     return (
       <div className="ui">
         {user.githubuser ?
-          <div class="ui active centered inline loader"></div> :
-          <GitHubUserEntry saveGH={saveGitUser} userid={user.userid} activityPoints={activityPoints} Callback={getTeams} />
+          <div class="ui active centered inline loader"></div> : 
+          <GitHubUserEntry saveGH={saveGitUser} userid={user.userid} activityPoints={activityPoints} />
         }
       </div>
     );

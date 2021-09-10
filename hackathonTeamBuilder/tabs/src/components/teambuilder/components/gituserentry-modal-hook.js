@@ -86,6 +86,8 @@ const GitHubUserEntryHook = (props) => {
     props.activityPoints(11); 
     props.Callback();
     setOpen(false);
+
+
   };
  
   return (
