@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react';
-import { Button, Loader, Flex, Header,TeamCreateIcon } from '@fluentui/react-northstar';
+import { Button, Loader, Flex, Header,TeamCreateIcon, Dialog,Form, FormInput, FormCheckbox, FormButton, FormField, Input,Label,Menu,Dropdown  } from '@fluentui/react-northstar';
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
@@ -12,7 +12,19 @@ import User from './apis/user';
 import Team from './apis/team';
 import Challenge from './apis/challenge';
 import {createTeamButtonText} from './components/Themes'
-
+import { SearchIcon, ExclamationCircleIcon } from '@fluentui/react-icons-northstar'
+import {
+  getTheme,
+  mergeStyleSets,
+  FontWeights,
+  ContextualMenu,
+  Toggle,
+  Modal,
+  IDragOptions,
+  IIconProps,
+  Stack,
+  IStackProps,
+} from '@fluentui/react';
 function TeamBuilder() {
   const [user, setUser] = useState(new User());
   const [team, setTeam] = useState({});
@@ -28,6 +40,15 @@ function TeamBuilder() {
   const teamClient = Team();
   const challengeClient = Challenge();
   const credential = new TeamsUserCredential();
+
+
+  const placeholdertxt = "Select your user id";
+  const letsgo = () => {
+    let user = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
+  
+    var letsgobutton = document.getElementById("letsgo");
+    letsgobutton.className = "ui positive button active";
+  };
 
   // Helper functions ----------------------------------------
   async function activityPoints(activityId) {
@@ -160,6 +181,10 @@ function TeamBuilder() {
             :
             <div > 
            
+           
+
+
+
 
               <Flex gap="gap.medium" padding="padding.large">
       
