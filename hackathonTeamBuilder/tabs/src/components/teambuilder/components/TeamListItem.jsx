@@ -2,39 +2,9 @@ import React from "react";
 import {
   Button, Flex, Header, Text, Label, mergeThemes, teamsTheme, Provider
 } from '@fluentui/react-northstar';
-
+import {dontLeadButton, leadButton, editButton,noMemberFound,colorLead,colorMember,leadButtonText,dontLeadButtonText,editButtonText, joinButtonText,leaveButtonText} from './Themes'
 function TeamListItem(props) {
-  // Theme overrides --------------------------------------------
-  const dontLeadButton = {
-    siteVariables: {
-      colorScheme: {
-        brand: {
-          'background': 'darkorange',
-        }
-      }
-    }
-  }
-
-  const leadButton = {
-    siteVariables: {
-      colorScheme: {
-        brand: {
-          'background': 'green',
-        }
-      }
-    }
-  }
-  
-  const editButton = {
-    siteVariables: {
-      colorScheme: {
-        brand: {
-          'background': 'darkblue',
-        }
-      }
-    }
-  }
-  // End Theme overrides -----------------------------------------
+ 
 
   const team = props.team;
   const hackers = [];
@@ -43,14 +13,15 @@ function TeamListItem(props) {
     if (team.Users.hackers.length === 0) {
       hackers.push(
         <Label>
-          No Members or Lead
+          {noMemberFound}
         </Label>
       )
     } else {
       props.team.Users.hackers.forEach(user => (
         hackers.push(
+          
           <span key={user}>
-            <Label color={user.islead ? "orange" : "green"} content={user.name} />&nbsp;
+            <Label color={user.islead ? colorLead : colorMember} content={user.name} />&nbsp;
           </span>
         )
       ))
@@ -59,16 +30,11 @@ function TeamListItem(props) {
  
   return (
       <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
-        <Flex.Item size="size.quarter">
+        <Flex.Item >
           <div style={{ position: 'relative', }} >
             <Header as="h3" content={team.teamName} />
             <Text content={team.teamDescription} />
-          </div>
-        </Flex.Item>
-        <Flex.Item>
-          <Flex gap="gap.medium" padding="padding.medium">
-            <div style={{ position: 'relative', }}>
-              <Header as="h4" content={team.msTeamsChannel} />
+            <Header as="h4" content={team.msTeamsChannel} />
               { hackers }
               {!props.isTeamMember ? (
                 !props.hasTeam ? (
@@ -82,7 +48,7 @@ function TeamListItem(props) {
                         );
                       }}
                     >
-                      Join
+                      {joinButtonText}
                     </Button>
                   </Flex>
                 ) : (
@@ -92,7 +58,7 @@ function TeamListItem(props) {
 
                 <Flex gap="gap.medium" padding="padding.medium">
                   <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
-                    <Button primary
+                    <Button  primary
                       onClick={() => {
                         props.Callback(
                           false,
@@ -101,7 +67,7 @@ function TeamListItem(props) {
                         );
                       }}
                     >
-                      Leave
+                      {leaveButtonText}
                     </Button>
                   </Provider>
                   <Provider theme={mergeThemes(teamsTheme, editButton)}>
@@ -111,7 +77,7 @@ function TeamListItem(props) {
 
                       }}
                     >
-                      Edit
+                      {editButtonText}
                     </Button>
                   </Provider>
                   {
@@ -126,7 +92,7 @@ function TeamListItem(props) {
                               );
                             }}
                           >
-                            Don't Lead
+                            {dontLeadButtonText}
                           </Button>
                         </Provider>
                     ) : (
@@ -140,7 +106,7 @@ function TeamListItem(props) {
                             );
                           }}
                         >
-                          Lead
+                          {leadButtonText}
                         </Button>
                       </Provider>
                     )
@@ -148,9 +114,10 @@ function TeamListItem(props) {
                 </Flex>
               )
               }
-            </div>
-          </Flex>
+          </div>
         </Flex.Item>
+        
+     
       </Flex>
   );
 

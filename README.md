@@ -1,9 +1,15 @@
-# Project
+## Team Builder
 
-Use this repo to create a TeamBuilder instance in your teams code.
+| [Documentation](https://github.com/microsoft/hackathon-team-builder/wiki/Documentation) | [Deployment guide](https://github.com/microsoft/hackathon-team-builder/wiki/Deployment-Guide) | [Architecture]() |
+| ---- | ---- | ---- |
 
-[How to deploy](https://github.com/microsoft/hackathon-team-builder.git)
+## Description
 
+Microsoft Teams Tab application used to create and organize Hackathon Teams and to setup and configure Teams channels per Hackathon team created.
+
+## Products
+- Micorosoft Teams Tab App
+- React Application
 
 ## Contributing
 
