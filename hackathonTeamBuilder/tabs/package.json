@@ -11,7 +11,7 @@
     "@microsoft/teamsfx": "^0.2.0",
     "@stardust-ui/docs-components": "^0.40.0",
     "agile": "^0.0.2",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "classnames": "^2.3.1",
     "graphql": "^15.5.0",
     "msal": "^1.4.0",
