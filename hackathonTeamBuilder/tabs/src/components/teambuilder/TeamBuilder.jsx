@@ -208,7 +208,7 @@ function TeamBuilder() {
             <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
           }
           <br /><h2>All Teams</h2>
-          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={team.allteams} challenges={challengeOptions} islead={user.islead} />
+          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={team.allteams} challengeOptions={challengeOptions} islead={user.islead} />
         </div>
       </div>
     );
