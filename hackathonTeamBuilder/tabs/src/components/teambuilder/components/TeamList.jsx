@@ -26,9 +26,6 @@ function TeamsList(props) {
 
   useEffect(() => {
     if (props.challengeOptions) {
-      console.log('setting challenge options');
-      console.log(props.challengeOptions);
-      
       setChallenges(props.challengeOptions);
     }
   }, [props.challengeOptions]);
@@ -51,18 +48,25 @@ function TeamsList(props) {
   }
 
   function getTeamListItems(teamlist) {
-    const t = _.orderBy(teamlist, 'teamName')
-    return t.map((team) => (
-      <TeamListItem
-        Callback={joinOrLeaveTeam}
-        edit={editTeam}
-        key={team.id}
-        team={team}
-        isTeamMember={team.id === props.myteam}
-        hasTeam={props.myteam}
-        islead={props.islead}
-      />
-    ))
+    if (teamlist) {
+      const t = _.orderBy(teamlist, 'teamName')
+      return t.map((team) => (
+        <TeamListItem
+          Callback={joinOrLeaveTeam}
+          edit={editTeam}
+          key={team.id}
+          team={team}
+          isTeamMember={team.id === props.myteam}
+          hasTeam={props.myteam}
+          islead={props.islead}
+        />
+      ))
+    }
+    else {
+      return (
+        <div>No teams.</div>
+      )
+    }
   }
 
   return (
