@@ -25,10 +25,13 @@ function TeamsList(props) {
   }, [props.teams]);
 
   useEffect(() => {
-    if (props.challenges) {
-      setChallenges(props.challenges);
+    if (props.challengeOptions) {
+      console.log('setting challenge options');
+      console.log(props.challengeOptions);
+      
+      setChallenges(props.challengeOptions);
     }
-  }, [props.challenges]);
+  }, [props.challengeOptions]);
 
   function joinOrLeaveTeam(type, id, name, isCreate, islead) {
     props.Callback(type, id, name, isCreate, islead);
