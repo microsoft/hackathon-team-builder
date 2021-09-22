@@ -18,11 +18,11 @@ function TeamsList(props) {
   }
 
   useEffect(() => {
-    if (props.teams) {
+    if (props.teams && props.challenges) {
       let newt = groupBy(props.teams, 'challengeName');
-      let newc = Object.getOwnPropertyNames(newt);
+      //let newc = Object.getOwnPropertyNames(newt);
       setTeams(newt);
-      setChallenges(newc);
+      setChallenges(props.challenges);
     }
   }, [props.teams]);
 
@@ -39,8 +39,8 @@ function TeamsList(props) {
 
     return challenges.map((c) => (
       {
-        title: c,
-        content: getTeamListItems(teams[c])
+        title: c.name,
+        content: getTeamListItems(teams[c.track])
       }      
     ));
   }
