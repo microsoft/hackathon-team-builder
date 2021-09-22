@@ -7,7 +7,7 @@ function Team() {
   query{
     teams:getAllTeams{teamName id:teamId teamDescription   githubURL 
       skillsWanted modifiedBy createdBy challengeName
-      msTeamsChannel Users{hackers{islead name} }}
+      msTeamsChannelName msTeamsChannelUrl Users{hackers{islead name} }}
   }
   `;
 

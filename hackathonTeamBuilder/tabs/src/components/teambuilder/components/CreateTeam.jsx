@@ -17,7 +17,8 @@ function TeamForm(props) {
   const [challengeName, setChallengeName] = useState('');
   const [challengeNameOptions, setChallengeNameOptions] = useState([]);
   const [skillsWanted, setSkillsWanted] = useState('');
-  const [msTeamsChannel, setChannel] = useState('');
+  const [msTeamsChannelName, setChannel] = useState('');
+  const [msTeamsChannelUrl, setChannelURL] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [created, setCreated] = useState(false);
 
@@ -38,7 +39,8 @@ function TeamForm(props) {
       setTeamName(t.teamName);
       setTeamDescription(t.teamDescription);
       setChallengeName(t.challengeName);
-      setChannel(t.msTeamsChannel);
+      setChannel(t.msTeamsChannelName);
+      setChannelURL(t.msTeamsChannelUrl);
 
       if (t.teamName && t.teamName !== '') delete currentErrors['teamName'];
       if (t.teamDescription && t.teamDescription !== '') delete currentErrors['teamDescription'];
@@ -88,7 +90,7 @@ function TeamForm(props) {
         delete currentFormErrors[name];
         setChallengeName(value.prefix);
         break;
-      case 'msTeamsChannel':
+      case 'msTeamsChannelName':
         setChannel(value);
         if (!value || value === '') {
           currentFormErrors[name] = 'Team Channel cannot be empty';

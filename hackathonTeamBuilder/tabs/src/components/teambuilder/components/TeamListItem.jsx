@@ -18,8 +18,7 @@ function TeamListItem(props) {
       )
     } else {
       props.team.Users.hackers.forEach(user => (
-        hackers.push(
-          
+        hackers.push(          
           <span key={user}>
             <Label color={user.islead ? colorLead : colorMember} content={user.name} />&nbsp;
           </span>
@@ -34,7 +33,7 @@ function TeamListItem(props) {
           <div style={{ position: 'relative', }} >
             <Header as="h3" content={team.teamName} />
             <Text content={team.teamDescription} />
-            <Header as="h4" content={team.msTeamsChannel} />
+            <Header as="h4" content={team.msTeamsChannelName} />
               { hackers }
               {!props.isTeamMember ? (
                 !props.hasTeam ? (

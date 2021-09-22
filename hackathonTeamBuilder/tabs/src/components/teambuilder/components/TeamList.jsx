@@ -46,7 +46,7 @@ function TeamsList(props) {
   }
 
   function getTeamListItems(teamlist) {
-    const t = _.orderBy(teamlist, 'msTeamsChannel')
+    const t = _.orderBy(teamlist, 'msTeamsChannelName')
     return t.map((team) => (
       <TeamListItem
         Callback={joinOrLeaveTeam}
