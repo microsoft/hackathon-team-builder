@@ -159,7 +159,7 @@ function TeamBuilder() {
 
   if (!user.found) {
     return (
-      <Message header='Contact Support!' content='User is not found or TeamBuilder API is down. Please ask for help in general channel.' />
+      <Message header='Loading!' content='Team Builder is loading.  In the event that it does not load, please ask for help in the Technical Assistance channel.' />
     );
   } else if (enableTeamBuilder) {
     return (
