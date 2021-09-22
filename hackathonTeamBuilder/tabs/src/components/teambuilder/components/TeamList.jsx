@@ -18,13 +18,17 @@ function TeamsList(props) {
   }
 
   useEffect(() => {
-    if (props.teams && props.challenges) {
+    if (props.teams) {
       let newt = groupBy(props.teams, 'challengeName');
-      //let newc = Object.getOwnPropertyNames(newt);
       setTeams(newt);
-      setChallenges(props.challenges);
     }
   }, [props.teams]);
+
+  useEffect(() => {
+    if (props.challenges) {
+      setChallenges(props.challenges);
+    }
+  }, [props.challenges]);
 
   function joinOrLeaveTeam(type, id, name, isCreate, islead) {
     props.Callback(type, id, name, isCreate, islead);
@@ -35,8 +39,6 @@ function TeamsList(props) {
   }
 
   function getChallengesList() {
-    challenges.sort();
-
     return challenges.map((c) => (
       {
         title: c.name,
@@ -46,7 +48,7 @@ function TeamsList(props) {
   }
 
   function getTeamListItems(teamlist) {
-    const t = _.orderBy(teamlist, 'msTeamsChannelName')
+    const t = _.orderBy(teamlist, 'teamName')
     return t.map((team) => (
       <TeamListItem
         Callback={joinOrLeaveTeam}
