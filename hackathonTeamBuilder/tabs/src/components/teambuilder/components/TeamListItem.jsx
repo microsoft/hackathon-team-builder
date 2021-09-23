@@ -20,7 +20,7 @@ function TeamListItem(props) {
       props.team.Users.hackers.forEach(user => (
         hackers.push(          
           <span key={user}>
-            <Label color={user.islead ? colorLead : colorMember} content={user.name} />&nbsp;
+            <Label color={user.islead ? colorLead : colorMember} content={user.islead ? user.name + " (Lead)" : user.name} />&nbsp;
           </span>
         )
       ))
@@ -33,7 +33,12 @@ function TeamListItem(props) {
           <div style={{ position: 'relative', }} >
             <Header as="h3" content={team.teamName} />
             <Text content={team.teamDescription} />
-            <Header as="h4" content={team.msTeamsChannelName} />
+            <br />
+            <br />
+            <Text weight="bold" content="Teams Channel: " /><Text content={team.msTeamsChannelName} />
+            <br />
+            <Text weight="bold" content="Team Members: " />
+            <br />
               { hackers }
               {!props.isTeamMember ? (
                 !props.hasTeam ? (

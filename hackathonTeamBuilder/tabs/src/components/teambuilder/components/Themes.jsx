@@ -2,7 +2,7 @@ export const dontLeadButton = {
     siteVariables: {
       colorScheme: {
         brand: {
-          'background': 'darkorange',
+          //'background': 'darkorange',
         }
       }
     }
@@ -12,7 +12,7 @@ export const leadButton = {
     siteVariables: {
       colorScheme: {
         brand: {
-          'background': 'green',
+          //'background': 'green',
         }
       }
     }
@@ -22,17 +22,19 @@ export const leadButton = {
     siteVariables: {
       colorScheme: {
         brand: {
-          'background': 'darkblue',
+          //'background': 'darkblue',
         }
       }
     }
   }
 
-  export const noMemberFound ="No Member or Lead"
+  //fluidui lable color options: none, brand, orange, red, grey, yellow, pink, green
 
-  export const colorLead ="orange"
+  export const noMemberFound ="No Team Members or Lead"
 
-  export const colorMember ="green"
+  export const colorLead ="green"
+
+  export const colorMember ="black"
 
   export const joinButtonText ="Join"
 
