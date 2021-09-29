@@ -110,7 +110,7 @@ const GitHubUserEntryHook = (props) => {
         </div>
               
                 <Label  >
-                  Don't have one? It's easy! Here's <a target="_blank" href="https://github.com/join">how</a> :)
+                  Don't have one? It's easy! Here's&nbsp;<a target="_blank" href="https://github.com/join">how</a>&nbsp;:)
                 </Label> <br /><br />
                 <Label >Select your username: </Label>
                 {selectedIndex ?
