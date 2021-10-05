@@ -64,31 +64,50 @@ function TeamBuilder() {
   }
 
   async function getTeams(authToken) {
-    let teams = await teamClient.getAllTeams(authToken);
-    setTeam({...team, allteams: teams});
-    setExistingTeamNames(teams.map((t) => t.teamName));
-    setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
+    try {
+      let teams = await teamClient.getAllTeams(authToken);
+      setTeam({...team, allteams: teams});
+      setExistingTeamNames(teams.map((t) => t.teamName));
+      setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
+    } catch (error) {
+      console.error(error);
+    }
+
   }
 
   async function fetchChallengeOptions(authToken) {
-    let items = await challengeClient.getAllChallenges(authToken);
-    setChallengeOptions(items);
+    try {
+      let items = await challengeClient.getAllChallenges(authToken);
+      setChallengeOptions(items);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function CreateNewTeam(body) {
-    body.createdBy = user.email;
-    let newTeamId = await teamClient.createNewTeam(hackToken, body);
-    setTeam({...team, teamid: newTeamId});
+    try {
+      body.createdBy = user.email;
+      let newTeamId = await teamClient.createNewTeam(hackToken, body);
+      setTeam({...team, teamid: newTeamId});
+      await updateTeamMembership(true, newTeamId, body.teamName, 1, 1);
+    } catch (error) {
+      console.error(error);
+    }
 
-    await updateTeamMembership(true, newTeamId, body.teamName, 1, 1);
+    // Even if create calls fail, try to update the UI
     setShowCreate(!showCreate);
     await getTeams(hackToken);
   }
 
   async function editTeam(body) {
-    body.modifiedBy = user.email;
-    await teamClient.editTeam(hackToken, user.myteam, body);
+    try {
+      body.modifiedBy = user.email;
+      await teamClient.editTeam(hackToken, user.myteam, body);
+    } catch (error) {
+      console.error(error);
+    }
 
+    // Try to update UI even if edit call fails
     setShowCreate(!showCreate);
     await getTeams(hackToken);
   }
@@ -107,7 +126,13 @@ function TeamBuilder() {
   }
 
   async function updateTeamMembership(join, id, name, isCreate, islead) {
-    await user.changeTeamMembership(hackToken, join, id, name, isCreate, islead);
+    try {
+      await user.changeTeamMembership(hackToken, join, id, name, isCreate, islead);
+    } catch (error) {
+      console.error(error);
+    }
+
+    // Try to update UI even if membership call fails
     await user.getTeam(hackToken);
     await getTeams(hackToken);
   }
@@ -117,10 +142,14 @@ function TeamBuilder() {
   }
 
   async function saveGitUser(body) {
-    body.UserId = user.userid;
-    await user.saveGitUserId(hackToken, user.userid, body);
-    await user.getUserID(hackToken);
-    setEnableTeamBuilder(true);
+    try {
+      body.UserId = user.userid;
+      await user.saveGitUserId(hackToken, user.userid, body);
+      await user.getUserID(hackToken);
+      setEnableTeamBuilder(true);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // End Helper Functions-------------------------------------
