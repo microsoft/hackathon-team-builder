@@ -9,7 +9,13 @@ namespace TeamBuilder.API.Data
         {
         }
 
-        public DbSet<ChallengeArea> Challenges { get; set; }
-        public DbSet<Team> Teams { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TeamMember>().HasKey(t => new { t.TeamId, t.UserId });
+        }
+
+        public DbSet<ChallengeArea> Challenges { get; set; } = default!;
+        public DbSet<Team> Teams { get; set; } = default!;
+        public DbSet<TeamMember> TeamMembers { get; set; } = default!;
     }
 }

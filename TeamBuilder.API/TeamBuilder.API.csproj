@@ -9,6 +9,15 @@
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.0.1" />
     <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.0.1" />
     <PackageReference Include="HotChocolate.Data" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
