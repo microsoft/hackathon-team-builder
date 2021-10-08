@@ -9,8 +9,11 @@ using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using TeamBuilder.API.Challenges;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
+using TeamBuilder.API.TeamMembers;
+using TeamBuilder.API.Teams;
 using TeamBuilder.API.Types;
 
 namespace TeamBuilder.API
@@ -45,7 +48,10 @@ namespace TeamBuilder.API
             services
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
-                .AddMutationType<Mutation>()
+                .AddMutationType()
+                    .AddTypeExtension<ChallengeMutations>()
+                    .AddTypeExtension<TeamMutations>()
+                    .AddTypeExtension<TeamMemberMutations>()
                 .AddType<ChallengeType>()
                 .AddType<TeamType>()
                 .AddType<TeamMemberType>()
