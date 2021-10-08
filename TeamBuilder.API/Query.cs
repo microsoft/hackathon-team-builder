@@ -5,6 +5,7 @@ using TeamBuilder.API.DataLoader;
 using HotChocolate;
 using System.Threading.Tasks;
 using System.Threading;
+using User=Microsoft.Graph.User;
 
 namespace TeamBuilder.API
 {
@@ -18,5 +19,10 @@ namespace TeamBuilder.API
             TeamByIdDataLoader dataLoader,
             CancellationToken cancellationToken
         ) => dataLoader.LoadAsync(id, cancellationToken);
+
+        public Task<Member> GetUserAsync(
+            string email,
+            UserByIdDataLoader dataLoader,
+            CancellationToken cancellationToken) => dataLoader.LoadAsync(email, cancellationToken);
     }
 }

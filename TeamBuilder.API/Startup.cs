@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
 using TeamBuilder.API.Types;
@@ -24,15 +29,30 @@ namespace TeamBuilder.API
         {
             services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlite("Data Source=teambuilder.db"));
 
+            services.AddScoped<GraphServiceClient>(o =>
+            {
+                var tokenProvider = new AzureServiceTokenProvider();
+                var token = tokenProvider.GetAccessTokenAsync("https://graph.microsoft.com").Result;
+
+                return new GraphServiceClient(new DelegateAuthenticationProvider(request =>
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
+
+                    return Task.CompletedTask;
+                }));
+            });
+
             services
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
                 .AddType<ChallengeType>()
                 .AddType<TeamType>()
+                .AddType<TeamMemberType>()
                 .AddDataLoader<TeamByIdDataLoader>()
                 .AddDataLoader<ChallengeByIdDataLoader>()
                 .AddDataLoader<TeamMemberByTeamIdDataLoader>()
+                .AddDataLoader<UserByIdDataLoader>()
                 .AddSorting()
                 .AddFiltering()
                 ;
