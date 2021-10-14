@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Graph;
-using Microsoft.Identity.Client;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TeamBuilder.API.Challenges;
@@ -34,6 +33,7 @@ namespace TeamBuilder.API
 
             services.AddScoped<GraphServiceClient>(o =>
             {
+                // Uses MSI to get access to GraphAPI
                 var tokenProvider = new AzureServiceTokenProvider();
                 var token = tokenProvider.GetAccessTokenAsync("https://graph.microsoft.com").Result;
 
