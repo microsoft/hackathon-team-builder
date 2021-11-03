@@ -42,7 +42,7 @@ function TeamForm(props) {
       setChannel(t.msTeamsChannelName);
       setChannelURL(t.msTeamsChannelUrl);
 
-      if (t.teamName && t.teamName !== '') delete currentErrors['teamName'];
+      if (t.teamName && t.teamName !== '' && t.teamName.length <= 40) delete currentErrors['teamName'];
       if (t.teamDescription && t.teamDescription !== '') delete currentErrors['teamDescription'];
       if (t.challengeName && t.challengeName !== '') delete currentErrors['challengeName'];
 
@@ -59,6 +59,9 @@ function TeamForm(props) {
         setTeamName(value);
         if (!value || value === '') {
           currentFormErrors[name] = 'Team Name cannot be empty';
+        }
+        else if (value.length > 40) {
+          currentFormErrors[name] = 'Team Name must be less than 40 characters';
         }
         else {
           delete currentFormErrors[name];
