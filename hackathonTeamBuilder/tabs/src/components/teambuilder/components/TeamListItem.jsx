@@ -32,7 +32,8 @@ function TeamListItem(props) {
         <Flex.Item >
           <div style={{ position: 'relative', }} >
             <Header as="h3" content={team.teamName} />
-            <Text content={team.teamDescription} />
+            <div>{team.teamDescription}</div>
+            {/* <Text content={team.teamDescription} /> */}
             <br />
             <br />
             <Text weight="bold" content="Teams Channel: " /><Text content={team.msTeamsChannelName} />
