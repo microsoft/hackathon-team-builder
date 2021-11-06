@@ -165,8 +165,9 @@ function TeamBuilder() {
 
       let info = await credential.getUserInfo();
       user.email = info.preferredUserName; // usually email address
+      user.ADUserId = info.objectId;
       setEmail(info.preferredUserName);
-      setUsername(info.displayName)
+      setUsername(info.displayName);
 
       await user.getUserID(tokenResp.token);
       await user.getTeam(tokenResp.token);
