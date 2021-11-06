@@ -165,7 +165,7 @@ function TeamBuilder() {
 
       let info = await credential.getUserInfo();
       user.email = info.preferredUserName; // usually email address
-      user.ADObjectId = info.objectId;
+      user.ADUserId = info.objectId;
       setEmail(info.preferredUserName);
       setUsername(info.displayName);
 
