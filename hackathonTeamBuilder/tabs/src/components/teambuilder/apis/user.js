@@ -3,6 +3,7 @@ import nh4h from './nh4h';
 class User {
   static APIURL = '/users/';
   static APICODEURL = '/reglink/code';
+  static ADOBJECTID = "ADUserId";
   static ROLE = "userRole";
   static REGEMAIL = "userRegEmail";
   static TEAMSEMAIL = "UserMSTeamsEmail";
@@ -33,6 +34,7 @@ class User {
   githubid;
   githubuser;
   notfound;
+  ADObjectId;
 
   constructor() {
     this.userid = false;
@@ -48,8 +50,9 @@ class User {
   getUserID = (authToken) => {
     let body = {};
     body[User.TEAMSEMAIL] = this.email;
+    body[User.ADOBJECTID] = this.ADObjectId;
     let apiClient = nh4h(authToken);    
-    return apiClient.post(User.APIURL + 'msemail', body)
+    return apiClient.post(User.APIURL + 'objectid', body)
       .then((response) => {
         if (response.data.returnError) {          
           this.found = false;
