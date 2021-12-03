@@ -11,11 +11,13 @@
         "azureResources": [],
         "activeResourcePlugins": [
             "fx-resource-frontend-hosting",
+            "fx-resource-identity",
             "fx-resource-aad-app-for-teams",
             "fx-resource-local-debug",
             "fx-resource-appstudio",
             "fx-resource-simple-auth"
         ]
     },
-    "programmingLanguage": "javascript"
+    "programmingLanguage": "javascript",
+    "version": "2.0.0"
 }

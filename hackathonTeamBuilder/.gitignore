@@ -2,3 +2,9 @@ node_modules
 /.fx/*.env
 /.fx/*.userdata
 .DS_Store
+.fx/configs/localSettings.json
+.fx/subscriptionInfo.json
+build
+**/.env.teamsfx.local
+.fx/states/*.userdata
+.backup

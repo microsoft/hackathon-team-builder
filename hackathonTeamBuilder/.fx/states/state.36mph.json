@@ -1,0 +1,39 @@
+{
+    "solution": {
+        "resourceNameSuffix": "20a3cd",
+        "resourceGroupName": "hackathonTeamBuilder-36mph-rg",
+        "tenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
+        "subscriptionId": "da454a5b-6be8-4084-8841-b913918f9aa6",
+        "subscriptionName": "36MPH Dev - MSDN",
+        "location": "Central US",
+        "teamsAppTenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
+        "provisionSucceeded": true
+    },
+    "fx-resource-appstudio": {
+        "teamsAppId": "56ff96c3-80b2-40cb-b3eb-a9ced88d59b8"
+    },
+    "fx-resource-frontend-hosting": {
+        "domain": "hackathonteambui6c1859.z19.web.core.windows.net",
+        "endpoint": "https://hackathonteambui6c1859.z19.web.core.windows.net",
+        "storageResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-rg/providers/Microsoft.Storage/storageAccounts/hackathonteambui6c1859"
+    },
+    "fx-resource-identity": {
+        "identityName": "hackathont36mp6c1859",
+        "identityResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hackathont36mp6c1859",
+        "identityClientId": "c7be0ea8-dfe6-4b0c-938b-a377c486fadd"
+    },
+    "fx-resource-aad-app-for-teams": {
+        "clientId": "f6d8bf42-df10-4e25-92d4-038034d32b62",
+        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}",
+        "objectId": "5f3dc0ed-b591-4314-b935-a2edafef9dcf",
+        "oauth2PermissionScopeId": "8d340e87-d851-49ba-82c9-c24b10031f0d",
+        "tenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
+        "oauthHost": "https://login.microsoftonline.com",
+        "oauthAuthority": "https://login.microsoftonline.com/2e6a1980-3b67-497b-90c1-b8a3409dfa64",
+        "applicationIdUris": "api://hackathonteambui6c1859.z19.web.core.windows.net/f6d8bf42-df10-4e25-92d4-038034d32b62"
+    },
+    "fx-resource-simple-auth": {
+        "endpoint": "https://hackathonteambuilder6c1859.azurewebsites.net",
+        "webAppResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-rg/providers/Microsoft.Web/sites/hackathonteambuilder6c1859"
+    }
+}
