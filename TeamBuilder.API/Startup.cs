@@ -25,6 +25,8 @@ namespace TeamBuilder.API
         }
 
         public IConfiguration Configuration { get; }
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -43,6 +45,18 @@ namespace TeamBuilder.API
 
                     return Task.CompletedTask;
                 }));
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder//.WithOrigins("https://hackathonteambui6c1859.z19.web.core.windows.net")
+                                        .AllowAnyOrigin()
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                                  });
             });
 
             services
@@ -72,8 +86,8 @@ namespace TeamBuilder.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGraphQL();

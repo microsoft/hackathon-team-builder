@@ -6,29 +6,18 @@ var _ = require('agile');
 function TeamsList(props) {
 
   const [teams, setTeams] = useState([]);
-  const [challenges, setChallenges] = useState([]);
-
-  function groupBy(array, property) {
-    var hash = {};
-    for (var i = 0; i < array.length; i++) {
-      if (!hash[array[i][property]]) hash[array[i][property]] = [];
-      hash[array[i][property]].push(array[i]);
-    }
-    return hash;
-  }
 
   useEffect(() => {
-    if (props.teams) {
-      let newt = groupBy(props.teams, 'challengeName');
-      setTeams(newt);
+    if (props.teams) {      
+      setTeams(props.teams);
     }
   }, [props.teams]);
 
-  useEffect(() => {
-    if (props.challengeOptions) {
-      setChallenges(props.challengeOptions);
-    }
-  }, [props.challengeOptions]);
+  // useEffect(() => {
+  //   if (props.challengeOptions) {
+  //     setChallenges(props.challengeOptions);
+  //   }
+  // }, [props.challengeOptions]);
 
   function joinOrLeaveTeam(type, id, name, isCreate, islead) {
     props.Callback(type, id, name, isCreate, islead);
@@ -38,19 +27,18 @@ function TeamsList(props) {
     props.edit();
   }
 
-  function getChallengesList() {
-    return challenges.map((c) => (
+  function getChallengePanels() {
+    return teams.map((c) => (
       {
         title: c.name,
-        content: getTeamListItems(teams[c.track])
+        content: getTeamListItems(c.teams)
       }      
     ));
   }
 
   function getTeamListItems(teamlist) {
     if (teamlist) {
-      const t = _.orderBy(teamlist, 'teamName')
-      return t.map((team) => (
+      return teamlist.map((team) => (
         <TeamListItem
           Callback={joinOrLeaveTeam}
           edit={editTeam}
@@ -74,7 +62,7 @@ function TeamsList(props) {
       fluid
       styled
       exclusive={false}
-      panels={getChallengesList()}>
+      panels={getChallengePanels()}>
     </Accordion>
   );
 }

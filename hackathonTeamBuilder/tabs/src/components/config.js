@@ -5,7 +5,7 @@ const prod = {
     };
 
 const dev = {
-    GRAPHQL_ENDPOINT: 'http://localhost:3030/api/hack',
+    GRAPHQL_ENDPOINT: 'https://localhost:44347/graphql',
     HACKAPI_ENDPOINT: 'https://localhost:44300/api',
     HACKAPI_SCOPE: 'api://scope/user_impersonation'    
     };

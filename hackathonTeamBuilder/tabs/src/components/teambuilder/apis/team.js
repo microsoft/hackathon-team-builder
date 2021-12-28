@@ -3,11 +3,38 @@ import { gql } from '@apollo/client';
 import graphapi from './graphapi';
 
 function Team() {
+  // const TEAMSQUERY = gql `
+  // query{
+  //   teams:getAllTeams{teamName id:teamId teamDescription   githubURL 
+  //     skillsWanted modifiedBy createdBy challengeName
+  //     msTeamsChannelName msTeamsChannelUrl Users{hackers{islead name} }}
+  // }
+  // `;
+
   const TEAMSQUERY = gql `
-  query{
-    teams:getAllTeams{teamName id:teamId teamDescription   githubURL 
-      skillsWanted modifiedBy createdBy challengeName
-      msTeamsChannelName msTeamsChannelUrl Users{hackers{islead name} }}
+  query getChallenges {
+    challenges: challenges {
+      id
+      name
+      prefix
+    }
+    teams: challenges {
+      name
+      prefix
+      id
+      teams {
+        id
+        name
+        description
+        members {
+          userId
+          isLead
+          user {
+            fullName
+          }
+        }
+      }
+    }
   }
   `;
 
@@ -17,7 +44,7 @@ function Team() {
     let client = graphapi(authToken);
     let response = await client.query({ query: TEAMSQUERY });
     if (response.data) {
-      return response.data.teams;
+      return response.data;
     }
   }
 

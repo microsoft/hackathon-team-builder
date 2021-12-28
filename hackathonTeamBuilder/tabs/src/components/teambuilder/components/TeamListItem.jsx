@@ -10,17 +10,17 @@ function TeamListItem(props) {
   const hackers = [];
 
   if (team) {
-    if (team.Users.hackers.length === 0) {
+    if (team.members.length === 0) {
       hackers.push(
         <Label>
           {noMemberFound}
         </Label>
       )
     } else {
-      props.team.Users.hackers.forEach(user => (
+      team.members.forEach(m => (
         hackers.push(          
-          <span key={user}>
-            <Label color={user.islead ? colorLead : colorMember} content={user.islead ? user.name + " (Lead)" : user.name} />&nbsp;
+          <span key={m}>
+            <Label color={m.islead ? colorLead : colorMember} content={m.islead ? m.user.fullName + " (Lead)" : m.user.fullName} />&nbsp;
           </span>
         )
       ))
@@ -31,11 +31,11 @@ function TeamListItem(props) {
       <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
         <Flex.Item >
           <div style={{ position: 'relative', }} >
-            <Header as="h3" content={team.teamName} />
-            <Text content={team.teamDescription} />
+            <Header as="h3" content={team.name} />
+            <Text content={team.description} />
             <br />
             <br />
-            <Text weight="bold" content="Teams Channel: " /><Text content={team.msTeamsChannelName} />
+            {/* <Text weight="bold" content="Teams Channel: " /><Text content={team.msTeamsChannelName} /> */}
             <br />
             <Text weight="bold" content="Team Members: " />
             <br />
@@ -48,7 +48,7 @@ function TeamListItem(props) {
                         props.Callback(
                           true,
                           team.id,
-                          team.teamName
+                          team.name
                         );
                       }}
                     >
@@ -67,7 +67,7 @@ function TeamListItem(props) {
                         props.Callback(
                           false,
                           team.id,
-                          team.teamName
+                          team.name
                         );
                       }}
                     >
@@ -91,7 +91,7 @@ function TeamListItem(props) {
                             onClick={() => {
                               props.onLeadChange(
                                 team.id,
-                                team.teamName,
+                                team.name,
                                 0
                               );
                             }}
@@ -105,7 +105,7 @@ function TeamListItem(props) {
                           onClick={() => {
                             props.onLeadChange(
                               team.id,
-                              team.teamName,
+                              team.name,
                               1
                             );
                           }}

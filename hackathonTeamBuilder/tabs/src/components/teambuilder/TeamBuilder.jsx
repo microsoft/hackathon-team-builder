@@ -1,54 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Message } from 'semantic-ui-react';
-import { Button, Loader, Flex, Header,TeamCreateIcon, Dialog,Form, FormInput, FormCheckbox, FormButton, FormField, Input,Label,Menu,Dropdown  } from '@fluentui/react-northstar';
+import { Button, Flex, Header,TeamCreateIcon } from '@fluentui/react-northstar';
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
 import TeamListItem from './components/TeamListItem';
 import GitHubUserEntry from './components/gituserentry-modal-hook';
-import { HackAPIScope } from './apis/nh4h';
 import gamification, { GameAPIScope } from './apis/gamification';
 import User from './apis/user';
 import Team from './apis/team';
 import Challenge from './apis/challenge';
 import {createTeamButtonText} from './components/Themes'
-import { SearchIcon, ExclamationCircleIcon } from '@fluentui/react-icons-northstar'
-import {
-  getTheme,
-  mergeStyleSets,
-  FontWeights,
-  ContextualMenu,
-  Toggle,
-  Modal,
-  IDragOptions,
-  IIconProps,
-  Stack,
-  IStackProps,
-} from '@fluentui/react';
+
 function TeamBuilder() {
   const [user, setUser] = useState(new User());
-  const [team, setTeam] = useState({});
+  const [teamList, setTeamList] = useState([]); // list of teams grouped by challenge
   const [myTeam, setMyTeam] = useState(null);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [enableTeamBuilder, setEnableTeamBuilder] = useState(false);
+  const [enableTeamBuilder, setEnableTeamBuilder] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [hackToken, setHackToken] = useState('');
   const [existingTeamNames, setExistingTeamNames] = useState([]);
   const [challengeOptions, setChallengeOptions] = useState([]);
 
   const teamClient = Team();
-  const challengeClient = Challenge();
   const credential = new TeamsUserCredential();
-
-
-  const placeholdertxt = "Select your user id";
-  const letsgo = () => {
-    let user = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
-  
-    var letsgobutton = document.getElementById("letsgo");
-    letsgobutton.className = "ui positive button active";
-  };
 
   // Helper functions ----------------------------------------
   async function activityPoints(activityId) {
@@ -64,21 +41,22 @@ function TeamBuilder() {
   }
 
   async function getTeams(authToken) {
-    let teams = await teamClient.getAllTeams(authToken);
-    setTeam({...team, allteams: teams});
-    setExistingTeamNames(teams.map((t) => t.teamName));
-    setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
+    let result = await teamClient.getAllTeams(authToken);
+    setChallengeOptions(result.challenges);
+    setTeamList(result.teams);
+    setExistingTeamNames(result.teams.map((t) => t.teamName)); // used to prevent duplicate team names on create
+    //setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
   }
 
-  async function fetchChallengeOptions(authToken) {
-    let items = await challengeClient.getAllChallenges(authToken);
-    setChallengeOptions(items);
-  }
+  // async function fetchChallengeOptions(authToken) {
+  //   let items = await challengeClient.getAllChallenges(authToken);
+  //   setChallengeOptions(items);
+  // }
 
   async function CreateNewTeam(body) {
     body.createdBy = user.email;
+    // TODO: emit message to eventgrid
     let newTeamId = await teamClient.createNewTeam(hackToken, body);
-    setTeam({...team, teamid: newTeamId});
 
     await updateTeamMembership(true, newTeamId, body.teamName, 1, 1);
     setShowCreate(!showCreate);
@@ -117,6 +95,7 @@ function TeamBuilder() {
   }
 
   async function saveGitUser(body) {
+    // TODO: emit message to eventgrid
     body.UserId = user.userid;
     await user.saveGitUserId(hackToken, user.userid, body);
     await user.getUserID(hackToken);
@@ -129,25 +108,26 @@ function TeamBuilder() {
     const loadData = async () => {
       //credential.login(HackAPIScope); // uncomment for user consent
 
-      let tokenResp = await credential.getToken(HackAPIScope);
-      setHackToken(tokenResp.token);
+      //let tokenResp = await credential.getToken(HackAPIScope);
+      let token = 'abcdefg';
+      //setHackToken(tokenResp.token);
+      setHackToken(token);
 
-      await fetchChallengeOptions(tokenResp.token);
-
+      // get info from current user
       let info = await credential.getUserInfo();
       user.email = info.preferredUserName; // usually email address
       setEmail(info.preferredUserName);
       setUsername(info.displayName)
 
-      await user.getUserID(tokenResp.token);
-      await user.getTeam(tokenResp.token);
-      await getTeams(tokenResp.token);
+      //await user.getUserID(tokenResp.token);
+      //await user.getTeam(tokenResp.token);
+      await getTeams(token);
 
-      if (user.githubuser) {
-        setEnableTeamBuilder(true);
-      } else {
-        setEnableTeamBuilder(false);
-      }
+      // if (user.githubuser) {
+      //   setEnableTeamBuilder(true);
+      // } else {
+      //   setEnableTeamBuilder(false);
+      // }
 
     }; // End getUserInfo()   
 
@@ -157,11 +137,11 @@ function TeamBuilder() {
 
   let buttonText = !showCreate ? createTeamButtonText : 'Never Mind';
 
-  if (!user.found) {
-    return (
-      <Message header='Loading!' content='Team Builder is loading.  In the event that it does not load, please ask for help in the Technical Assistance channel.' />
-    );
-  } else if (enableTeamBuilder) {
+  // if (!user.found) {
+  //   return (
+  //     <Message header='Loading!' content='Team Builder is loading.  In the event that it does not load, please ask for help in the Technical Assistance channel.' />
+  //   );
+  // } else if (enableTeamBuilder) {
     return (
       <div className="ui">
         <div id="TeamBuilder">
@@ -180,48 +160,35 @@ function TeamBuilder() {
             </Flex>
             :
             <div > 
-           
-           
-
-
-
-
               <Flex gap="gap.medium" padding="padding.large">
-      
-                    
                     <Flex.Item size="size.half">
                       <div>
                     <br></br>
                     <br></br>
                     <Button icon={<TeamCreateIcon />}  fluid loader="Generate interface" primary onClick={toggleShowCreate}>{buttonText}</Button>
-
                     </div>
                     </Flex.Item>
-
-                
                   </Flex>
-              
             </div>
-            
           }
           {showCreate && 
             <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
           }
           <br /><h2>All Teams</h2>
-          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={team.allteams} challengeOptions={challengeOptions} islead={user.islead} />
+          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={teamList} />
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="ui">
-        {user.githubuser ?
-          <div class="ui active centered inline loader"></div> : 
-          <GitHubUserEntry saveGH={saveGitUser} userid={user.userid} activityPoints={activityPoints} />
-        }
-      </div>
-    );
-  }
+  // } else {
+  //   return (
+  //     <div className="ui">
+  //       {user.githubuser ?
+  //         <div class="ui active centered inline loader"></div> : 
+  //         <GitHubUserEntry saveGH={saveGitUser} userid={user.userid} activityPoints={activityPoints} />
+  //       }
+  //     </div>
+  //   );
+  // }
 }
 
 export default TeamBuilder;
