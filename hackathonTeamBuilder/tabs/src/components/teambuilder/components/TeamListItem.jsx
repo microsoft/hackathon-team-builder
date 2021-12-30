@@ -45,7 +45,7 @@ function TeamListItem(props) {
                   <Flex gap="gap.medium" padding="padding.medium">
                     <Button primary
                       onClick={() => {
-                        props.Callback(
+                        props.Callback( // handleChangeTeamMembership(join, id, name, islead = false)
                           true,
                           team.id,
                           team.name
@@ -64,7 +64,7 @@ function TeamListItem(props) {
                   <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
                     <Button  primary
                       onClick={() => {
-                        props.Callback(
+                        props.Callback( // handleChangeTeamMembership(join, id, name, islead = false)
                           false,
                           team.id,
                           team.name

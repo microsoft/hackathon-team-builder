@@ -34,7 +34,7 @@ namespace TeamBuilder.API.Types
                 int[] teamIds = await dbContext.Challenges
                     .Where(c => c.Id == challenge.Id)
                     .Include(c => c.Teams)
-                    .SelectMany(c => c.Teams.Select(t => t.ChallengeAreaId))
+                    .SelectMany(c => c.Teams.Select(t => t.Id))
                     .ToArrayAsync();
 
                 return await teamById.LoadAsync(teamIds, cancellationToken);    

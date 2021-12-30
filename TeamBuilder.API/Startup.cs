@@ -62,6 +62,7 @@ namespace TeamBuilder.API
             services
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
+                    .AddTypeExtension<TeamMemberQueries>()
                 .AddMutationType()
                     .AddTypeExtension<ChallengeMutations>()
                     .AddTypeExtension<TeamMutations>()

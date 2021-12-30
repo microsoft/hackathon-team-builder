@@ -14,6 +14,9 @@ namespace TeamBuilder.API
         [UseTeamBuilderDbContext]
         public Task<List<ChallengeArea>> GetChallenges([ScopedService] TeamBuilderDbContext context) => context.Challenges.ToListAsync();
 
+        [UseTeamBuilderDbContext]
+        public Task<List<Team>> GetTeams([ScopedService] TeamBuilderDbContext context) => context.Teams.ToListAsync();
+
         public Task<Team> GetTeamAsync(
             int id,
             TeamByIdDataLoader dataLoader,

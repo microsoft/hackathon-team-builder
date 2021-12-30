@@ -15,6 +15,11 @@ namespace TeamBuilder.API.Types
                 .Field(t => t.User)
                 .ResolveWith<TeamMemberResolvers>(c => c.GetMemberAsync(default!, default!, default))
                 .Name("user");
+
+            descriptor
+                .Field(t => t.Team)
+                .ResolveWith<TeamMemberResolvers>(c => c.GetTeamAsync(default!, default!, default))
+                .Name("team");
         }
 
         private class TeamMemberResolvers
@@ -23,6 +28,11 @@ namespace TeamBuilder.API.Types
                 [Parent] TeamMember tm,
                 UserByIdDataLoader loader,
                 CancellationToken cancellationToken) => await loader.LoadAsync(tm.UserId, cancellationToken);
+
+            public async Task<Team> GetTeamAsync(
+                [Parent] TeamMember tm,
+                TeamByIdDataLoader loader,
+                CancellationToken cancellationToken) => await loader.LoadAsync(tm.TeamId, cancellationToken);
         }
     }
 }

@@ -1,0 +1,10 @@
+mutation addTeam($input: AddTeamInput!){
+  addTeam(input: $input) {
+    errors {
+      message code
+    }
+    team {
+      id name
+    }
+  }
+}

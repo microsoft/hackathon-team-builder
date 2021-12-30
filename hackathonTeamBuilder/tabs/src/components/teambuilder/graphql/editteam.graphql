@@ -1,0 +1,12 @@
+mutation editTeam($input: EditTeamInput!) {
+    editTeam(input: $input) {
+        errors {
+            code message
+        }
+      team {
+        id
+        name
+        description   
+      }
+    }
+  }

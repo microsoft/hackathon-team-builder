@@ -14,6 +14,7 @@ function TeamForm(props) {
 
   const [teamName, setTeamName] = useState('');
   const [teamDescription, setTeamDescription] = useState('');
+  const [challengeAreaId, setChallengeAreaId] = useState(0);
   const [challengeName, setChallengeName] = useState('');
   const [challengeNameOptions, setChallengeNameOptions] = useState([]);
   const [skillsWanted, setSkillsWanted] = useState('');
@@ -44,7 +45,6 @@ function TeamForm(props) {
 
       if (t.teamName && t.teamName !== '') delete currentErrors['teamName'];
       if (t.teamDescription && t.teamDescription !== '') delete currentErrors['teamDescription'];
-      if (t.challengeName && t.challengeName !== '') delete currentErrors['challengeName'];
 
       setFormErrors(currentErrors);
     }
@@ -88,7 +88,8 @@ function TeamForm(props) {
     switch (name) {
       case 'challengeName':
         delete currentFormErrors[name];
-        setChallengeName(value.prefix);
+        setChallengeName(value.header);
+        setChallengeAreaId(value.value);
         break;
       case 'msTeamsChannelName':
         setChannel(value);
@@ -107,23 +108,21 @@ function TeamForm(props) {
   }
 
   function newTeam() {
-    let body = {
-      teamName: teamName,
-      teamDescription: teamDescription,
-      challengeName: challengeName,
-      skillsWanted: skillsWanted
+    let input = {
+      name: teamName,
+      description: teamDescription,
+      challengeAreaId: challengeAreaId
     }
-    props.createTeam(body);
+    props.createTeam(input);
   }
 
   function editTeam() {
-    let body = {
-      teamName: props.team.teamName,
-      teamDescription: teamDescription,
-      challengeName: challengeName,
-      skillsWanted: skillsWanted
+    let input = {
+      name: props.team.name,
+      description: teamDescription,
+      challengeAreaId: challengeAreaId
     };
-    props.editTeam(body);
+    props.editTeam(input);
   }
 
   function handleSubmit(event) {

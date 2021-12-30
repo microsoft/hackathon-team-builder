@@ -8,6 +8,7 @@ namespace TeamBuilder.API.Teams
     {
         protected TeamPayloadBase(Team team)
         { 
+            Team = team;
         }
 
         protected TeamPayloadBase(IReadOnlyList<UserError> errors) : base(errors)

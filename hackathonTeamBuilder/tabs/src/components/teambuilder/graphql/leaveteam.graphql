@@ -1,0 +1,3 @@
+mutation leaveTeam($input: LeaveTeamInput!) {
+  leaveTeam(input: $input)
+}

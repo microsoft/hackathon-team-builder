@@ -1,0 +1,39 @@
+query getChallenges($email: String!) {
+  challenges: challenges {
+    id
+    name
+    prefix
+  }
+  teams: challenges {
+    name
+    prefix
+    id
+    teams {
+      id
+      name
+      description
+      members {
+        userId
+        isLead
+        user {
+          fullName
+        }
+      }
+    }
+  }
+  teamnames: teams {
+    name
+    id
+  }
+  myteams: membershipByUserId(email: $email){
+      team {
+        id name description
+        members {
+          isLead
+          user {
+            fullName
+          }
+        }
+      }
+    }
+}

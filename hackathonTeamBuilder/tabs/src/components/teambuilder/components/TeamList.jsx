@@ -19,8 +19,8 @@ function TeamsList(props) {
   //   }
   // }, [props.challengeOptions]);
 
-  function joinOrLeaveTeam(type, id, name, isCreate, islead) {
-    props.Callback(type, id, name, isCreate, islead);
+  function joinOrLeaveTeam(type, id, name, islead) {
+    props.Callback(type, id, name, islead); // handleChangeTeamMembership(join, id, name, islead = false)
   }
 
   function editTeam(e) {

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Graph;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TeamBuilder.API.Data
 {

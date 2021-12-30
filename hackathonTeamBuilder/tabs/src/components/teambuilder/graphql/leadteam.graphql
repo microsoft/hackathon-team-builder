@@ -1,0 +1,10 @@
+mutation leadTeam($input: JoinTeamInput!) {
+  leadTeam(input: $input) {
+    errors {
+      code message
+    }
+    teamMember {
+      teamId userId isLead
+    }
+  }
+}

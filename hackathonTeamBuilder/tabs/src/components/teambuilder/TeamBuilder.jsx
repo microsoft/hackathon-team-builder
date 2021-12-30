@@ -29,65 +29,69 @@ function TeamBuilder() {
 
   // Helper functions ----------------------------------------
   async function activityPoints(activityId) {
-    let body = {
-      UserEmail: email,
-      ActivityId: activityId
-    }
-    let auth = await credential.getToken(GameAPIScope);
-    let client = gamification(auth.token);
+    // let body = {
+    //   UserEmail: email,
+    //   ActivityId: activityId
+    // }
+    // let auth = await credential.getToken(GameAPIScope);
+    // let client = gamification(auth.token);
     // += TODO: Get activity name and show it to user! 
     // Not required for this iteration
     // await client.post("/useractivity/Points", body);
   }
 
-  async function getTeams(authToken) {
-    let result = await teamClient.getAllTeams(authToken);
+  async function getTeams(authToken, email) {
+    let result = await teamClient.getAllTeams(authToken, email);
     setChallengeOptions(result.challenges);
     setTeamList(result.teams);
-    setExistingTeamNames(result.teams.map((t) => t.teamName)); // used to prevent duplicate team names on create
+    setExistingTeamNames(result.teamnames.map((t) => t.name)); // used to prevent duplicate team names on create
+    setMyTeam(result.myteams[0].team ?? null)
     //setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
   }
 
-  // async function fetchChallengeOptions(authToken) {
-  //   let items = await challengeClient.getAllChallenges(authToken);
-  //   setChallengeOptions(items);
-  // }
-
-  async function CreateNewTeam(body) {
-    body.createdBy = user.email;
-    // TODO: emit message to eventgrid
-    let newTeamId = await teamClient.createNewTeam(hackToken, body);
-
-    await updateTeamMembership(true, newTeamId, body.teamName, 1, 1);
+  async function CreateNewTeam(input) {
+    let newTeamId = await teamClient.createNewTeam(hackToken, input);
+    await updateTeamMembership(true, email, newTeamId, true);
     setShowCreate(!showCreate);
-    await getTeams(hackToken);
   }
 
-  async function editTeam(body) {
-    body.modifiedBy = user.email;
-    await teamClient.editTeam(hackToken, user.myteam, body);
-
+  async function editTeam(input) {
+    await teamClient.editTeam(hackToken, input);
     setShowCreate(!showCreate);
-    await getTeams(hackToken);
+    await getTeams(hackToken, email);
   }
 
-  async function handleChangeTeamMembership(join, id, name, isFromCreate = 0, islead = 0) {
+  async function handleChangeTeamMembership(join, id, name, islead = false) {
     if (join) {
       // Activity Id for joining a team is 13
       await activityPoints(13);
     }
 
-    await updateTeamMembership(join, id, name, isFromCreate, islead);
+    await updateTeamMembership(join, email, id, islead);
   }
 
   async function handleLeadChange(id, name, islead) {
-    await updateTeamMembership(true, id, name, 0, islead);
+    let input = {
+      teamId: id,
+      userId: email,
+      islead: islead
+    };
+    await teamClient.leadTeam(hackToken, input);
   }
 
-  async function updateTeamMembership(join, id, name, isCreate, islead) {
-    await user.changeTeamMembership(hackToken, join, id, name, isCreate, islead);
-    await user.getTeam(hackToken);
-    await getTeams(hackToken);
+  async function updateTeamMembership(join, userId, teamId, islead) {
+    let input = {
+      teamId: teamId,
+      userId: userId
+    };
+    if (join) {
+      input.isLead = islead;
+      await teamClient.joinTeam(hackToken, input);
+    }
+    else {
+      await teamClient.leaveTeam(hackToken, input);
+    }
+    await getTeams(hackToken, email);
   }
 
   function toggleShowCreate() {
@@ -115,13 +119,13 @@ function TeamBuilder() {
 
       // get info from current user
       let info = await credential.getUserInfo();
-      user.email = info.preferredUserName; // usually email address
+      //user.email = info.preferredUserName; // usually email address
       setEmail(info.preferredUserName);
       setUsername(info.displayName)
 
       //await user.getUserID(tokenResp.token);
       //await user.getTeam(tokenResp.token);
-      await getTeams(token);
+      await getTeams(token, info.preferredUserName);
 
       // if (user.githubuser) {
       //   setEnableTeamBuilder(true);
