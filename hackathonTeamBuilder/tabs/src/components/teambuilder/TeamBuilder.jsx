@@ -45,7 +45,7 @@ function TeamBuilder() {
     setChallengeOptions(result.challenges);
     setTeamList(result.teams);
     setExistingTeamNames(result.teamnames.map((t) => t.name)); // used to prevent duplicate team names on create
-    setMyTeam(result.myteams[0].team ?? null)
+    setMyTeam(result.myteams[0] ?? null)
     //setMyTeam(teams.find((t) => t.id === user.myteam) ?? null);
   }
 
@@ -74,9 +74,10 @@ function TeamBuilder() {
     let input = {
       teamId: id,
       userId: email,
-      islead: islead
+      isLead: islead
     };
     await teamClient.leadTeam(hackToken, input);
+    await getTeams(hackToken, email);
   }
 
   async function updateTeamMembership(join, userId, teamId, islead) {
@@ -157,7 +158,7 @@ function TeamBuilder() {
             <Header as="h3" content="Your Team" />
               <div className="ui special fluid">
                 <TeamListItem Callback={handleChangeTeamMembership} edit={toggleShowCreate}
-                  islead={user.islead} team={myTeam} isTeamMember={true} onLeadChange={handleLeadChange} />
+                  islead={myTeam.isLead} team={myTeam.team} isTeamMember={true} onLeadChange={handleLeadChange} />
               </div>
             </div>
             </Flex.Item>
@@ -176,10 +177,10 @@ function TeamBuilder() {
             </div>
           }
           {showCreate && 
-            <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
+            <CreateTeam activityPoints={activityPoints} teamNames={existingTeamNames} team={myTeam.team} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
           }
           <br /><h2>All Teams</h2>
-          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam} teams={teamList} />
+          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam ? myTeam.team : null} teams={teamList} />
         </div>
       </div>
     );

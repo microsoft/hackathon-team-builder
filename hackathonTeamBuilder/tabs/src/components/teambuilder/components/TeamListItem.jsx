@@ -20,7 +20,7 @@ function TeamListItem(props) {
       team.members.forEach(m => (
         hackers.push(          
           <span key={m}>
-            <Label color={m.islead ? colorLead : colorMember} content={m.islead ? m.user.fullName + " (Lead)" : m.user.fullName} />&nbsp;
+            <Label color={m.isLead ? colorLead : colorMember} content={m.isLead ? m.user.fullName + " (Lead)" : m.user.fullName} />&nbsp;
           </span>
         )
       ))
@@ -92,7 +92,7 @@ function TeamListItem(props) {
                               props.onLeadChange(
                                 team.id,
                                 team.name,
-                                0
+                                false
                               );
                             }}
                           >
@@ -106,7 +106,7 @@ function TeamListItem(props) {
                             props.onLeadChange(
                               team.id,
                               team.name,
-                              1
+                              true
                             );
                           }}
                         >
