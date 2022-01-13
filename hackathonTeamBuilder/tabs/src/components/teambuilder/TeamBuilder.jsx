@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Flex, Header,TeamCreateIcon, Loader } from '@fluentui/react-northstar';
+import { Provider, teamsTheme, teamsDarkTheme, Button, Flex, Header,TeamCreateIcon, Loader, teamsV2Theme } from '@fluentui/react-northstar';
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from './components/TeamList';
 import CreateTeam from './components/CreateTeam';
@@ -102,6 +102,7 @@ function TeamBuilder() {
   let buttonText = !showCreate ? createTeamButtonText : 'Never Mind';
 
     return (
+      <Provider theme={ teamsTheme || teamsDarkTheme}>
       <div className="ui">
         <div id="TeamBuilder">
           {isLoading &&
@@ -138,9 +139,11 @@ function TeamBuilder() {
             <CreateTeam teamNames={existingTeamNames} team={myTeam ? myTeam.team : null} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
           }
           <br /><h2>All Teams</h2>
-          <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam ? myTeam.team : null} teams={teamList} />
+              <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam ? myTeam.team : null} teams={teamList} />
+
         </div>
       </div>
+      </Provider>
     );
 }
 
