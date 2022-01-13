@@ -2,8 +2,7 @@ import { ApolloLink, HttpLink, InMemoryCache, ApolloClient } from "@apollo/clien
 import {config} from '../../config'
 
 export default function(authToken) {
-    //const httpLink = new HttpLink({ uri: config.GRAPHQL_ENDPOINT });
-    const httpLink = new HttpLink({ uri: 'https://localhost:5501/graphql'});
+    const httpLink = new HttpLink({ uri: config.GRAPHQL_ENDPOINT });
 
     // const authLink = new ApolloLink((operation, forward) => {    
     //   // Use the setContext method to set the HTTP headers.

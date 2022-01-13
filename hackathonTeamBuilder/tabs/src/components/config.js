@@ -5,9 +5,7 @@ const prod = {
     };
 
 const dev = {
-    GRAPHQL_ENDPOINT: 'https://localhost:44347/graphql',
-    HACKAPI_ENDPOINT: 'https://localhost:44300/api',
-    HACKAPI_SCOPE: 'api://scope/user_impersonation'    
+    GRAPHQL_ENDPOINT: 'https://localhost:5501/graphql'
     };
 
 export const config = process.env.NODE_ENV === 'development' ? dev: prod;
