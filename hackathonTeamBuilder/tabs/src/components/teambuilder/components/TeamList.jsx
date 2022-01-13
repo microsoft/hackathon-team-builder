@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion } from '@fluentui/react-northstar';
 import TeamListItem from './TeamListItem';
-var _ = require('agile');
 
 function TeamsList(props) {
 
@@ -13,14 +12,8 @@ function TeamsList(props) {
     }
   }, [props.teams]);
 
-  // useEffect(() => {
-  //   if (props.challengeOptions) {
-  //     setChallenges(props.challengeOptions);
-  //   }
-  // }, [props.challengeOptions]);
-
   function joinOrLeaveTeam(type, id, name, islead) {
-    props.Callback(type, id, name, islead); // handleChangeTeamMembership(join, id, name, islead = false)
+    props.Callback(type, id, name, islead); // handleChangeTeamMembership(join, teamid, teamname, islead = false)
   }
 
   function editTeam(e) {

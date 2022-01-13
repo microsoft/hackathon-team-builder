@@ -12,7 +12,7 @@ namespace TeamBuilder.API.TeamMembers
     public class TeamMemberQueries
     {
         [UseTeamBuilderDbContext]
-        public Task<List<TeamMember>> GetMembershipByUserId([ScopedService] TeamBuilderDbContext context, string email) => 
-            context.TeamMembers.Where(t => t.UserId.Equals(email)).ToListAsync();
+        public Task<List<TeamMember>> GetMembershipByUserId([ScopedService] TeamBuilderDbContext context, string userId) => 
+            context.TeamMembers.Where(t => t.UserId.Equals(userId)).ToListAsync();
     }
 }

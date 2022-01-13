@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Dropdown, Label, Button } from '@fluentui/react-northstar';
+import { Dropdown, Button } from '@fluentui/react-northstar';
 
 function TeamForm(props) {
 
   function initValidation() {
     return {
       challengeName: 'Select a challenge area.',
-      //msTeamsChannel: 'Select a team channel.',
       teamName: 'Team Name cannot be empty.',
       teamDescription: 'Team Description cannot be empty.',
     }
@@ -17,12 +16,7 @@ function TeamForm(props) {
   const [challengeAreaId, setChallengeAreaId] = useState(0);
   const [challengeName, setChallengeName] = useState('');
   const [challengeNameOptions, setChallengeNameOptions] = useState([]);
-  const [skillsWanted, setSkillsWanted] = useState('');
-  const [msTeamsChannelName, setChannel] = useState('');
-  const [msTeamsChannelUrl, setChannelURL] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [created, setCreated] = useState(false);
-
   const [formErrors, setFormErrors] = useState(initValidation());
 
   useEffect(() => {
@@ -40,8 +34,6 @@ function TeamForm(props) {
       setTeamName(t.teamName);
       setTeamDescription(t.teamDescription);
       setChallengeName(t.challengeName);
-      setChannel(t.msTeamsChannelName);
-      setChannelURL(t.msTeamsChannelUrl);
 
       if (t.teamName && t.teamName !== '') delete currentErrors['teamName'];
       if (t.teamDescription && t.teamDescription !== '') delete currentErrors['teamDescription'];
@@ -90,16 +82,7 @@ function TeamForm(props) {
         delete currentFormErrors[name];
         setChallengeName(value.header);
         setChallengeAreaId(value.value);
-        break;
-      case 'msTeamsChannelName':
-        setChannel(value);
-        if (!value || value === '') {
-          currentFormErrors[name] = 'Team Channel cannot be empty';
-        }
-        else {
-          delete currentFormErrors[name];
-        }
-        break;
+        break;      
       default:
         break;
     }
@@ -130,8 +113,6 @@ function TeamForm(props) {
     if (isValid()) {
       setSubmitting(true);
       if (!props.team) {
-        // Activity Id for creating team is 12
-        props.activityPoints(12)
         newTeam();
       } else {
         editTeam();
@@ -144,7 +125,7 @@ function TeamForm(props) {
     let compareVal = value.toLowerCase();
     delete currentErrors['duplicateName'];
     for (let existingTeam of props.teamNames) {
-      if (existingTeam.toLowerCase() == compareVal) {
+      if (existingTeam.toLowerCase() === compareVal) {
         currentErrors['duplicateName'] = 'Team name already exists!'
         break;
       }
@@ -176,7 +157,6 @@ function TeamForm(props) {
 
   return (
     <div className="ui segment">
-      {!created ?
         <form onSubmit={handleSubmit} className="ui form">
           {!props.team ? "" :
             <div className="field">
@@ -235,9 +215,6 @@ function TeamForm(props) {
             }
           </div>
         </form>
-        :
-        <span className="ui">Team Created</span>
-      }
     </div>
   )
 }

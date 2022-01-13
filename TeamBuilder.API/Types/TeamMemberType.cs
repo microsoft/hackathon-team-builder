@@ -12,9 +12,8 @@ namespace TeamBuilder.API.Types
         protected override void Configure(IObjectTypeDescriptor<TeamMember> descriptor)
         {
             descriptor
-                .Field(t => t.User)
-                .ResolveWith<TeamMemberResolvers>(c => c.GetMemberAsync(default!, default!, default))
-                .Name("user");
+                .Field("user")
+                .ResolveWith<TeamMemberResolvers>(c => c.GetMemberAsync(default!, default!, default));
 
             descriptor
                 .Field(t => t.Team)

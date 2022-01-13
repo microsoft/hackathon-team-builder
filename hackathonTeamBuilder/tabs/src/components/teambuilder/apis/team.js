@@ -1,8 +1,5 @@
-import nh4h from './nh4h';
-import { gql } from '@apollo/client';
 import graphapi from './graphapi';
 import { loader } from 'graphql.macro';
-
 
 function Team() {
   const TEAMSQUERY = loader('../graphql/teamquery.graphql');
@@ -14,9 +11,9 @@ function Team() {
 
   // authToken: jwt bearer token to call graphql api
   // email: email of the logged in user
-  async function getAllTeams(authToken, email) {
+  async function getAllTeams(authToken, userId) {
     let client = graphapi(authToken);
-    let response = await client.query({ query: TEAMSQUERY, variables: { email } });
+    let response = await client.query({ query: TEAMSQUERY, variables: { userId } });
     if (response.data) {
       return response.data;
     }

@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UserSecretsId>a4a23551-5f03-4d57-b0c3-89ef9b1ce219</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-rg/providers/microsoft.insights/components/TeamBuilderAPI20220111132301</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,8 +12,11 @@
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.0.1" />
     <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.0.1" />
     <PackageReference Include="HotChocolate.Data" Version="12.0.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
     <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

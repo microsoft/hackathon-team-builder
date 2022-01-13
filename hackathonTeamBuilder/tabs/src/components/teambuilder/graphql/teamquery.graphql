@@ -1,4 +1,4 @@
-query getChallenges($email: String!) {
+query getChallenges($userId: String!) {
   challenges: challenges {
     id
     name
@@ -25,7 +25,7 @@ query getChallenges($email: String!) {
     name
     id
   }
-  myteams: membershipByUserId(email: $email){
+  myteams: membershipByUserId(userId: $userId){
       team {
         id name description
         members {

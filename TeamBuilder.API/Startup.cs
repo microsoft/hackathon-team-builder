@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Graph;
 using TeamBuilder.API.Challenges;
+using TeamBuilder.API.Common;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
 using TeamBuilder.API.TeamMembers;
@@ -29,12 +30,17 @@ namespace TeamBuilder.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlite("Data Source=teambuilder.db"));
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+
+            //services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlite("Data Source=teambuilder.db"));
+            services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("teambuilder")));
 
             services.AddScoped<GraphServiceClient>(o =>
             {
+                var config = new GraphClientConfiguration();
+                Configuration.GetSection("GraphClient").Bind(config);
                 // Uses MSI to get access to GraphAPI
-                return new GraphServiceClient(new DefaultAzureCredential());
+                return new GraphServiceClient(new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret));
             });
 
             services.AddCors(options =>
