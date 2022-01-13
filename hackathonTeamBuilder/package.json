@@ -14,8 +14,6 @@
         "@babel/runtime": "^7.15.4",
         "@fluentui/code-sandbox": "^0.57.0",
         "@fluentui/react": "^8.30.2",
-        "@stardust-ui/docs-components": "^0.40.0",
-        "prettier": "^1.19.1",
-        "prettier-plugin-import-sort": "0.0.7"
+        "@stardust-ui/docs-components": "^0.40.0"        
     }
 }
