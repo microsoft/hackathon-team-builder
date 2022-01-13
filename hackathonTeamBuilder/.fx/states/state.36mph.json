@@ -24,13 +24,13 @@
     },
     "fx-resource-aad-app-for-teams": {
         "clientId": "f6d8bf42-df10-4e25-92d4-038034d32b62",
-        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}",
         "objectId": "5f3dc0ed-b591-4314-b935-a2edafef9dcf",
         "oauth2PermissionScopeId": "8d340e87-d851-49ba-82c9-c24b10031f0d",
         "tenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
         "oauthHost": "https://login.microsoftonline.com",
         "oauthAuthority": "https://login.microsoftonline.com/2e6a1980-3b67-497b-90c1-b8a3409dfa64",
-        "applicationIdUris": "api://hackathonteambui6c1859.z19.web.core.windows.net/f6d8bf42-df10-4e25-92d4-038034d32b62"
+        "applicationIdUris": "api://hackathonteambui6c1859.z19.web.core.windows.net/f6d8bf42-df10-4e25-92d4-038034d32b62",
+        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}"
     },
     "fx-resource-simple-auth": {
         "endpoint": "https://hackathonteambuilder6c1859.azurewebsites.net",
