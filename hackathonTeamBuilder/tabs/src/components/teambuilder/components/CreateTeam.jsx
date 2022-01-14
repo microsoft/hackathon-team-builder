@@ -207,8 +207,8 @@ function TeamForm(props) {
                 </ul>
                 }
                 <div>
-                  <Button primary type="submit" disabled={!isValid()}>{props.team ? 'Save' : 'Create Team'}</Button>
-                  <Button onClick={cancelClick}>Cancel</Button>
+                  <Button primary type="submit" disabled={!isValid()} aria-label="Submit or Save Button">{props.team ? 'Save' : 'Create Team'}</Button>
+                  <Button onClick={cancelClick} aria-label="Cancel Button">Cancel</Button>
                 </div>
 
               </div>

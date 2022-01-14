@@ -51,12 +51,17 @@ function TeamsList(props) {
   }
 
   return (
-    <Accordion
-      fluid
-      styled
-      exclusive={false}
-      panels={getChallengePanels()}>
-    </Accordion>
+    <div>
+      <div></div>
+      <div>
+        <Accordion
+          fluid
+          styled
+          exclusive={false}
+          panels={getChallengePanels()}>
+        </Accordion>
+      </div>
+    </div>
   );
 }
 
