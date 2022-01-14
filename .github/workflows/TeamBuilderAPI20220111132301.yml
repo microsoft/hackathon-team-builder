@@ -1,0 +1,55 @@
+name: Build and deploy .NET Core app to Github Release
+on:
+  push:
+    tags:
+    - '*'
+env:
+  AZURE_WEBAPP_PACKAGE_PATH: ./publish
+  CONFIGURATION: Release
+  DOTNET_CORE_VERSION: 5.0.x
+  WORKING_DIRECTORY: ./TeamBuilder.API
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "❓ Find the release semantic version"
+      id: semver
+      run: |
+        set -e
+        tag=${{ github.ref }}
+        echo "Tag is: $tag"
+        test -n "$tag"
+        echo "::set-output name=tag::$tag"
+        full=$( echo $tag | grep -E --only-matching --max-count=1 '[0-9]+[.][0-9]+[.][0-9]+(-.*)?$' )
+        echo "Full version is: $full"
+        test -n "$full"
+        echo "::set-output name=full::$full"
+      shell: bash
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+    - name: Restore
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+    - name: Build
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test
+      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+    - name: Publish
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+        
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    - name: Zip Folder
+      run: |
+        cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        zip -r ../Teambuilder.API_${{ steps.semver.outputs.full }}.zip *
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "./*.zip"
+        bodyFile: "CHANGELOG.md"
+        token: ${{ secrets.GITHUB_TOKEN }}    
