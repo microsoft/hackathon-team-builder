@@ -12,6 +12,19 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
+    - name: "❓ Find the release semantic version"
+      id: semver
+      run: |
+        set -e
+        tag=${{ github.event.release.tag_name }}
+        echo "Tag is: $tag"
+        test -n "$tag"
+        echo "::set-output name=tag::$tag"
+        full=$( echo $tag | grep -E --only-matching --max-count=1 '[0-9]+[.][0-9]+[.][0-9]+(-.*)?$' )
+        echo "Full version is: $full"
+        test -n "$full"
+        echo "::set-output name=full::$full"        
+      shell: bash
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
@@ -32,7 +45,7 @@ jobs:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Zip Folder
-      run: zip -r Teambuilder.API_${{ github.ref }}.zip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/*
+      run: zip -r Teambuilder.API_${{ steps.semver.outputs.full }}.zip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/*
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "./*.zip"
