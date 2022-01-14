@@ -33,23 +33,8 @@ jobs:
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Zip Folder
       run: zip -r release.zip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    - name: Create Release
-      uses: actions/create-release@v1
-      id: create_release
-      with: 
-        draft: false
-        prerelease: false
-        release_name: Release ${{ github.ref }}
-        tag_name: ${{ github.ref }}
-        body_path: CHANGELOG.md
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-    - name: Add release Artifacts
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    - uses: ncipollo/release-action@v1
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./release.zip
-        asset_name: release.zip
-        asset_content_type: application/zip
+        artifacts: "./*.zip"
+        bodyFile: "CHANGELOG.md"
+        token: ${{ secrets.GITHUB_TOKEN }}    
