@@ -43,12 +43,17 @@ jobs:
         body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
+    - name: Download API artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: webapp
+        path: ${{ github.workspace }}/webapp
     - name: Add release Artifacts
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        asset_path: ${{ github.workspace }}/webapp
         asset_name: webapp.zip
         asset_content_type: application/zip
