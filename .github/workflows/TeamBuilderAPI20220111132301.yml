@@ -16,14 +16,14 @@ jobs:
       id: semver
       run: |
         set -e
-        tag=${{ github.event.release.tag_name }}
+        tag=${{ github.ref }}
         echo "Tag is: $tag"
         test -n "$tag"
         echo "::set-output name=tag::$tag"
         full=$( echo $tag | grep -E --only-matching --max-count=1 '[0-9]+[.][0-9]+[.][0-9]+(-.*)?$' )
         echo "Full version is: $full"
         test -n "$full"
-        echo "::set-output name=full::$full"        
+        echo "::set-output name=full::$full"
       shell: bash
     - uses: actions/checkout@v2
     - name: Setup .NET Core
