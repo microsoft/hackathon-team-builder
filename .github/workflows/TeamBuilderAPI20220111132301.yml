@@ -31,7 +31,8 @@ jobs:
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
+    - name: Zip Folder
+      run: zip -r release.zip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Create Release
       uses: actions/create-release@v1
       id: create_release
@@ -43,17 +44,12 @@ jobs:
         body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
-    - name: Download API artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: webapp
-        path: ${{ github.workspace }}/webapp
     - name: Add release Artifacts
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}/webapp
-        asset_name: webapp.zip
+        asset_path: ./release.zip
+        asset_name: release.zip
         asset_content_type: application/zip
