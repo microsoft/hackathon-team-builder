@@ -10,7 +10,7 @@ env:
   WORKING_DIRECTORY: ./TeamBuilder.API
 jobs:
   build-and-publish:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
