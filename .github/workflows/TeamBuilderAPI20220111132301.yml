@@ -32,7 +32,7 @@ jobs:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Zip Folder
-      run: zip -r release.zip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      run: zip -r Teambuilder.API_${{ github.ref }}.zip ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/*
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "./*.zip"
