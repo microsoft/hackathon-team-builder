@@ -102,7 +102,6 @@ function TeamBuilder() {
   let buttonText = !showCreate ? createTeamButtonText : 'Never Mind';
 
     return (
-      <Provider theme={ teamsTheme || teamsDarkTheme}>
       <div className="ui">
         <div id="TeamBuilder">
           {isLoading &&
@@ -129,7 +128,7 @@ function TeamBuilder() {
                       <div>
                     <br></br>
                     <br></br>
-                    <Button icon={<TeamCreateIcon />}  fluid loader="Generate interface" primary onClick={toggleShowCreate}>{buttonText}</Button>
+                    <Button icon={<TeamCreateIcon />}  fluid loader="Generate interface" primary onClick={toggleShowCreate} aria-label="Create Team or Cancel Create Team Button">{buttonText}</Button>
                     </div>
                     </Flex.Item>
                   </Flex>
@@ -143,7 +142,6 @@ function TeamBuilder() {
 
         </div>
       </div>
-      </Provider>
     );
 }
 

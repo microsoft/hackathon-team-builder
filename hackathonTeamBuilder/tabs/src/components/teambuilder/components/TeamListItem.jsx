@@ -43,7 +43,7 @@ function TeamListItem(props) {
               {!props.isTeamMember ? (
                 !props.hasTeam ? (
                   <Flex gap="gap.medium" padding="padding.medium">
-                    <Button primary
+                    <Button primary aria-label="Join Team Button"
                       onClick={() => {
                         props.Callback( // handleChangeTeamMembership(join, id, name, islead = false)
                           true,
@@ -62,7 +62,7 @@ function TeamListItem(props) {
 
                 <Flex gap="gap.medium" padding="padding.medium">
                   <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
-                    <Button  primary
+                    <Button  primary aria-label="Leave Team Button"
                       onClick={() => {
                         props.Callback( // handleChangeTeamMembership(join, id, name, islead = false)
                           false,
@@ -75,7 +75,7 @@ function TeamListItem(props) {
                     </Button>
                   </Provider>
                   <Provider theme={mergeThemes(teamsTheme, editButton)}>
-                    <Button primary
+                    <Button primary aria-label="Edit Team Button"
                       onClick={() => {
                         props.edit()
 
@@ -87,7 +87,7 @@ function TeamListItem(props) {
                   {
                     props.islead ? (
                         <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
-                          <Button primary
+                          <Button primary aria-label="Don't Lead Button"
                             onClick={() => {
                               props.onLeadChange(
                                 team.id,
@@ -101,7 +101,7 @@ function TeamListItem(props) {
                         </Provider>
                     ) : (
                       <Provider theme={mergeThemes(teamsTheme, leadButton)}>
-                        <Button primary
+                        <Button primary aria-label="Lead Button"
                           onClick={() => {
                             props.onLeadChange(
                               team.id,

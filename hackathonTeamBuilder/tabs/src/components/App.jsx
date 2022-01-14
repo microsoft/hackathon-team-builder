@@ -26,7 +26,7 @@ export default function App() {
   });
   
   return (
-    <Provider theme={theme || teamsTheme || teamsDarkTheme || teamsHighContrastTheme}>
+    <Provider theme={teamsTheme}>
       <Router>
         <Route exact path="/">
           <Redirect to="/tab" />
