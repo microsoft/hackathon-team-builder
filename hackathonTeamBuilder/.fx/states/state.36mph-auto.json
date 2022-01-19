@@ -1,0 +1,41 @@
+{
+    "solution": {
+        "provisionSucceeded": false,
+        "needCreateResourceGroup": true,
+        "resourceNameSuffix": "e5df42",
+        "resourceGroupName": "hackathonTeamBuilder-36mph-auto-rg",
+        "tenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
+        "subscriptionId": "da454a5b-6be8-4084-8841-b913918f9aa6",
+        "subscriptionName": "36MPH Dev - MSDN",
+        "location": "Central US",
+        "teamsAppTenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64"
+    },
+    "fx-resource-frontend-hosting": {
+        "domain": "hackathont36mpfdda20.z19.web.core.windows.net",
+        "endpoint": "https://hackathont36mpfdda20.z19.web.core.windows.net",
+        "storageResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-auto-rg/providers/Microsoft.Storage/storageAccounts/hackathont36mpfdda20"
+    },
+    "fx-resource-identity": {
+        "identityName": "hackathont36mpfdda20",
+        "identityResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-auto-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hackathont36mpfdda20",
+        "identityClientId": "7403abaa-fbe4-49f2-b4f8-b25158c9a6a8"
+    },
+    "fx-resource-aad-app-for-teams": {
+        "clientId": "ccbe1523-bc4e-4466-82b2-9c701b3ef3c9",
+        "objectId": "b563738b-4f8a-428f-83fc-bc846510043e",
+        "oauth2PermissionScopeId": "b4f3f724-d177-4ea9-95b0-ea7cb0264e99",
+        "tenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
+        "oauthHost": "https://login.microsoftonline.com",
+        "oauthAuthority": "https://login.microsoftonline.com/2e6a1980-3b67-497b-90c1-b8a3409dfa64",
+        "applicationIdUris": "api://hackathont36mpfdda20.z19.web.core.windows.net/ccbe1523-bc4e-4466-82b2-9c701b3ef3c9",
+        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}"
+    },
+    "fx-resource-appstudio": {
+        "teamsAppId": "014ced44-1bd3-477b-88a7-9bb1e3443ac8"
+    },
+    "fx-resource-simple-auth": {
+        "endpoint": "https://hackathont36mpfdda20.azurewebsites.net",
+        "webAppResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-auto-rg/providers/Microsoft.Web/sites/hackathont36mpfdda20",
+        "serverFarmId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-auto-rg/providers/Microsoft.Web/serverfarms/hackathont36mpfdda20"
+    }
+}

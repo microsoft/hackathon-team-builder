@@ -4,14 +4,14 @@
   "parameters": {
     "provisionParameters": {
       "value": {
-        "resourceBaseName": "hackathont36mp6c1859",
+        "resourceBaseName": "hackathont36mpfdda20",
         "m365ClientId": "{{state.fx-resource-aad-app-for-teams.clientId}}",
         "m365ClientSecret": "{{state.fx-resource-aad-app-for-teams.clientSecret}}",
         "m365TenantId": "{{state.fx-resource-aad-app-for-teams.tenantId}}",
         "m365OauthAuthorityHost": "{{state.fx-resource-aad-app-for-teams.oauthHost}}",
-        "frontendHostingStorageName": "hackathonteambui6c1859",
-        "simpleAuthServerFarmsName": "hackathonteambuilder6c1859",
-        "simpleAuthWebAppName": "hackathonteambuilder6c1859"
+        "frontendHostingStorageName": "hackathont36mpfdda20",
+        "simpleAuthServerFarmsName": "hackathont36mpfdda20",
+        "simpleAuthWebAppName": "hackathont36mpfdda20"
       }
     }
   }

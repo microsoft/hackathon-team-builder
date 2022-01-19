@@ -42,3 +42,4 @@ resource simpleAuthDeploy 'Microsoft.Web/sites/extensions@2021-02-01' = {
 
 output webAppResourceId string = webApp.id
 output endpoint string = 'https://${webApp.properties.defaultHostName}'
+output serverFarmId string = serverFarms.id
