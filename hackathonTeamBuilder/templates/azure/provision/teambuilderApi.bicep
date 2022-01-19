@@ -66,3 +66,4 @@ resource teamBuilderApiDeploy 'Microsoft.Web/sites/extensions@2021-02-01' = {
 }
 
 output apiEndpoint string = 'https://${teambuilderApi.properties.defaultHostName}'
+output webAppResourceId string = teambuilderApi.id
