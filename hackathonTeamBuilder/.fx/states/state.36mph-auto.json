@@ -1,7 +1,7 @@
 {
     "solution": {
-        "provisionSucceeded": false,
-        "needCreateResourceGroup": true,
+        "provisionSucceeded": true,
+        "needCreateResourceGroup": false,
         "resourceNameSuffix": "e5df42",
         "resourceGroupName": "hackathonTeamBuilder-36mph-auto-rg",
         "tenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
@@ -31,7 +31,8 @@
         "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}"
     },
     "fx-resource-appstudio": {
-        "teamsAppId": "014ced44-1bd3-477b-88a7-9bb1e3443ac8"
+        "teamsAppId": "014ced44-1bd3-477b-88a7-9bb1e3443ac8",
+        "teamsAppUpdatedAt": 1642618591208
     },
     "fx-resource-simple-auth": {
         "endpoint": "https://hackathont36mpfdda20.azurewebsites.net",
