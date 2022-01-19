@@ -11,7 +11,7 @@
         "m365OauthAuthorityHost": "{{state.fx-resource-aad-app-for-teams.oauthHost}}",
         "frontendHostingStorageName": "hackathont36mpfdda20",
         "simpleAuthServerFarmsName": "hackathont36mpfdda20",
-        "simpleAuthWebAppName": "hackathont36mpfdda20"
+        "simpleAuthWebAppName": "hackathont36mpfdda20"        
       }
     }
   }
