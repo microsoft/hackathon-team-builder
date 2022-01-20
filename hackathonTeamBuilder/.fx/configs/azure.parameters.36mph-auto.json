@@ -11,7 +11,10 @@
         "m365OauthAuthorityHost": "{{state.fx-resource-aad-app-for-teams.oauthHost}}",
         "frontendHostingStorageName": "hackathont36mpfdda20",
         "simpleAuthServerFarmsName": "hackathont36mpfdda20",
-        "simpleAuthWebAppName": "hackathont36mpfdda20"
+        "simpleAuthWebAppName": "hackathont36mpfdda20",
+        "sqlAadAdminLogin": "pjirsa@36mphdev.onmicrosoft.com",
+        "sqlAadAdminSid": "61e8d361-e08d-4019-bb91-180e1f834d6b",
+        "sqlAadAdminTenant": "2e6a1980-3b67-497b-90c1-b8a3409dfa64"
       }
     }
   }

@@ -6,20 +6,20 @@ param userAssignedIdentityId string
 var teambuilderApiName = 'TeambuilderAPI${uniqueString(resourceGroup().id)}'
 var teambuilderPackageUri = contains(provisionParameters, 'teambuilderPackageUri') ? provisionParameters['teambuilderPackageUri'] : 'https://github.com/microsoft/hackathon-team-builder/releases/download/v0.0.11/Teambuilder.API_0.0.11.zip'
 var teambuilderDbServerName = contains(provisionParameters, 'teambuilderDbServerName') ? provisionParameters['teambuilderDbServerName'] : '${uniqueString(resourceGroup().id)}dbserver'
-//var teambuilderDbPassword = provisionParameters['teambuilderDbPassword']
+var adminLogin = contains(provisionParameters, 'sqlAadAdminLogin') ? provisionParameters['sqlAadAdminLogin'] : ''
+var adminSid = contains(provisionParameters, 'sqlAadAdminSid') ? provisionParameters['sqlAadAdminSid'] : ''
+var adminTenantId = contains(provisionParameters, 'sqlAadAdminTenantId') ? provisionParameters['sqlAadAdminTenantId'] : ''
 
 resource teambuilderSql 'Microsoft.Sql/servers@2021-05-01-preview' = {
   name: teambuilderDbServerName
   location: resourceGroup().location
   properties: {
-    //administratorLogin: 'teambuilder-admin'
-    // administratorLoginPassword: teambuilderDbPassword
     administrators: {
       administratorType: 'ActiveDirectory'
       principalType: 'User'
-      login: 'pjirsa@36mphdev.onmicrosoft.com'
-      sid: '61e8d361-e08d-4019-bb91-180e1f834d6b'
-      tenantId: '2e6a1980-3b67-497b-90c1-b8a3409dfa64'
+      login: adminLogin
+      sid: adminSid
+      tenantId: adminTenantId
       azureADOnlyAuthentication: true
     }
     version: '12.0'
