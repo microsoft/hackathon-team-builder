@@ -2,13 +2,9 @@ using TeamBuilder.API.Data;
 
 namespace TeamBuilder.API.Challenges
 {
-    public class AddChallengePayload
+    public class AddChallengePayload : ChallengePayloadBase
     {
-        public AddChallengePayload(ChallengeArea challenge)
-        {
-            Challenge = challenge;
-        }
+        public AddChallengePayload(ChallengeArea challenge) : base(challenge) { }
 
-        public ChallengeArea Challenge { get; }
     }
 }
