@@ -46,6 +46,7 @@ jobs:
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Zip Folder
       run: |
+        cp ${{ env.WORKING_DIRECTORY }}/Teambuilder.API/teambuilder.db ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         zip -r ../Teambuilder.API_${{ steps.semver.outputs.full }}.zip *
     - uses: ncipollo/release-action@v1
