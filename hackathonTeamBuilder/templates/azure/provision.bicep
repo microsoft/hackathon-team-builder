@@ -56,4 +56,6 @@ module graphqlAPIProvision './provision/teambuilderApi.bicep' = {
 output graphqlAPIOutput object = {
   apiEndpoint: graphqlAPIProvision.outputs.apiEndpoint
   webAppResourceId: graphqlAPIProvision.outputs.webAppResourceId
+  sqlHostName: graphqlAPIProvision.outputs.sqlHostName
+  sqlDatabaseResourceId: graphqlAPIProvision.outputs.sqlDatabaseResourceId
 }

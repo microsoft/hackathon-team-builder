@@ -18,7 +18,7 @@
     "fx-resource-identity": {
         "identityName": "hackathont36mpfdda20",
         "identityResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-auto-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hackathont36mpfdda20",
-        "identityClientId": "c77e60c3-9fda-4826-b8f5-076e24c7375e"
+        "identityClientId": "26083384-7239-401f-aaee-c746c9bf5055"
     },
     "fx-resource-aad-app-for-teams": {
         "clientId": "ccbe1523-bc4e-4466-82b2-9c701b3ef3c9",
@@ -32,7 +32,7 @@
     },
     "fx-resource-appstudio": {
         "teamsAppId": "014ced44-1bd3-477b-88a7-9bb1e3443ac8",
-        "teamsAppUpdatedAt": 1642630322052
+        "teamsAppUpdatedAt": 1642641616713
     },
     "fx-resource-simple-auth": {
         "endpoint": "https://hackathont36mpfdda20.azurewebsites.net",

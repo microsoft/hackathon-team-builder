@@ -13,11 +13,11 @@ module teamsFxSimpleAuthConfig './teamsFx/simpleAuth.bicep' = {
   }
 }
 
-// module teamsFxApiConfig './teamsFx/teambuilderApi.bicep' = {
-//   name: 'addTeamsFxApiConfiguration'
-//   params: {
-//     provisionParameters: provisionParameters
-//     provisionOutputs: provisionOutputs
-//     currentAppSettings: teamApiCurrentAppSettings
-//   }
-// }
+module teamsFxApiConfig './teamsFx/teambuilderApi.bicep' = {
+  name: 'addTeamsFxApiConfiguration'
+  params: {
+    provisionParameters: provisionParameters
+    provisionOutputs: provisionOutputs
+    currentAppSettings: teamApiCurrentAppSettings
+  }
+}
