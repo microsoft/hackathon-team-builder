@@ -32,8 +32,8 @@ namespace TeamBuilder.API
         {
             services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
-            //services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlite("Data Source=teambuilder.db"));
-            services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("teambuilder")));
+            services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlite("Data Source=teambuilder.db"));
+            //services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("teambuilder")));
 
             services.AddScoped<GraphServiceClient>(o =>
             {
