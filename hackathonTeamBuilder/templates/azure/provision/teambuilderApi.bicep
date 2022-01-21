@@ -4,7 +4,7 @@ param serverFarmId string
 param userAssignedIdentityId string
 
 var teambuilderApiName = 'TeambuilderAPI${uniqueString(resourceGroup().id)}'
-var teambuilderPackageUri = contains(provisionParameters, 'teambuilderPackageUri') ? provisionParameters['teambuilderPackageUri'] : 'https://github.com/microsoft/hackathon-team-builder/releases/download/v0.0.12/Teambuilder.API_0.0.12.zip'
+var teambuilderPackageUri = contains(provisionParameters, 'teambuilderPackageUri') ? provisionParameters['teambuilderPackageUri'] : 'https://github.com/microsoft/hackathon-team-builder/releases/download/v0.0.14/Teambuilder.API_0.0.14.zip'
 
 resource teambuilderApi 'Microsoft.Web/sites@2021-02-01' = {
   kind: 'app'

@@ -4,6 +4,8 @@
         "delegated": [
             "User.Read"
         ],
-        "application": []
+        "application": [
+            "User.Read.All"
+        ]
     }
 ]

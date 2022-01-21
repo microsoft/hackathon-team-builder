@@ -33,13 +33,11 @@ namespace TeamBuilder.API
             services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
             services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlite("Data Source=teambuilder.db"));
-            //services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("teambuilder")));
 
             services.AddScoped<GraphServiceClient>(o =>
             {
                 var config = new GraphClientConfiguration();
                 Configuration.GetSection("GraphClient").Bind(config);
-                // Uses MSI to get access to GraphAPI
                 return new GraphServiceClient(new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret));
             });
 
