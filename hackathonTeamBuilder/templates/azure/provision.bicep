@@ -41,4 +41,19 @@ output simpleAuthOutput object = {
   teamsFxPluginId: 'fx-resource-simple-auth'
   endpoint: simpleAuthProvision.outputs.endpoint
   webAppResourceId: simpleAuthProvision.outputs.webAppResourceId
+  serverFarmId: simpleAuthProvision.outputs.serverFarmId
+}
+
+module graphqlAPIProvision './provision/teambuilderApi.bicep' = {
+  name: 'graphqlAPIProvision'
+  params: {
+    provisionParameters: provisionParameters
+    serverFarmId: simpleAuthProvision.outputs.serverFarmId
+    userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
+  }
+}
+
+output graphqlAPIOutput object = {
+  apiEndpoint: graphqlAPIProvision.outputs.apiEndpoint
+  webAppResourceId: graphqlAPIProvision.outputs.webAppResourceId
 }
