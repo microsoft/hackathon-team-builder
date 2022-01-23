@@ -38,7 +38,9 @@ namespace TeamBuilder.API
             {
                 var config = new GraphClientConfiguration();
                 Configuration.GetSection("GraphClient").Bind(config);
-                return new GraphServiceClient(new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret));
+                var client = new GraphServiceClient(new ClientSecretCredential(config.TenantId, config.ClientId, config.ClientSecret));
+                client.BaseUrl = "https://graph.microsoft.com/beta";
+                return client;
             });
 
             services.AddCors(options =>

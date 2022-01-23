@@ -6,6 +6,7 @@ using GreenDonut;
 using TeamBuilder.API.Data;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 
 namespace TeamBuilder.API.DataLoader
 {
@@ -34,18 +35,24 @@ namespace TeamBuilder.API.DataLoader
             {
                 _logger.LogInformation("Fetching user information from GraphAPI");
                 var batchReq = new BatchRequestContent();
-                var reqIds = new Dictionary<string, string>(); // userid, requestid
+                var reqIds = new List<GraphBatchRequest>(); // userid, requestid
 
                 foreach (var i in keys)
                 {
-                    reqIds.Add(i, batchReq.AddBatchRequestStep(_graphClient.Users[i].Request()));
+                    var reqItem = new GraphBatchRequest();
+                    reqItem.UserId = i;
+                    reqItem.UserRequestId = batchReq.AddBatchRequestStep(_graphClient.Users[i].Request());
+                    reqItem.PhotoRequestId = batchReq.AddBatchRequestStep(_graphClient.Users[i].Photo.Content.Request());
+                    reqItem.PresenceRequestId = batchReq.AddBatchRequestStep(_graphClient.Users[i].Presence.Request());
+                    reqIds.Add(reqItem);
                 }
 
                 var resp = await _graphClient.Batch.Request().PostAsync(batchReq);
 
                 foreach (var req in reqIds)
                 {
-                    var user = await resp.GetResponseByIdAsync<User>(req.Value);
+                    var user = await resp.GetResponseByIdAsync<User>(req.UserRequestId);
+
                     var member = new Member
                     {
                         UserId = user.Id,
@@ -54,7 +61,7 @@ namespace TeamBuilder.API.DataLoader
                         LastName = user.Surname,
                         FullName = user.DisplayName
                     };
-                    result.Add(req.Key, member);
+                    result.Add(req.UserId, member);
                 }
 
                 _logger.LogInformation("Response from graphclient success");
@@ -65,6 +72,31 @@ namespace TeamBuilder.API.DataLoader
                 _logger.LogError(ex, ex.Message);
                 throw ex;
             }
+        }
+
+        private string GetUserPhoto(Stream photo)
+        {
+            if (photo != null)
+            {
+                MemoryStream ms = new MemoryStream();
+                photo.CopyTo(ms);
+                byte[] buffer = ms.ToArray();
+                string result = Convert.ToBase64String(buffer);
+                string imgDataURL = string.Format("data:image/png;base64,{0}", result);
+                return imgDataURL;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        private class GraphBatchRequest
+        {
+            public string UserId { get; set; } = default!;
+            public string UserRequestId { get; set; } = default!;
+            public string PhotoRequestId { get; set; } = default!;
+            public string PresenceRequestId { get; set; } = default!;
         }
 
     }
