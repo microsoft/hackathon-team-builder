@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  Provider,
-  teamsTheme,
-  teamsDarkTheme,
   Button,
   Flex,
   Header,
   TeamCreateIcon,
-  Loader,
-  teamsV2Theme,
+  Loader
 } from "@fluentui/react-northstar";
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from "./components/TeamList";
