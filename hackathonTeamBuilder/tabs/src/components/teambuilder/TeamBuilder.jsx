@@ -115,13 +115,14 @@ function TeamBuilder() {
         )}
         {myTeam ? (
           <Flex column gap="gap.medium" padding="padding.medium">
-            <Header as="h1" content="Your Team" />
+            <Header as="h1">Your Teams</Header>
             <TeamListItem
               Callback={handleChangeTeamMembership}
               edit={toggleShowCreate}
               isLead={myTeam.isLead}
               team={myTeam.team}
               isTeamMember={true}
+              showAllButtons
               onLeadChange={handleLeadChange}
             />
           </Flex>
@@ -157,7 +158,7 @@ function TeamBuilder() {
         )}
         <hr />
         <Flex column gap="gap.medium" padding="padding.medium">
-          <h2>All Teams</h2>
+          <Header as="h1">All Teams</Header>
           <TeamList
             edit={toggleShowCreate}
             Callback={handleChangeTeamMembership}

@@ -56,7 +56,7 @@ function TeamsList(props) {
         <Accordion
           fluid
           styled
-          exclusive={false}
+          defaultActiveIndex={[0]}
           panels={getChallengePanels()}>
         </Accordion>
       </div>

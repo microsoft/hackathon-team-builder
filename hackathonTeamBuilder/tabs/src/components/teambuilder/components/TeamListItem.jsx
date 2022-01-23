@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
+  AcceptIcon,
+  Avatar,
   Button,
   Card,
   Flex,
   Header,
   Label,
+  PresenterIcon,
   Text,
 } from "@fluentui/react-northstar";
 import {
@@ -32,11 +35,20 @@ function TeamListItem(props) {
       <Label>{noMemberFound}</Label>
     ) : (
       team.members.map((m, idx) => (
-        <Label
-          key={idx}
-          color={m.isLead ? colorLead : colorMember}
-          content={m.isLead ? m.user.fullName + " (Lead)" : m.user.fullName}
-        />
+        (m.isLead) ?
+        <Avatar key={idx} 
+          name={m.user.fullName}
+          icon={<PresenterIcon />}
+           />
+           :
+           <Avatar key={idx}
+           name={m.user.fullName}
+           />
+        // <Label
+        //   key={idx}
+        //   color={m.isLead ? colorLead : colorMember}
+        //   content={m.isLead ? m.user.fullName + " (Lead)" : m.user.fullName}
+        // />
       ))
     );
   }
@@ -130,16 +142,23 @@ function TeamListItem(props) {
         </Card.Body>
         <Card.Footer>
           <Flex gap="gap.small">
-            {props.isTeamMember ? (
-              <Flex gap="gap.small">
-                <LeaveButton onClick={props.Callback} />
-                <EditButton onClick={props.edit} />
-                {props.isLead ? (
-                  <DontLeadButton onClick={props.onLeadChange} />
-                ) : (
-                  <LeadButton onClick={props.onLeadChange} />
-                )}
-              </Flex>
+            {props.showAllButtons ? ( // if showAllButtons === true
+              props.isTeamMember ? (
+                <Flex gap="gap.small">
+                  <LeaveButton onClick={props.Callback} />
+                  <EditButton onClick={props.edit} />
+                  {props.isLead ? (
+                    <DontLeadButton onClick={props.onLeadChange} />
+                  ) : (
+                    <LeadButton onClick={props.onLeadChange} />
+                  )}
+                </Flex>
+              ) : (
+                <JoinButton onClick={props.Callback} />
+              )
+            ) : // else show only join/leave buttons
+            props.isTeamMember ? (
+              <LeaveButton onClick={props.Callback} />
             ) : (
               <JoinButton onClick={props.Callback} />
             )}

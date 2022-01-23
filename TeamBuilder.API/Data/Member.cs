@@ -11,5 +11,7 @@ namespace TeamBuilder.API.Data
         public string FirstName { get; set; } = default!;
         public string LastName {  get; set; } = default!;
         public string FullName {  get; set; } = default!;
+        public string AvatarUrl { get; set; } = default!;
+        public string OnlineStatus {  get; set; } = default!;
     }
 }
