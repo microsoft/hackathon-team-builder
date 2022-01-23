@@ -1,33 +1,3 @@
-export const dontLeadButton = {
-    siteVariables: {
-      colorScheme: {
-        brand: {
-          //'background': 'darkorange',
-        }
-      }
-    }
-  }
-
-export const leadButton = {
-    siteVariables: {
-      colorScheme: {
-        brand: {
-          //'background': 'green',
-        }
-      }
-    }
-  }
-  
-  export  const editButton = {
-    siteVariables: {
-      colorScheme: {
-        brand: {
-          //'background': 'darkblue',
-        }
-      }
-    }
-  }
-
   //fluidui lable color options: none, brand, orange, red, grey, yellow, pink, green
 
   export const noMemberFound ="No Team Members or Lead"
