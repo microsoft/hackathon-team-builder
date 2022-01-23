@@ -1,33 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { Provider, teamsTheme, teamsDarkTheme, Button, Flex, Header,TeamCreateIcon, Loader, teamsV2Theme } from '@fluentui/react-northstar';
+import React, { useState, useEffect } from "react";
+import {
+  Provider,
+  teamsTheme,
+  teamsDarkTheme,
+  Button,
+  Flex,
+  Header,
+  TeamCreateIcon,
+  Loader,
+  teamsV2Theme,
+} from "@fluentui/react-northstar";
 import { TeamsUserCredential } from "@microsoft/teamsfx";
-import TeamList from './components/TeamList';
-import CreateTeam from './components/CreateTeam';
-import TeamListItem from './components/TeamListItem';
-import Team from './apis/team';
-import {createTeamButtonText} from './components/Themes'
+import TeamList from "./components/TeamList";
+import CreateTeam from "./components/CreateTeam";
+import TeamListItem from "./components/TeamListItem";
+import Team from "./apis/team";
+import { createTeamButtonText } from "./components/Themes";
 
 function TeamBuilder() {
   const [teamList, setTeamList] = useState([]); // list of teams grouped by challenge
   const [myTeam, setMyTeam] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
-  const [hackToken, setHackToken] = useState('');
+  const [hackToken, setHackToken] = useState("");
   const [existingTeamNames, setExistingTeamNames] = useState([]);
   const [challengeOptions, setChallengeOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState("");
 
   const teamClient = Team();
   const credential = new TeamsUserCredential();
 
   // Helper functions ----------------------------------------
-  
+
   async function getTeams(authToken, userId) {
     let result = await teamClient.getAllTeams(authToken, userId);
     setChallengeOptions(result.challenges);
     setTeamList(result.teams);
     setExistingTeamNames(result.teamnames.map((t) => t.name)); // used to prevent duplicate team names on create
-    setMyTeam(result.myteams[0] ?? null)
+    setMyTeam(result.myteams[0] ?? null);
     setIsLoading(false);
   }
 
@@ -43,32 +53,31 @@ function TeamBuilder() {
     await getTeams(hackToken, userId);
   }
 
-  async function handleChangeTeamMembership(join, id, name, islead = false) {    
-    await updateTeamMembership(join, userId, id, islead);
+  async function handleChangeTeamMembership(join, id, name, isLead = false) {
+    await updateTeamMembership(join, userId, id, isLead);
   }
 
-  async function handleLeadChange(id, name, islead) {
+  async function handleLeadChange(id, name, isLead) {
     setIsLoading(true);
     let input = {
       teamId: id,
       userId: userId,
-      isLead: islead
+      isLead: isLead,
     };
     await teamClient.leadTeam(hackToken, input);
     await getTeams(hackToken, userId);
   }
 
-  async function updateTeamMembership(join, userId, teamId, islead) {
+  async function updateTeamMembership(join, userId, teamId, isLead) {
     setIsLoading(true);
     let input = {
       teamId: teamId,
-      userId: userId
+      userId: userId,
     };
     if (join) {
-      input.isLead = islead;
+      input.isLead = isLead;
       await teamClient.joinTeam(hackToken, input);
-    }
-    else {
+    } else {
       await teamClient.leaveTeam(hackToken, input);
     }
     await getTeams(hackToken, userId);
@@ -84,7 +93,7 @@ function TeamBuilder() {
     const loadData = async () => {
       //credential.login(HackAPIScope); // uncomment for user consent
       //let tokenResp = await credential.getToken(HackAPIScope);
-      let token = 'abcdefg';
+      let token = "abcdefg";
       //setHackToken(tokenResp.token);
       setHackToken(token);
 
@@ -93,56 +102,76 @@ function TeamBuilder() {
       setUserId(info.objectId);
 
       await getTeams(token, info.objectId);
-    }; // End getUserInfo()   
+    }; // End getUserInfo()
 
     loadData();
+  }, []);
 
-  }, []);  
+  let buttonText = !showCreate ? createTeamButtonText : "Never Mind";
 
-  let buttonText = !showCreate ? createTeamButtonText : 'Never Mind';
-
-    return (
-      <div className="ui">
-        <div id="TeamBuilder">
-          {isLoading &&
-            <div className="fullscreen">
-              <Loader label="Loading data..." />
-            </div>
-          }
-          {myTeam ?
-          <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
-          <Flex.Item >
-            <div>
-            <Header as="h3" content="Your Team" />
-              <div className="ui special fluid">
-                <TeamListItem Callback={handleChangeTeamMembership} edit={toggleShowCreate}
-                  islead={myTeam.isLead} team={myTeam.team} isTeamMember={true} onLeadChange={handleLeadChange} />
+  return (
+    <div className="ui">
+      <div id="TeamBuilder">
+        {isLoading && (
+          <div className="fullscreen">
+            <Loader label="Loading data..." />
+          </div>
+        )}
+        {myTeam ? (
+          <Flex column gap="gap.medium" padding="padding.medium">
+            <Header as="h1" content="Your Team" />
+            <TeamListItem
+              Callback={handleChangeTeamMembership}
+              edit={toggleShowCreate}
+              isLead={myTeam.isLead}
+              team={myTeam.team}
+              isTeamMember={true}
+              onLeadChange={handleLeadChange}
+            />
+          </Flex>
+        ) : (
+          <Flex gap="gap.medium" padding="padding.large">
+            <Flex.Item size="size.half">
+              <div>
+                <br></br>
+                <br></br>
+                <Button
+                  icon={<TeamCreateIcon />}
+                  fluid
+                  loader="Generate interface"
+                  primary
+                  onClick={toggleShowCreate}
+                  aria-label="Create Team or Cancel Create Team Button"
+                >
+                  {buttonText}
+                </Button>
               </div>
-            </div>
             </Flex.Item>
-            </Flex>
-            :
-            <div > 
-              <Flex gap="gap.medium" padding="padding.large">
-                    <Flex.Item size="size.half">
-                      <div>
-                    <br></br>
-                    <br></br>
-                    <Button icon={<TeamCreateIcon />}  fluid loader="Generate interface" primary onClick={toggleShowCreate} aria-label="Create Team or Cancel Create Team Button">{buttonText}</Button>
-                    </div>
-                    </Flex.Item>
-                  </Flex>
-            </div>
-          }
-          {showCreate && 
-            <CreateTeam teamNames={existingTeamNames} team={myTeam ? myTeam.team : null} createTeam={CreateNewTeam} editTeam={editTeam} cancel={toggleShowCreate} challengeOptions={challengeOptions} />
-          }
-          <br /><h2>All Teams</h2>
-              <TeamList edit={toggleShowCreate} Callback={handleChangeTeamMembership} myteam={myTeam ? myTeam.team : null} teams={teamList} />
-
-        </div>
+          </Flex>
+        )}
+        {showCreate && (
+          <CreateTeam
+            teamNames={existingTeamNames}
+            team={myTeam ? myTeam.team : null}
+            createTeam={CreateNewTeam}
+            editTeam={editTeam}
+            cancel={toggleShowCreate}
+            challengeOptions={challengeOptions}
+          />
+        )}
+        <hr />
+        <Flex column gap="gap.medium" padding="padding.medium">
+          <h2>All Teams</h2>
+          <TeamList
+            edit={toggleShowCreate}
+            Callback={handleChangeTeamMembership}
+            myteam={myTeam ? myTeam.team.id : null}
+            teams={teamList}
+          />
+        </Flex>
       </div>
-    );
+    </div>
+  );
 }
 
 export default TeamBuilder;

@@ -17,9 +17,6 @@
     "fx-resource-aad-app-for-teams": {
         "oauthHost": "https://login.microsoftonline.com",
         "oauthAuthority": "https://login.microsoftonline.com/f3dbb474-15ef-4465-a3a1-fff0e4c8146b",
-        "clientId": "52162dca-f784-4b03-ae65-75faa6d135e9",
-        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}",
-        "objectId": "3a3f9776-0611-47e0-bdba-bebd428db028",
         "oauth2PermissionScopeId": "1040bd83-5e63-4b56-b84b-08515fad41fc",
         "tenantId": "f3dbb474-15ef-4465-a3a1-fff0e4c8146b",
         "applicationIdUris": "api://hackathonteambuifee948ef.z13.web.core.windows.net/52162dca-f784-4b03-ae65-75faa6d135e9"

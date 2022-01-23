@@ -38,8 +38,7 @@ function TeamsList(props) {
           key={team.id}
           team={team}
           isTeamMember={team.id === props.myteam}
-          hasTeam={props.myteam}
-          islead={props.islead}
+          isLead={props.isLead}
         />
       ))
     }

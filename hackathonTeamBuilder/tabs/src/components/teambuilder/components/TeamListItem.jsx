@@ -1,130 +1,153 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Button, Flex, Header, Text, Label, mergeThemes, teamsTheme, Provider
-} from '@fluentui/react-northstar';
-import {dontLeadButton, leadButton, editButton,noMemberFound,colorLead,colorMember,leadButtonText,dontLeadButtonText,editButtonText, joinButtonText,leaveButtonText} from './Themes'
+  Button,
+  Card,
+  Flex,
+  Header,
+  Label,
+  Text,
+} from "@fluentui/react-northstar";
+import {
+  noMemberFound,
+  colorLead,
+  colorMember,
+  leadButtonText,
+  dontLeadButtonText,
+  editButtonText,
+  joinButtonText,
+  leaveButtonText,
+} from "./Themes";
+
 function TeamListItem(props) {
- 
+  const [team, setTeam] = useState(null);
 
-  const team = props.team;
-  const hackers = [];
-
-  if (team) {
-    if (team.members.length === 0) {
-      hackers.push(
-        <Label>
-          {noMemberFound}
-        </Label>
-      )
-    } else {
-      team.members.forEach(m => (
-        hackers.push(          
-          <span key={m}>
-            <Label color={m.isLead ? colorLead : colorMember} content={m.isLead ? m.user.fullName + " (Lead)" : m.user.fullName} />&nbsp;
-          </span>
-        )
-      ))
+  useEffect(() => {
+    if (props.team) {
+      setTeam(props.team);
     }
+  }, [props.team]);
+
+  function getHackers() {
+    return team.members.length === 0 ? (
+      <Label>{noMemberFound}</Label>
+    ) : (
+      team.members.map((m, idx) => (
+        <Label
+          key={idx}
+          color={m.isLead ? colorLead : colorMember}
+          content={m.isLead ? m.user.fullName + " (Lead)" : m.user.fullName}
+        />
+      ))
+    );
   }
- 
+
+  function JoinButton({ onClick }) {
+    return (
+      <Button
+        aria-label="Join Team Button"
+        onClick={() => {
+          onClick(
+            // handleChangeTeamMembership(join, id, name, islead = false)
+            true,
+            team.id,
+            team.name
+          );
+        }}
+      >
+        {joinButtonText}
+      </Button>
+    );
+  }
+
+  function LeaveButton({ onClick }) {
+    return (
+      <Button
+        primary
+        aria-label={leaveButtonText}
+        onClick={() => {
+          onClick(
+            // handleChangeTeamMembership(join, id, name, islead = false)
+            false,
+            team.id,
+            team.name
+          );
+        }}
+      >
+        {leaveButtonText}
+      </Button>
+    );
+  }
+
+  function EditButton({ onClick }) {
+    return (
+      <Button aria-label="Edit Team Button" onClick={onClick}>
+        {editButtonText}
+      </Button>
+    );
+  }
+
+  function LeadButton({ isTeamMember, isLead, onClick }) {
+    return (
+      <Button
+        aria-label="Lead Button"
+        onClick={() => {
+          onClick(team.id, team.name, true);
+        }}
+      >
+        {leadButtonText}
+      </Button>
+    );
+  }
+
+  function DontLeadButton({ isLead, onClick }) {
+    return (
+      <Button
+        primary
+        aria-label="Don't Lead Button"
+        onClick={() => {
+          onClick(team.id, team.name, false);
+        }}
+      >
+        {dontLeadButtonText}
+      </Button>
+    );
+  }
+
   return (
-      <Flex gap="gap.medium" padding="padding.medium" debug style={{ minHeight: 130, }}>
-        <Flex.Item >
-          <div style={{ position: 'relative', }} >
+    team && (
+      <Card fluid key={team.id}>
+        <Card.Header>
+          <Flex gap="gap.small" column>
             <Header as="h3" content={team.name} />
             <Text content={team.description} />
-            <br />
-            <br />
-            {/* <Text weight="bold" content="Teams Channel: " /><Text content={team.msTeamsChannelName} /> */}
-            <br />
-            <Text weight="bold" content="Team Members: " />
-            <br />
-              { hackers }
-              {!props.isTeamMember ? (
-                !props.hasTeam ? (
-                  <Flex gap="gap.medium" padding="padding.medium">
-                    <Button primary aria-label="Join Team Button"
-                      onClick={() => {
-                        props.Callback( // handleChangeTeamMembership(join, id, name, islead = false)
-                          true,
-                          team.id,
-                          team.name
-                        );
-                      }}
-                    >
-                      {joinButtonText}
-                    </Button>
-                  </Flex>
+          </Flex>
+        </Card.Header>
+        <Card.Body>
+          <Text weight="bold" content="Team Members: " />
+          <Flex.Item>
+            <Flex gap="gap.smaller">{getHackers()}</Flex>
+          </Flex.Item>
+        </Card.Body>
+        <Card.Footer>
+          <Flex gap="gap.small">
+            {props.isTeamMember ? (
+              <Flex gap="gap.small">
+                <LeaveButton onClick={props.Callback} />
+                <EditButton onClick={props.edit} />
+                {props.isLead ? (
+                  <DontLeadButton onClick={props.onLeadChange} />
                 ) : (
-                  <br></br>
-                )
-              ) : (
-
-                <Flex gap="gap.medium" padding="padding.medium">
-                  <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
-                    <Button  primary aria-label="Leave Team Button"
-                      onClick={() => {
-                        props.Callback( // handleChangeTeamMembership(join, id, name, islead = false)
-                          false,
-                          team.id,
-                          team.name
-                        );
-                      }}
-                    >
-                      {leaveButtonText}
-                    </Button>
-                  </Provider>
-                  <Provider theme={mergeThemes(teamsTheme, editButton)}>
-                    <Button primary aria-label="Edit Team Button"
-                      onClick={() => {
-                        props.edit()
-
-                      }}
-                    >
-                      {editButtonText}
-                    </Button>
-                  </Provider>
-                  {
-                    props.islead ? (
-                        <Provider theme={mergeThemes(teamsTheme, dontLeadButton)}>
-                          <Button primary aria-label="Don't Lead Button"
-                            onClick={() => {
-                              props.onLeadChange(
-                                team.id,
-                                team.name,
-                                false
-                              );
-                            }}
-                          >
-                            {dontLeadButtonText}
-                          </Button>
-                        </Provider>
-                    ) : (
-                      <Provider theme={mergeThemes(teamsTheme, leadButton)}>
-                        <Button primary aria-label="Lead Button"
-                          onClick={() => {
-                            props.onLeadChange(
-                              team.id,
-                              team.name,
-                              true
-                            );
-                          }}
-                        >
-                          {leadButtonText}
-                        </Button>
-                      </Provider>
-                    )
-                  }
-                </Flex>
-              )
-              }
-          </div>
-        </Flex.Item>
-        
-     
-      </Flex>
+                  <LeadButton onClick={props.onLeadChange} />
+                )}
+              </Flex>
+            ) : (
+              <JoinButton onClick={props.Callback} />
+            )}
+          </Flex>
+        </Card.Footer>
+      </Card>
+    )
   );
-
 }
 
 export default TeamListItem;
