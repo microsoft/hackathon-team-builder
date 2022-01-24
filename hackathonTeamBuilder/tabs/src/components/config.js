@@ -1,6 +1,5 @@
 const prod = {
-    GRAPHQL_ENDPOINT: 'https://teambuilderapi20220111132301.azurewebsites.net/graphql',
-    HACKAPI_ENDPOINT: 'https://hackapi-tax6y5voqibmw.azurewebsites.net/api',
+    GRAPHQL_ENDPOINT: 'https://teambuilderapibs55fu56l4xzi.azurewebsites.net/graphql',
     HACKAPI_SCOPE: 'api://05acec15-d6fb-4dae-a9b3-5886a7709df9/user_impersonation'    
     };
 
