@@ -26,13 +26,16 @@ query getChallenges($userId: String!) {
     id
   }
   myteams: membershipByUserId(userId: $userId){
-      team {
+      team {        
         id name description
         members {
           isLead
           user {
             fullName
           }
+        }
+        challenge {
+          name
         }
       }
       isLead

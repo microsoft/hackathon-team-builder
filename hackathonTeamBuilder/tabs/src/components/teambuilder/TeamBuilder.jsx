@@ -4,7 +4,7 @@ import {
   Flex,
   Header,
   TeamCreateIcon,
-  Loader
+  Loader,
 } from "@fluentui/react-northstar";
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from "./components/TeamList";
@@ -106,16 +106,16 @@ function TeamBuilder() {
   let buttonText = !showCreate ? createTeamButtonText : "Never Mind";
 
   return (
-    <div className="ui">
+    <Flex column fluid>
       <div id="TeamBuilder">
         {isLoading && (
           <div className="fullscreen">
             <Loader label="Loading data..." />
           </div>
         )}
-        {myTeam ? (
+        {myTeam && !showCreate ? (
           <Flex column gap="gap.medium" padding="padding.medium">
-            <Header as="h1">Your Teams</Header>
+            <Header as="h1">Your Team</Header>
             <TeamListItem
               Callback={handleChangeTeamMembership}
               edit={toggleShowCreate}
@@ -129,32 +129,29 @@ function TeamBuilder() {
         ) : (
           <Flex gap="gap.medium" padding="padding.large">
             <Flex.Item size="size.half">
-              <div>
-                <br></br>
-                <br></br>
-                <Button
-                  icon={<TeamCreateIcon />}
-                  fluid
-                  loader="Generate interface"
-                  primary
-                  onClick={toggleShowCreate}
-                  aria-label="Create Team or Cancel Create Team Button"
-                >
-                  {buttonText}
-                </Button>
-              </div>
+              <Button
+                icon={<TeamCreateIcon />}
+                loader="Generate interface"
+                primary
+                onClick={toggleShowCreate}
+                aria-label="Create Team or Cancel Create Team Button"
+              >
+                {buttonText}
+              </Button>
             </Flex.Item>
           </Flex>
         )}
         {showCreate && (
-          <CreateTeam
-            teamNames={existingTeamNames}
-            team={myTeam ? myTeam.team : null}
-            createTeam={CreateNewTeam}
-            editTeam={editTeam}
-            cancel={toggleShowCreate}
-            challengeOptions={challengeOptions}
-          />
+          <Flex gap="gap.medium" padding="padding.medium">
+            <CreateTeam
+              teamNames={existingTeamNames}
+              team={myTeam ? myTeam.team : null}
+              createTeam={CreateNewTeam}
+              editTeam={editTeam}
+              cancel={toggleShowCreate}
+              challengeOptions={challengeOptions}
+            />
+          </Flex>
         )}
         <hr />
         <Flex column gap="gap.medium" padding="padding.medium">
@@ -167,7 +164,7 @@ function TeamBuilder() {
           />
         </Flex>
       </div>
-    </div>
+    </Flex>
   );
 }
 

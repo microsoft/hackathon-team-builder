@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion } from '@fluentui/react-northstar';
 import TeamListItem from './TeamListItem';
+import { getPropsWithDefaults } from '@uifabric/utilities';
 
 function TeamsList(props) {
 
@@ -39,6 +40,7 @@ function TeamsList(props) {
           team={team}
           isTeamMember={team.id === props.myteam}
           isLead={props.isLead}
+          hasTeam={props.myteam !== null}
         />
       ))
     }
