@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.5.0" />
+    <PackageReference Include="Azure.Messaging.EventGrid" Version="4.8.1" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.0.1" />
     <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.0.1" />
     <PackageReference Include="HotChocolate.Data" Version="12.0.1" />

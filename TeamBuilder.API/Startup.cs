@@ -10,6 +10,7 @@ using TeamBuilder.API.Challenges;
 using TeamBuilder.API.Common;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
+using TeamBuilder.API.Services;
 using TeamBuilder.API.TeamMembers;
 using TeamBuilder.API.Teams;
 using TeamBuilder.API.Types;
@@ -54,6 +55,9 @@ namespace TeamBuilder.API
                                         .AllowAnyMethod();
                                   });
             });
+
+            services.Configure<EventGridMessageServiceConfiguration>(Configuration.GetSection("EventGrid"));
+            services.AddSingleton<IMessageService, EventGridMessageService>();
 
             services
                 .AddGraphQLServer()

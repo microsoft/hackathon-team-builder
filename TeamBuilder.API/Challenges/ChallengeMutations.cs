@@ -3,6 +3,7 @@ using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using TeamBuilder.API.Data;
+using TeamBuilder.API.Services;
 
 namespace TeamBuilder.API.Challenges
 {
@@ -34,7 +35,8 @@ namespace TeamBuilder.API.Challenges
         [UseTeamBuilderDbContext]
         public async Task<AddChallengePayload> AddChallengeAsync(
             AddChallengeInput input,
-            [ScopedService] TeamBuilderDbContext context)
+            [ScopedService] TeamBuilderDbContext context,
+            [Service] IMessageService messageService)
         {
             var challenge = new ChallengeArea
             {
@@ -45,6 +47,8 @@ namespace TeamBuilder.API.Challenges
 
             context.Challenges.Add(challenge);
             await context.SaveChangesAsync();
+
+            await messageService.SendAsync(challenge, MutationType.Create);
 
             return new AddChallengePayload(challenge);
         }
@@ -73,7 +77,8 @@ namespace TeamBuilder.API.Challenges
         public async Task<EditChallengePayload> EditChallengeAsync(
             int id,
             EditChallengeInput input,
-            [ScopedService] TeamBuilderDbContext context)
+            [ScopedService] TeamBuilderDbContext context,
+            [Service] IMessageService messageService)
         {
             var existingItem = await context.Challenges.FindAsync(id);
             if (existingItem == null)
@@ -86,6 +91,9 @@ namespace TeamBuilder.API.Challenges
             existingItem.Description = string.IsNullOrEmpty(input.Description) ? existingItem.Description : input.Description;
             context.Entry(existingItem).State = EntityState.Modified;
             await context.SaveChangesAsync();
+
+            await messageService.SendAsync(existingItem, MutationType.Update);
+
             return new EditChallengePayload(existingItem);
         }
 
@@ -102,11 +110,12 @@ namespace TeamBuilder.API.Challenges
         ///        succeeded reason
         ///    }
         /// }
-    /// </example>
-    [UseTeamBuilderDbContext]
+        /// </example>
+        [UseTeamBuilderDbContext]
         public async Task<DeleteChallengePayload> DeleteChallengeAsync(
-            int id,
-            [ScopedService] TeamBuilderDbContext context)
+                int id,
+                [ScopedService] TeamBuilderDbContext context,
+                [Service] IMessageService messageService)
         {
             var existingItem = await context.Challenges.FindAsync(id);
             if (existingItem == null)
@@ -115,6 +124,9 @@ namespace TeamBuilder.API.Challenges
             }
             context.Challenges.Remove(existingItem);
             await context.SaveChangesAsync();
+
+            await messageService.SendAsync(existingItem, MutationType.Delete);
+
             return new DeleteChallengePayload(true, "Deleted");
         }
     }
