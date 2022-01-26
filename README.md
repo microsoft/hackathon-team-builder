@@ -5,7 +5,46 @@
 
 ## Description
 
-Microsoft Teams Tab application used to create and organize Hackathon Teams and to setup and configure Teams channels per Hackathon team created.
+Create and manage Hackathon Teams with this sample Microsoft Teams Tab application used to 
+The app deploys all assets needed for users to:
+    * Create a hackathon team
+    * Edit a hackathon team's description
+    * Join a hackathon team
+    * Leave a hackathon team
+    * Lead a hackathon team
+
+You can use this app as sample code, or run a simple hackathon with it.
+
+To run this locally, or deploy to your Team's workspace you need:
+* [Visual Studio Code](https://code.visualstudio.com/Download)
+* [Team's Toolkit Extension](https://marketplace.visualstudio.com/items?itemName=TeamsDevApp.ms-teams-vscode-extension)
+
+[Desploying Locally](#deploying-locally)
+[Deploying To Teams](#deploying-to-teams)
+
+## Deploying Locally
+1 Clone the project and open Visual Studio Code at the hackathonTeamBuilder subdirectory
+```
+git clone https://github.com/microsoft/hackathon-team-builder.git
+cd hackathon-team-builder
+cd hackathonTeamBuilder
+code .
+```
+2 Open the Team's Toolkit Extension
+3 Sign in to your M365 organization ([Create an M365 org](https://www.microsoft.com/en-us/windows-365?rtc=1))
+4 Sign in to your Azure subscription ([Create an Azure subscription](https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription#:~:text=Create%20a%20subscription%20in%20the%20Azure%20portal.%201,that%20helps%20you%20easily%20...%20%20See%20More.))
+5 Once signed in hit F5 to run locally (this may take several minutes)
+6 A new broswer will open to a local instance of Teams (you might be asked to login again)
+7 You will see a screen asking if you want to Add TeamBuilder to Teams - click add
+You're now in TeamBuilder!
+
+## Deploying to Teams
+1 Follow steps 1-4 from the Deploying Locally section above
+2 Click on the Team's Toolkit > Deployment > Provision in the cloud
+3 Click on the Team's Toolkit > Deployment > Deploy to the cloud 
+4 Click on the Team's Toolkit > Deployment > Publish To Teams
+5 In your Team's control panel you will need to update the version of the Team Builder A]
+6 Add Team Builder to any Team Channel just as you would any a]
 
 ## Products
 - Micorosoft Teams Tab App
