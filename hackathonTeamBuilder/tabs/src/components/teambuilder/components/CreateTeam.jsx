@@ -183,66 +183,6 @@ function TeamForm(props) {
 
   return (
     <Form onSubmit={handleSubmit} fields={fields} />
-    // <div className="ui segment">
-    //     <form onSubmit={handleSubmit} className="ui form">
-    //       {!props.team ? "" :
-    //         <div className="field">
-    //           <h2>{teamName}</h2>
-    //         </div>
-    //       }
-    //       {props.team ? "" :
-    //         <div className="field">
-    //           <label>Challenge Area</label>
-    //           <Dropdown name="challengeName" placeholder='Select a challenge' fluid checkable items={challengeNameOptions} onChange={handleDropDownChange} defaultValue={challengeName} />
-    //         </div>
-    //       }          
-
-    //       {props.team ? "" :
-    //         <div className="field">
-    //           <label>Team Name</label>
-    //           <input required id="teamName" value={teamName} name="teamName" type="text" onChange={handleInputChange} className={
-    //             formErrors && (formErrors.teamName || formErrors.duplicateName || formErrors.invalidName)
-    //               ? 'form-control error'
-    //               : 'form-control'
-    //           } />
-    //         </div>
-    //       }
-
-    //       <div className="field">
-    //         <label>Team description</label>
-    //         <textarea required value={teamDescription} name="teamDescription" rows="2" onChange={handleInputChange}></textarea>
-    //       </div>
-          
-    //       {props.team ? "" :
-    //         <div className="field">
-
-    //         </div>
-    //       }
-    //       <div className="ui basic segment">
-    //         {submitting ?
-    //           <span className="ui">Creating...</span>
-    //           :
-    //           <div>
-    //             {!isValid() && <ul>
-    //               {Object.entries(formErrors || {}).map(([prop, value]) => {
-    //                 return (
-    //                   <li className='error-message' key={prop}>
-    //                     {value}
-    //                   </li>
-    //                 );
-    //               })}
-    //             </ul>
-    //             }
-    //             <div>
-    //               <Button primary type="submit" disabled={!isValid()} aria-label="Submit or Save Button">{props.team ? 'Save' : 'Create Team'}</Button>
-    //               <Button onClick={cancelClick} aria-label="Cancel Button">Cancel</Button>
-    //             </div>
-
-    //           </div>
-    //         }
-    //       </div>
-    //     </form>
-    // </div>
   )
 }
 
