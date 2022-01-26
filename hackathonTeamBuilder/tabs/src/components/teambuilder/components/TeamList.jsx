@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion } from '@fluentui/react-northstar';
 import TeamListItem from './TeamListItem';
+import { getPropsWithDefaults } from '@uifabric/utilities';
 
 function TeamsList(props) {
 
@@ -23,6 +24,7 @@ function TeamsList(props) {
   function getChallengePanels() {
     return teams.map((c) => (
       {
+        key: c.id,
         title: c.name,
         content: getTeamListItems(c.teams)
       }      

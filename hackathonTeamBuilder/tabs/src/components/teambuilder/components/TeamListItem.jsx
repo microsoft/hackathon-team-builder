@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import {
-  AcceptIcon,
   Avatar,
   Button,
   Card,
   Flex,
   Header,
   Label,
-  PresenterIcon,
   Text,
 } from "@fluentui/react-northstar";
 import {
   noMemberFound,
-  colorLead,
-  colorMember,
   leadButtonText,
   dontLeadButtonText,
   editButtonText,
@@ -31,25 +27,31 @@ function TeamListItem(props) {
   }, [props.team]);
 
   function getHackers() {
-    return team.members.length === 0 ? (
-      <Label>{noMemberFound}</Label>
-    ) : (
-      team.members.map((m, idx) => (
-        (m.isLead) ?
-        <Avatar key={idx} 
-          name={m.user.fullName}
-          icon={<PresenterIcon />}
-           />
-           :
-           <Avatar key={idx}
-           name={m.user.fullName}
-           />
-        // <Label
-        //   key={idx}
-        //   color={m.isLead ? colorLead : colorMember}
-        //   content={m.isLead ? m.user.fullName + " (Lead)" : m.user.fullName}
-        // />
-      ))
+    return (
+      <Flex gap="gap.small">
+        {team.members
+          .filter((m) => !m.isLead)
+          .map((m, idx) => <Avatar key={idx} name={m.user.fullName} />)
+        }
+      </Flex>
+    );
+  }
+
+  function getTeamLeads() {
+    return (
+      <Flex gap="gap.small">
+        {team.members
+          .filter((m) => m.isLead)
+          .map((m, idx) => (
+            <Avatar
+              key={idx}
+              name={m.user.fullName + " (Lead)"}
+              status={{
+                color: "lightblue",
+              }}
+            />
+          ))}
+      </Flex>
     );
   }
 
@@ -135,10 +137,18 @@ function TeamListItem(props) {
           </Flex>
         </Card.Header>
         <Card.Body>
-          <Text weight="bold" content="Team Members: " />
-          <Flex.Item>
-            <Flex gap="gap.smaller">{getHackers()}</Flex>
-          </Flex.Item>
+          <Flex gap="gap.small" fluid>
+            <Flex column gap="gap.small">
+              <Text weight="bold" content="Team Leaders: " />
+              {getTeamLeads()}
+            </Flex>
+            <Flex.Item push>
+              <Flex column gap="gap.small">
+                <Text weight="bold" content="Team Members: " />
+                {getHackers()}
+              </Flex>
+            </Flex.Item>
+          </Flex>
         </Card.Body>
         <Card.Footer>
           <Flex gap="gap.small">
@@ -157,7 +167,9 @@ function TeamListItem(props) {
                 <JoinButton onClick={props.Callback} />
               )
             ) : // else show only join/leave buttons
-            props.isTeamMember ? (
+            props.hasTeam ? (
+              <></>
+            ) : props.isTeamMember ? (
               <LeaveButton onClick={props.Callback} />
             ) : (
               <JoinButton onClick={props.Callback} />

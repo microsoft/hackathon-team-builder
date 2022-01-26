@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dropdown, Form, Input, TextArea } from '@fluentui/react-northstar';
+import { Button, Form, Input, TextArea } from '@fluentui/react-northstar';
 
 function TeamForm(props) {
-
-  function initValidation() {
-    return {
-      challengeName: 'Select a challenge area.',
-      teamName: 'Team Name cannot be empty.',
-      teamDescription: 'Team Description cannot be empty.',
-    }
-  }
-
   const [teamName, setTeamName] = useState('');
   const [teamDescription, setTeamDescription] = useState('');
-  const [challengeAreaId, setChallengeAreaId] = useState(0);
-  const [challengeNameOptions, setChallengeNameOptions] = useState([]);
-  const [formErrors, setFormErrors] = useState(initValidation());
+  const [challengeName, setChallengeName] = useState('');
+  const [formErrors, setFormErrors] = useState({});
 
   const fields = [
     {
@@ -23,13 +13,10 @@ function TeamForm(props) {
       name: 'challengeName',
       id: 'challengeName',
       key: 'challengeName',
-      required: true,
-      errorMessage: formErrors['challengeName'],
       control: {
-        as: Dropdown,
-        placeholder: 'Choose a Challenge Area',
-        items: challengeNameOptions,
-        onChange: handleDropDownChange
+        as: Input,
+        value: challengeName,
+        disabled: true
       }
     },
     {
@@ -42,8 +29,7 @@ function TeamForm(props) {
       control: {
         as: Input,
         value: teamName,
-        showSuccessIndicator: false,
-        onChange: handleInputChange
+        disabled: true
       },
     },
     {
@@ -63,21 +49,27 @@ function TeamForm(props) {
     {
         control: {
           as: Button,
-          content: 'Create Team',
+          content: 'Save',
         },
         key: 'submit',
     }
   ]; 
 
   useEffect(() => {
-    if (props.challengeOptions){
-      let items = props.challengeOptions.map((c) => {
-        return { header: c.name, content: c.description, value: c.id, prefix: c.track }
-      });
-      setChallengeNameOptions(items);
-    }
+    if (props.team) {
+      let t = props.team;
+      let currentErrors = formErrors;
 
-  }, [props.challengeOptions])
+      setTeamName(t.name);
+      setTeamDescription(t.description);
+      setChallengeName(t.challenge.name);
+
+      if (t.name && t.name !== '') delete currentErrors['teamName'];
+      if (t.description && t.description !== '') delete currentErrors['teamDescription'];
+
+      setFormErrors(currentErrors);
+    }
+  }, [props.team])
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -110,48 +102,14 @@ function TeamForm(props) {
     setFormErrors(currentFormErrors);
   }
 
-  function handleDropDownChange(event, option) {
-    const { name, value } = option;
-    let currentFormErrors = formErrors;
-
-    switch (name) {
-      case 'challengeName':
-        delete currentFormErrors[name];
-        setChallengeAreaId(value.value);
-        break;      
-      default:
-        break;
-    }
-
-    setFormErrors(currentFormErrors);
-  }
-
-  function newTeam() {
-    let input = {
-      name: teamName,
-      description: teamDescription,
-      challengeAreaId: challengeAreaId
-    }
-    props.createTeam(input);
-  }
-
-  function editTeam() {
-    let input = {
-      name: props.team.name,
-      description: teamDescription,
-      challengeAreaId: challengeAreaId
-    };
-    props.editTeam(input);
-  }
-
   function handleSubmit(event) {
     event.preventDefault();
     if (isValid()) {
-      if (!props.team) {
-        newTeam();
-      } else {
-        editTeam();
-      }
+        let input = {
+            id: props.team.id,
+            description: teamDescription
+          };
+          props.editTeam(input);
       return true;
     }
   }
