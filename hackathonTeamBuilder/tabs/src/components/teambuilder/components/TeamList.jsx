@@ -41,6 +41,7 @@ function TeamsList(props) {
           team={team}
           isTeamMember={team.id === props.myteam}
           isLead={props.isLead}
+          hasTeam={props.myteam !== null}
         />
       ))
     }
