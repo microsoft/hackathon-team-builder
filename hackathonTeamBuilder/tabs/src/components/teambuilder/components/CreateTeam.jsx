@@ -14,9 +14,7 @@ function TeamForm(props) {
   const [teamName, setTeamName] = useState('');
   const [teamDescription, setTeamDescription] = useState('');
   const [challengeAreaId, setChallengeAreaId] = useState(0);
-  const [challengeName, setChallengeName] = useState('');
   const [challengeNameOptions, setChallengeNameOptions] = useState([]);
-  const [submitting, setSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState(initValidation());
 
   const fields = [
@@ -26,7 +24,6 @@ function TeamForm(props) {
       id: 'challengeName',
       key: 'challengeName',
       required: true,
-      defaultValue: challengeName,
       errorMessage: formErrors['challengeName'],
       control: {
         as: Dropdown,
@@ -66,11 +63,11 @@ function TeamForm(props) {
     {
         control: {
           as: Button,
-          content: props.team ? 'Save' : 'Create Team',
+          content: 'Create Team',
         },
         key: 'submit',
     }
-  ];
+  ]; 
 
   useEffect(() => {
     if (props.challengeOptions){
@@ -80,20 +77,7 @@ function TeamForm(props) {
       setChallengeNameOptions(items);
     }
 
-    if (props.team) {
-      let t = props.team;
-      let currentErrors = formErrors;
-
-      setTeamName(t.name);
-      setTeamDescription(t.description);
-      setChallengeName(t.challenge.name);
-
-      if (t.name && t.name !== '') delete currentErrors['teamName'];
-      if (t.description && t.description !== '') delete currentErrors['teamDescription'];
-
-      setFormErrors(currentErrors);
-    }
-  }, [props.team, props.challengeOptions]);
+  }, [props.challengeOptions])
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -133,7 +117,6 @@ function TeamForm(props) {
     switch (name) {
       case 'challengeName':
         delete currentFormErrors[name];
-        setChallengeName(value.header);
         setChallengeAreaId(value.value);
         break;      
       default:
@@ -163,9 +146,7 @@ function TeamForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setSubmitting(true);    
     if (isValid()) {
-      setSubmitting(true);
       if (!props.team) {
         newTeam();
       } else {
@@ -198,11 +179,6 @@ function TeamForm(props) {
     else {
       return true;
     }
-  }
-
-  function cancelClick(e) {
-    e.preventDefault();
-    props.cancel();
   }
 
   return (

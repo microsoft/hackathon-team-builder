@@ -9,6 +9,7 @@ import {
 import { TeamsUserCredential } from "@microsoft/teamsfx";
 import TeamList from "./components/TeamList";
 import CreateTeam from "./components/CreateTeam";
+import EditTeam from "./components/EditTeam";
 import TeamListItem from "./components/TeamListItem";
 import Team from "./apis/team";
 import { createTeamButtonText } from "./components/Themes";
@@ -141,7 +142,7 @@ function TeamBuilder() {
             </Flex.Item>
           </Flex>
         )}
-        {showCreate && (
+        {showCreate && !myTeam && (
           <Flex gap="gap.medium" padding="padding.medium">
             <CreateTeam
               teamNames={existingTeamNames}
@@ -152,6 +153,17 @@ function TeamBuilder() {
               challengeOptions={challengeOptions}
             />
           </Flex>
+        )}
+        {showCreate && myTeam && (
+          <Flex gap="gap.medium" padding="padding.medium">
+          <EditTeam
+            teamNames={existingTeamNames}
+            team={myTeam.team}
+            editTeam={editTeam}
+            cancel={toggleShowCreate}
+            challengeOptions={challengeOptions}
+          />
+        </Flex>
         )}
         <hr />
         <Flex column gap="gap.medium" padding="padding.medium">

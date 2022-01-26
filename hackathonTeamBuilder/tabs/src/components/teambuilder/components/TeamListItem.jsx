@@ -142,7 +142,7 @@ function TeamListItem(props) {
               <Text weight="bold" content="Team Leaders: " />
               {getTeamLeads()}
             </Flex>
-            <Flex.Item push="right">
+            <Flex.Item push>
               <Flex column gap="gap.small">
                 <Text weight="bold" content="Team Members: " />
                 {getHackers()}

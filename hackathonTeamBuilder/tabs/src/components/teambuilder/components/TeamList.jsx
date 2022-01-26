@@ -24,6 +24,7 @@ function TeamsList(props) {
   function getChallengePanels() {
     return teams.map((c) => (
       {
+        key: c.id,
         title: c.name,
         content: getTeamListItems(c.teams)
       }      
@@ -40,7 +41,6 @@ function TeamsList(props) {
           team={team}
           isTeamMember={team.id === props.myteam}
           isLead={props.isLead}
-          hasTeam={props.myteam !== null}
         />
       ))
     }

@@ -35,6 +35,7 @@ query getChallenges($userId: String!) {
           }
         }
         challenge {
+          id
           name
         }
       }
