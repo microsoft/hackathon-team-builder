@@ -22,6 +22,12 @@ namespace TeamBuilder.API
             CancellationToken cancellationToken
         ) => dataLoader.LoadAsync(id, cancellationToken);
 
+        public Task<AppSetting> GetAppSettingsAsync(
+            string msTeamId,
+            AppSettingByMSTeamIdDataLoader dataLoader,
+            CancellationToken cancellationToken
+        ) => dataLoader.LoadAsync(msTeamId, cancellationToken);
+
         public Task<Member> GetUserAsync(
             string userId,
             UserByIdDataLoader dataLoader,
