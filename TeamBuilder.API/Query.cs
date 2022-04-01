@@ -16,6 +16,9 @@ namespace TeamBuilder.API
         [UseTeamBuilderDbContext]
         public Task<List<Team>> GetTeams([ScopedService] TeamBuilderDbContext context) => context.Teams.ToListAsync();
 
+        [UseTeamBuilderDbContext]
+        public Task<List<AppSetting>> GetAppSettings([ScopedService] TeamBuilderDbContext context) => context.AppSettings.ToListAsync();
+
         public Task<Team> GetTeamAsync(
             int id,
             TeamByIdDataLoader dataLoader,

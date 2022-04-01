@@ -7,6 +7,7 @@ namespace TeamBuilder.API.Data
 {
     public class AppSetting
     {
+
         [StringLength(100)]
         public string MSTeamId { get; set; }
      
