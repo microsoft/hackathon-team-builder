@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Graph;
+using TeamBuilder.API.AppSettings;
 using TeamBuilder.API.Challenges;
 using TeamBuilder.API.Common;
 using TeamBuilder.API.Data;
@@ -63,10 +64,12 @@ namespace TeamBuilder.API
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
                     .AddTypeExtension<TeamMemberQueries>()
+                    .AddTypeExtension<AppSettingQueries>()
                 .AddMutationType()
                     .AddTypeExtension<ChallengeMutations>()
                     .AddTypeExtension<TeamMutations>()
                     .AddTypeExtension<TeamMemberMutations>()
+                    .AddTypeExtension<AppSettingMutation>()
                 .AddType<ChallengeType>()
                 .AddType<TeamType>()
                 .AddType<TeamMemberType>()
@@ -74,6 +77,7 @@ namespace TeamBuilder.API
                 .AddDataLoader<ChallengeByIdDataLoader>()
                 .AddDataLoader<TeamMemberByTeamIdDataLoader>()
                 .AddDataLoader<UserByIdDataLoader>()
+                .AddDataLoader<AppSettingByMSTeamIdDataLoader>()
                 .AddSorting()
                 .AddFiltering()
                 ;
