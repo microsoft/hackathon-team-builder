@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Checkbox, Form, Input } from '@fluentui/react-northstar';
+import { Checkbox, Form, Input, Flex } from '@fluentui/react-northstar';
 import "./App.css";
 import * as microsoftTeams from "@microsoft/teams-js";
 
@@ -10,10 +10,10 @@ import * as microsoftTeams from "@microsoft/teams-js";
  * their choices and communicate that to Teams to enable the save button.
  */
  function TabConfig(props) {
-  //useTeamsPrivateChannel
-  const [teamsChannel, setTeamsChannel] = useState('');
-  const [useTeamsPrivateChannel, setUseTeamsPrivateChannel] = useState('');
-  const [joinApprovalRequired, setJoinApprovalRequired] = useState('');
+
+  const [teamsChannel, setTeamsChannel] = useState(false);
+  const [useTeamsPrivateChannel, setUseTeamsPrivateChannel] = useState(false);
+  const [joinApprovalRequired, setJoinApprovalRequired] = useState(false);
   const [maxTeamSize, setMaxTeamSize] = useState('');
   const [githubOrg, setGithubOrg] = useState('');
   const [githubKey, setGithubKey] = useState('');
@@ -23,10 +23,10 @@ import * as microsoftTeams from "@microsoft/teams-js";
     return {
       githubOrg: 'Github organization name cannot be empty.',
       githubKey: 'Github authorization key cannot be empty.',
-      teamsChannel: 'Use teams',
+      teamsChannel: '',
       maxTeamSize: 'Max team size cannot be empty.',
-      useTeamsPrivateChannel: 'Use teams private channel',
-      joinApprovalRequired: 'Join approval required',
+      joinApprovalRequired: '',
+      useTeamsPrivateChannel: '',      
     }
   }
 
@@ -50,7 +50,7 @@ import * as microsoftTeams from "@microsoft/teams-js";
       name: 'useTeamsPrivateChannel',
       id: 'useTeamsPrivateChannel',
       key: 'useTeamsPrivateChannel',
-      required: false,
+      required: true,
       errorMessage: formErrors['useTeamsPrivateChannel'],
       control: {
         as: Checkbox,
@@ -119,6 +119,7 @@ import * as microsoftTeams from "@microsoft/teams-js";
 
   useEffect(() => {
 
+    console.log("UseEffect called..");
     // Initialize the Microsoft Teams SDK
     microsoftTeams.initialize();
 
@@ -149,22 +150,79 @@ import * as microsoftTeams from "@microsoft/teams-js";
   }, [])
 
   function handleInputChange(e) {
+
+    console.log("handleInputChange called..");
+    //
     const { name, value } = e.target;
+    console.log(`name: ${name} value: ${value}`);
     let currentFormErrors = formErrors;
     //
-    if (!value || value === '') {
-      currentFormErrors[name] = formErrors[name];
+    switch (name) {
+      case 'teamsChannel':
+        setTeamsChannel(e.target.checked);
+        if (!e.target.checked === true) {
+          currentFormErrors[name] = formErrors[teamsChannel];
+        }
+        else {
+          delete currentFormErrors[name];
+        }
+        break;
+      case 'useTeamsPrivateChannel':
+        setUseTeamsPrivateChannel(e.target.checked);
+        if (!e.target.checked) {
+          currentFormErrors[name] = formErrors[useTeamsPrivateChannel];
+        }
+        else {
+          delete currentFormErrors[name];
+        }
+        break;
+      case 'joinApprovalRequired':
+          setJoinApprovalRequired(e.target.checked);
+          if (!e.target.checked) {
+            currentFormErrors[name] = formErrors[joinApprovalRequired];
+          }
+          else {
+            delete currentFormErrors[name];
+          }
+          break;
+      case 'maxTeamSize':
+          setMaxTeamSize(value);
+          if (!value || value === '') {
+            currentFormErrors[name] = formErrors[maxTeamSize];
+          }
+          else {
+            delete currentFormErrors[name];
+          }
+          break;
+      case 'githubOrg':
+        setGithubOrg(value);
+        if (!value || value === '') {
+          currentFormErrors[name] = formErrors[githubOrg];
+        }
+        else {
+          delete currentFormErrors[name];
+        }
+        break;
+      case 'githubKey':
+        setGithubKey(value);
+        if (!value || value === '') {
+          currentFormErrors[name] = formErrors[githubKey];
+        }
+        else {
+          delete currentFormErrors[name];
+        }
+        break;
+      default:
+        break;
     }
-    else {
-      delete currentFormErrors[name];
-    }
+
     setFormErrors(currentFormErrors);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     if (isValid()) {
-      alert('Saving settings...');
+      // TODO: Save settings
       return true;
     }
   }
@@ -180,9 +238,11 @@ import * as microsoftTeams from "@microsoft/teams-js";
 
   return (
     <div>
-      <h1>Tab Configuration</h1>
+      <h3>Tab Configuration</h3>
       <div>
-        <Form onSubmit={handleSubmit} fields={fields} />
+        <Flex padding="padding.small">
+          <Form onSubmit={handleSubmit} fields={fields} />
+        </Flex>
         {/*
         We will add a form to hold and save the following configuration options:
         TeamsChannels (Enable Teams Integration?) -> Toggle Yes/No
