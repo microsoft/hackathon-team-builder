@@ -5,6 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeamBuilder.API.Data
 {
+    public enum AppSettingNames
+    {
+        UseTeams,
+        UsePrivateChannels,
+        MaxTeamSize,
+        EnableAuth,
+        GitHubOrg,
+        GitHubKey
+    }
     public class AppSetting
     {
 
@@ -13,7 +22,7 @@ namespace TeamBuilder.API.Data
      
         [Required]
         [StringLength(50)]
-        public string Setting { get; set; }
+        public AppSettingNames Setting { get; set; }
 
         [Required]
         [StringLength(250)]
