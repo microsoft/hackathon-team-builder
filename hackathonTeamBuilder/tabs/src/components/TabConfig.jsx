@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Checkbox, Form, Input } from '@fluentui/react-northstar';
 import "./App.css";
 import * as microsoftTeams from "@microsoft/teams-js";
 
@@ -8,8 +9,116 @@ import * as microsoftTeams from "@microsoft/teams-js";
  * make their choices and once they are done you will need to validate
  * their choices and communicate that to Teams to enable the save button.
  */
-class TabConfig extends React.Component {
-  render() {
+ function TabConfig(props) {
+  //useTeamsPrivateChannel
+  const [teamsChannel, setTeamsChannel] = useState('');
+  const [useTeamsPrivateChannel, setUseTeamsPrivateChannel] = useState('');
+  const [joinApprovalRequired, setJoinApprovalRequired] = useState('');
+  const [maxTeamSize, setMaxTeamSize] = useState('');
+  const [githubOrg, setGithubOrg] = useState('');
+  const [githubKey, setGithubKey] = useState('');
+  const [formErrors, setFormErrors] = useState(initValidation());
+
+  function initValidation() {
+    return {
+      githubOrg: 'Github organization name cannot be empty.',
+      githubKey: 'Github authorization key cannot be empty.',
+      teamsChannel: 'Use teams',
+      maxTeamSize: 'Max team size cannot be empty.',
+      useTeamsPrivateChannel: 'Use teams private channel',
+      joinApprovalRequired: 'Join approval required',
+    }
+  }
+
+  const fields = [
+    {
+      label: 'Use MS Teams',
+      name: 'teamsChannel',
+      id: 'teamsChannel',
+      key: 'teamsChannel',
+      required: false,
+      errorMessage: formErrors['teamsChannel'],
+      control: {
+        as: Checkbox,
+        value: teamsChannel,
+        showSuccessIndicator: false,
+        onChange: handleInputChange
+      },
+    },
+    {
+      label: 'Use MS Teams private channels',
+      name: 'useTeamsPrivateChannel',
+      id: 'useTeamsPrivateChannel',
+      key: 'useTeamsPrivateChannel',
+      required: false,
+      errorMessage: formErrors['useTeamsPrivateChannel'],
+      control: {
+        as: Checkbox,
+        value: useTeamsPrivateChannel,
+        showSuccessIndicator: false,
+        onChange: handleInputChange
+      },
+    },
+    {
+      label: 'Join approval required',
+      name: 'joinApprovalRequired',
+      id: 'joinApprovalRequired',
+      key: 'joinApprovalRequired',
+      required: false,
+      errorMessage: formErrors['joinApprovalRequired'],
+      control: {
+        as: Checkbox,
+        value: joinApprovalRequired,
+        showSuccessIndicator: false,
+        onChange: handleInputChange
+      },
+    },
+    {
+      label: 'Max team size',
+      name: 'maxTeamSize',
+      id: 'maxTeamSize',
+      key: 'maxTeamSize',
+      required: false,
+      errorMessage: formErrors['maxTeamSize'],
+      control: {
+        as: Input,
+        value: maxTeamSize,
+        showSuccessIndicator: false,
+        onChange: handleInputChange
+      },
+    },
+    {
+      label: 'GitHub Organization',
+      name: 'githubOrg',
+      id: 'githubOrg',
+      key: 'githubOrg',
+      required: false,
+      errorMessage: formErrors['githubOrg'],
+      control: {
+        as: Input,
+        value: githubOrg,
+        showSuccessIndicator: false,
+        onChange: handleInputChange
+      },
+    },
+    {
+      label: 'GitHub Key',
+      name: 'githubKey',
+      id: 'githubKey',
+      key: 'githubkey',
+      required: false,
+      errorMessage: formErrors['githubKey'],
+      control: {
+        as: Input,
+        value: githubKey,
+        showSuccessIndicator: false,
+        onChange: handleInputChange
+      },
+    },
+  ]; 
+
+  useEffect(() => {
+
     // Initialize the Microsoft Teams SDK
     microsoftTeams.initialize();
 
@@ -21,7 +130,7 @@ class TabConfig extends React.Component {
     microsoftTeams.settings.registerOnSaveHandler((saveEvent) => {
       const baseUrl = `https://${window.location.hostname}:${window.location.port}`;
       microsoftTeams.settings.setSettings({
-        suggestedDisplayName: "My Tab",
+        suggestedDisplayName: "Settings",
         entityId: "Test",
         contentUrl: baseUrl + "/index.html#/tab",
         websiteUrl: baseUrl + "/index.html#/tab",
@@ -37,16 +146,56 @@ class TabConfig extends React.Component {
      */
     microsoftTeams.settings.setValidityState(true);
 
-    return (
-      <div>
-        <h1>Tab Configuration</h1>
-        <div>
-          This is where you will add your tab configuration options the user can choose when the tab
-          is added to your team/group chat.
-        </div>
-      </div>
-    );
+  }, [])
+
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    let currentFormErrors = formErrors;
+    //
+    if (!value || value === '') {
+      currentFormErrors[name] = formErrors[name];
+    }
+    else {
+      delete currentFormErrors[name];
+    }
+    setFormErrors(currentFormErrors);
   }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (isValid()) {
+      alert('Saving settings...');
+      return true;
+    }
+  }
+
+  function isValid() {
+    if (Object.entries(formErrors || {}).length > 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
+  return (
+    <div>
+      <h1>Tab Configuration</h1>
+      <div>
+        <Form onSubmit={handleSubmit} fields={fields} />
+        {/*
+        We will add a form to hold and save the following configuration options:
+        TeamsChannels (Enable Teams Integration?) -> Toggle Yes/No
+        TeamsPrivateChannels (Using Teams private channels?) -> Toggle Yes/No
+        MaxTeamSize (What's your max team size?) -> Textbox, 12
+        JoinApproval (Require approval to join a team?) -> Toggle Yes/No
+        GitHubOrg (What's your Github org name?) -> Textbox default:NULL
+        GitHubAuthKey (What's your Github auth key?) -> Textbox default:NULL
+        */}
+      </div>
+    </div>
+  );
+
 }
 
 export default TabConfig;
