@@ -8,6 +8,7 @@ using TeamBuilder.API.Data;
 
 namespace TeamBuilder.API.AppSettings
 {
+    [ExtendObjectType(OperationTypeNames.Query)]
     public class AppSettingQueries
     {
         [UseTeamBuilderDbContext]
