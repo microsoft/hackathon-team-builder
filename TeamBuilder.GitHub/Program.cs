@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.Configure<GitHubClientFactoryOptions>(builder.Configuration.GetSection("GitHub"));
-builder.Services.AddSingleton<GitHubClientFactory>();
+builder.Services.AddScoped<GitHubClientFactory>();
 builder.Services.AddControllers().AddNewtonsoftJson(jsonOptions => {
     jsonOptions.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
     jsonOptions.SerializerSettings.Converters.Add(new PermissionLevelJsonConverter());

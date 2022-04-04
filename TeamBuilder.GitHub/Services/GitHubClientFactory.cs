@@ -16,7 +16,7 @@ public class GitHubClientFactory
     internal int TeamId { get; set; }
 
 
-    public GitHubClientFactory(IOptions<KeyVaultOptions> keyVaultOptions, IOptions<GitHubClientFactoryOptions> options)
+    public GitHubClientFactory(IOptions<GitHubClientFactoryOptions> options)
     {
         var secretUri = new Uri(options.Value.KeyVaultSecretUri);
         var secretId = new KeyVaultSecretIdentifier(secretUri);
@@ -25,16 +25,13 @@ public class GitHubClientFactory
         _productHeaderVal = new ProductHeaderValue(options.Value.ProductHeaderValue);
         _installationId = long.Parse(options.Value.InstallationId, NumberStyles.Number);
 
-        //var clientCertificateCredential = new ClientSecretCredential(keyVaultOptions.Value.TenantId, keyVaultOptions.Value.ClientId, keyVaultOptions.Value.Secret);
-
         var secretClient = new SecretClient(secretId.VaultUri, new DefaultAzureCredential());
         KeyVaultSecret secretResponse = secretClient.GetSecretAsync(secretId.Name, secretId.Version).Result;
 
         var secret = secretResponse.Value;
 
         Org = options.Value.Org;
-        // todo: get team id programmatically then place in secrets.json
-        // TeamId = int.Parse(options.Value.TeamId, NumberStyles.Number);
+        TeamId = int.Parse(options.Value.TeamId, NumberStyles.Number);
 
         _jwtFactory = new GitHubJwtFactory(
             new StringPrivateKeySource(secret),
@@ -57,11 +54,9 @@ public class GitHubClientFactory
 
         var accessToken = await appClient.GitHubApps.CreateInstallationToken(_installationId);
 
-        var gitHubClient = new GitHubClient(_productHeaderVal)
+        return new GitHubClient(_productHeaderVal)
         {
             Credentials = new Credentials(accessToken.Token, AuthenticationType.Bearer)
-        };        
-
-        return gitHubClient;
+        };
     }
 }
