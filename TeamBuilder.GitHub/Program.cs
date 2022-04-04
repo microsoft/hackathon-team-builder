@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.Configure<GitHubClientFactoryOptions>(builder.Configuration.GetSection("GitHub"));
-builder.Services.AddSingleton<GitHubClientFactory>();
+builder.Services.AddScoped<GitHubClientFactory>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
