@@ -25,7 +25,6 @@ public class TeamMembersController : ControllerBase
 
         if (team == null)
             return NotFound();
-
         return Ok(team);
     }
 
