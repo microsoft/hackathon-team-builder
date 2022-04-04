@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/TeamBuilder.GitHub/obj
+/TeamBuilder.GitHub/bin/Debug/net6.0
+/.vs/TeamBuilder
