@@ -21,12 +21,10 @@ import * as microsoftTeams from "@microsoft/teams-js";
 
   function initValidation() {
     return {
-      githubOrg: 'Github organization name cannot be empty.',
-      githubKey: 'Github authorization key cannot be empty.',
-      teamsChannel: '',
-      maxTeamSize: 'Max team size cannot be empty.',
-      joinApprovalRequired: '',
-      useTeamsPrivateChannel: '',      
+      // no fields are required
+      // githubOrg: 'Github organization name cannot be empty.',
+      // githubKey: 'Github authorization key cannot be empty.',
+      // maxTeamSize: 'Max team size cannot be empty.'
     }
   }
 
@@ -42,7 +40,7 @@ import * as microsoftTeams from "@microsoft/teams-js";
         as: Checkbox,
         value: teamsChannel,
         showSuccessIndicator: false,
-        onChange: handleInputChange
+        onChange: handleCheckboxChange
       },
     },
     {
@@ -50,13 +48,13 @@ import * as microsoftTeams from "@microsoft/teams-js";
       name: 'useTeamsPrivateChannel',
       id: 'useTeamsPrivateChannel',
       key: 'useTeamsPrivateChannel',
-      required: true,
+      required: false,
       errorMessage: formErrors['useTeamsPrivateChannel'],
       control: {
         as: Checkbox,
         value: useTeamsPrivateChannel,
         showSuccessIndicator: false,
-        onChange: handleInputChange
+        onChange: handleCheckboxChange
       },
     },
     {
@@ -70,7 +68,7 @@ import * as microsoftTeams from "@microsoft/teams-js";
         as: Checkbox,
         value: joinApprovalRequired,
         showSuccessIndicator: false,
-        onChange: handleInputChange
+        onChange: handleCheckboxChange
       },
     },
     {
@@ -139,15 +137,28 @@ import * as microsoftTeams from "@microsoft/teams-js";
       saveEvent.notifySuccess();
     });
 
-    /**
-     * After verifying that the settings for your tab are correctly
-     * filled in by the user you need to set the state of the dialog
-     * to be valid.  This will enable the save button in the configuration
-     * dialog.
-     */
-    microsoftTeams.settings.setValidityState(true);
+    
 
   }, [])
+
+  function handleCheckboxChange(e) {
+    const { name, value } = e.target.parentElement;
+
+    switch (name) {
+      case 'teamsChannel':
+        setTeamsChannel(value);
+        break;
+      case 'useTeamsPrivateChannel':
+        setUseTeamsPrivateChannel(value);
+        break;
+      case 'joinApprovalRequired':
+        setJoinApprovalRequired(value);
+        break;
+      default:
+        break;
+    }
+    isValid();    
+  }
 
   function handleInputChange(e) {
 
@@ -158,64 +169,19 @@ import * as microsoftTeams from "@microsoft/teams-js";
     let currentFormErrors = formErrors;
     //
     switch (name) {
-      case 'teamsChannel':
-        setTeamsChannel(e.target.checked);
-        if (!e.target.checked === true) {
-          currentFormErrors[name] = formErrors[teamsChannel];
-        }
-        else {
-          delete currentFormErrors[name];
-        }
-        break;
-      case 'useTeamsPrivateChannel':
-        setUseTeamsPrivateChannel(e.target.checked);
-        if (!e.target.checked) {
-          currentFormErrors[name] = formErrors[useTeamsPrivateChannel];
-        }
-        else {
-          delete currentFormErrors[name];
-        }
-        break;
-      case 'joinApprovalRequired':
-          setJoinApprovalRequired(e.target.checked);
-          if (!e.target.checked) {
-            currentFormErrors[name] = formErrors[joinApprovalRequired];
-          }
-          else {
-            delete currentFormErrors[name];
-          }
-          break;
       case 'maxTeamSize':
-          setMaxTeamSize(value);
-          if (!value || value === '') {
-            currentFormErrors[name] = formErrors[maxTeamSize];
-          }
-          else {
-            delete currentFormErrors[name];
-          }
+          setMaxTeamSize(value);          
           break;
       case 'githubOrg':
         setGithubOrg(value);
-        if (!value || value === '') {
-          currentFormErrors[name] = formErrors[githubOrg];
-        }
-        else {
-          delete currentFormErrors[name];
-        }
         break;
       case 'githubKey':
         setGithubKey(value);
-        if (!value || value === '') {
-          currentFormErrors[name] = formErrors[githubKey];
-        }
-        else {
-          delete currentFormErrors[name];
-        }
         break;
       default:
         break;
     }
-
+    isValid();
     setFormErrors(currentFormErrors);
   }
 
@@ -229,9 +195,17 @@ import * as microsoftTeams from "@microsoft/teams-js";
 
   function isValid() {
     if (Object.entries(formErrors || {}).length > 0) {
+      microsoftTeams.settings.setValidityState(false);
       return false;
     }
     else {
+      /**
+     * After verifying that the settings for your tab are correctly
+     * filled in by the user you need to set the state of the dialog
+     * to be valid.  This will enable the save button in the configuration
+     * dialog.
+     */
+    microsoftTeams.settings.setValidityState(true);
       return true;
     }
   }
@@ -241,7 +215,7 @@ import * as microsoftTeams from "@microsoft/teams-js";
       <h3>Tab Configuration</h3>
       <div>
         <Flex padding="padding.small">
-          <Form onSubmit={handleSubmit} fields={fields} />
+          <Form fields={fields} />
         </Flex>
         {/*
         We will add a form to hold and save the following configuration options:
