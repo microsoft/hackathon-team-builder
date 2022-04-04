@@ -16,15 +16,14 @@ public class TeamMembersController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(Team), 200)]
+    [ProducesResponseType(typeof(List<Team>), 200)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetTeamAsync()
+    public async Task<IActionResult> GetTeamAsync(int teamId)
     {
         var client = await _factory.GetClientAsync();
-        
-        var team = await client.Organization.Team.Get(_factory.TeamId);
+        var team = await client.Organization.Team.Get(teamId);
 
-        if(team == null)
+        if (team == null)
             return NotFound();
 
         return Ok(team);
@@ -52,7 +51,7 @@ public class TeamMembersController : ControllerBase
         var client = await _factory.GetClientAsync();
 
         await client.Organization.Team.AddOrEditMembership(_factory.TeamId, login, new UpdateTeamMembership(TeamRole.Member));
-        
+
         return NoContent();
     }
 
