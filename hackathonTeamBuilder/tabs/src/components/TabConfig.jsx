@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Checkbox, Form, Input, Flex } from '@fluentui/react-northstar';
+import { Checkbox, Form, Input, Flex, FormMessage } from '@fluentui/react-northstar';
 import "./App.css";
 import * as microsoftTeams from "@microsoft/teams-js";
+import { v4 as uuid } from 'uuid';
 
 /**
  * The 'Config' component is used to display your group tabs
@@ -16,8 +17,11 @@ import * as microsoftTeams from "@microsoft/teams-js";
   const [joinApprovalRequired, setJoinApprovalRequired] = useState(false);
   const [maxTeamSize, setMaxTeamSize] = useState('');
   const [githubOrg, setGithubOrg] = useState('');
+  const [githubIntegration, setGithubIntegration] = useState(false);
   const [githubKey, setGithubKey] = useState('');
   const [formErrors, setFormErrors] = useState(initValidation());
+  const [teamId, setTeamId] = useState('');
+  const [entityId, setEntityId] = useState('');
 
   function initValidation() {
     return {
@@ -30,46 +34,52 @@ import * as microsoftTeams from "@microsoft/teams-js";
 
   const fields = [
     {
-      label: 'Use MS Teams',
+      control: {
+        as: FormMessage,
+        content: 'Teams Settings'
+      }
+    },
+    {
+      label: 'Auto-create Teams Channels',
       name: 'teamsChannel',
       id: 'teamsChannel',
       key: 'teamsChannel',
+      inline: true,
       required: false,
       errorMessage: formErrors['teamsChannel'],
       control: {
         as: Checkbox,
         value: teamsChannel,
-        showSuccessIndicator: false,
         onChange: handleCheckboxChange
-      },
+      }
     },
     {
       label: 'Use MS Teams private channels',
       name: 'useTeamsPrivateChannel',
       id: 'useTeamsPrivateChannel',
       key: 'useTeamsPrivateChannel',
+      inline: true,
       required: false,
       errorMessage: formErrors['useTeamsPrivateChannel'],
       control: {
         as: Checkbox,
         value: useTeamsPrivateChannel,
-        showSuccessIndicator: false,
         onChange: handleCheckboxChange
-      },
+      }
     },
     {
       label: 'Join approval required',
       name: 'joinApprovalRequired',
       id: 'joinApprovalRequired',
       key: 'joinApprovalRequired',
+      inline: true,
       required: false,
       errorMessage: formErrors['joinApprovalRequired'],
       control: {
         as: Checkbox,
         value: joinApprovalRequired,
-        showSuccessIndicator: false,
         onChange: handleCheckboxChange
-      },
+      }
     },
     {
       label: 'Max team size',
@@ -83,7 +93,27 @@ import * as microsoftTeams from "@microsoft/teams-js";
         value: maxTeamSize,
         showSuccessIndicator: false,
         onChange: handleInputChange
-      },
+      }
+    },
+    {
+      control: {
+        as: FormMessage,
+        content: 'GitHub Integration'
+      }
+    },
+    {
+      label: 'Enabled',
+      name: 'githubIntegration',
+      id: 'githubIntegration',
+      key: 'githubIntegration',
+      inline: true,
+      required: false,
+      errorMessage: formErrors['githubIntegration'],
+      control: {
+        as: Checkbox,
+        value: githubIntegration,
+        onChange: handleCheckboxChange
+      }
     },
     {
       label: 'GitHub Organization',
@@ -97,30 +127,21 @@ import * as microsoftTeams from "@microsoft/teams-js";
         value: githubOrg,
         showSuccessIndicator: false,
         onChange: handleInputChange
-      },
-    },
-    {
-      label: 'GitHub Key',
-      name: 'githubKey',
-      id: 'githubKey',
-      key: 'githubkey',
-      required: false,
-      errorMessage: formErrors['githubKey'],
-      control: {
-        as: Input,
-        value: githubKey,
-        showSuccessIndicator: false,
-        onChange: handleInputChange
-      },
-    },
+      }
+    }
   ]; 
 
   useEffect(() => {
-
-    console.log("UseEffect called..");
     // Initialize the Microsoft Teams SDK
     microsoftTeams.initialize();
+    microsoftTeams.getContext(ctx => {
+      setTeamId(ctx.teamId);
+    });
 
+    microsoftTeams.settings.getSettings(settings => {
+      console.log(`entityId: ${settings.entityId}`);
+      setEntityId(settings.entityId);
+    });
     /**
      * When the user clicks "Save", save the url for your configured tab.
      * This allows for the addition of query string parameters based on
@@ -129,30 +150,36 @@ import * as microsoftTeams from "@microsoft/teams-js";
     microsoftTeams.settings.registerOnSaveHandler((saveEvent) => {
       const baseUrl = `https://${window.location.hostname}:${window.location.port}`;
       microsoftTeams.settings.setSettings({
-        suggestedDisplayName: "Settings",
-        entityId: "Test",
+        suggestedDisplayName: "TeamBuilder",
+        entityId: entityId ?? uuid().slice(0,8),
         contentUrl: baseUrl + "/index.html#/tab",
         websiteUrl: baseUrl + "/index.html#/tab",
       });
+
+      //TODO store settings to DB
+
       saveEvent.notifySuccess();
     });
 
-    
-
   }, [])
 
-  function handleCheckboxChange(e) {
-    const { name, value } = e.target.parentElement;
+  function handleCheckboxChange(_, item) {
+    const { name, checked } = item;
+
+    console.log(`name: ${name} value: ${checked}`);
 
     switch (name) {
       case 'teamsChannel':
-        setTeamsChannel(value);
+        setTeamsChannel(checked);
         break;
       case 'useTeamsPrivateChannel':
-        setUseTeamsPrivateChannel(value);
+        setUseTeamsPrivateChannel(checked);
         break;
       case 'joinApprovalRequired':
-        setJoinApprovalRequired(value);
+        setJoinApprovalRequired(checked);
+        break;
+      case 'githubIntegration':
+        setGithubIntegration(checked);
         break;
       default:
         break;
@@ -214,8 +241,19 @@ import * as microsoftTeams from "@microsoft/teams-js";
     <div>
       <h3>Tab Configuration</h3>
       <div>
-        <Flex padding="padding.small">
+        {teamId}
+        <Flex padding="padding.medium">
           <Form fields={fields} />
+          {/* <Form>
+            <FormCheckbox               
+              label='Use MS Teams'
+              name='teamsChannel'
+              id='teamsChannel'
+              key='teamsChannel'
+              required={false}
+              errorMessage={formErrors['teamsChannel']}
+              onChange={(e, val) => handleCheckboxChange(e, val)} />
+          </Form> */}
         </Flex>
         {/*
         We will add a form to hold and save the following configuration options:
