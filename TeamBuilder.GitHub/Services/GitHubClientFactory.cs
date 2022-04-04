@@ -19,22 +19,17 @@ public class GitHubClientFactory
     public GitHubClientFactory(IOptions<GitHubClientFactoryOptions> options)
     {
         var secretUri = new Uri(options.Value.KeyVaultSecretUri);
-
         var secretId = new KeyVaultSecretIdentifier(secretUri);
+        var gitHubAppId = int.Parse(options.Value.GitHubAppId, NumberStyles.Number);
+
+        _productHeaderVal = new ProductHeaderValue(options.Value.ProductHeaderValue);
+        _installationId = long.Parse(options.Value.InstallationId, NumberStyles.Number);
 
         var secretClient = new SecretClient(secretId.VaultUri, new DefaultAzureCredential());
-
-        KeyVaultSecret secretResponse;
-
-        secretResponse = secretClient.GetSecretAsync(secretId.Name, secretId.Version).Result;
+        KeyVaultSecret secretResponse = secretClient.GetSecretAsync(secretId.Name, secretId.Version).Result;
 
         var secret = secretResponse.Value;
 
-        _productHeaderVal = new ProductHeaderValue(options.Value.ProductHeaderValue);
-
-        var gitHubAppId = int.Parse(options.Value.GitHubAppId, NumberStyles.Number);
-
-        _installationId = long.Parse(options.Value.InstallationId, NumberStyles.Number);
         Org = options.Value.Org;
         TeamId = int.Parse(options.Value.TeamId, NumberStyles.Number);
 
@@ -52,12 +47,12 @@ public class GitHubClientFactory
     {
         var jwtToken = _jwtFactory.CreateEncodedJwtToken();
 
-        var gitHubClient = new GitHubClient(_productHeaderVal)
+        var appClient = new GitHubClient(_productHeaderVal)
         {
             Credentials = new Credentials(jwtToken, AuthenticationType.Bearer)
         };
 
-        var accessToken = await gitHubClient.GitHubApps.CreateInstallationToken(_installationId);
+        var accessToken = await appClient.GitHubApps.CreateInstallationToken(_installationId);
 
         return new GitHubClient(_productHeaderVal)
         {
