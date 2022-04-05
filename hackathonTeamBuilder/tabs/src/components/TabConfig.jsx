@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Checkbox, Form, Input, Flex, FormMessage } from '@fluentui/react-northstar';
+import { Checkbox, Form, Input, Flex, FormMessage, dropdownSelectedItemClassName } from '@fluentui/react-northstar';
 import "./App.css";
 import * as microsoftTeams from "@microsoft/teams-js";
 import { v4 as uuid } from 'uuid';
@@ -18,27 +18,18 @@ import { v4 as uuid } from 'uuid';
   const [maxTeamSize, setMaxTeamSize] = useState('');
   const [githubOrg, setGithubOrg] = useState('');
   const [githubIntegration, setGithubIntegration] = useState(false);
-  const [githubKey, setGithubKey] = useState('');
   const [formErrors, setFormErrors] = useState(initValidation());
-  const [teamId, setTeamId] = useState('');
   const [entityId, setEntityId] = useState('');
 
   function initValidation() {
     return {
-      // no fields are required
       // githubOrg: 'Github organization name cannot be empty.',
       // githubKey: 'Github authorization key cannot be empty.',
       // maxTeamSize: 'Max team size cannot be empty.'
     }
   }
 
-  const fields = [
-    {
-      control: {
-        as: FormMessage,
-        content: 'Teams Settings'
-      }
-    },
+  const teamFields = [    
     {
       label: 'Auto-create Teams Channels',
       name: 'teamsChannel',
@@ -88,6 +79,7 @@ import { v4 as uuid } from 'uuid';
       key: 'maxTeamSize',
       required: false,
       errorMessage: formErrors['maxTeamSize'],
+      inline: true,
       control: {
         as: Input,
         value: maxTeamSize,
@@ -95,12 +87,9 @@ import { v4 as uuid } from 'uuid';
         onChange: handleInputChange
       }
     },
-    {
-      control: {
-        as: FormMessage,
-        content: 'GitHub Integration'
-      }
-    },
+  ];
+
+  const githubFields = [    
     {
       label: 'Enabled',
       name: 'githubIntegration',
@@ -121,6 +110,7 @@ import { v4 as uuid } from 'uuid';
       id: 'githubOrg',
       key: 'githubOrg',
       required: false,
+      inline: true,
       errorMessage: formErrors['githubOrg'],
       control: {
         as: Input,
@@ -135,11 +125,10 @@ import { v4 as uuid } from 'uuid';
     // Initialize the Microsoft Teams SDK
     microsoftTeams.initialize();
     microsoftTeams.getContext(ctx => {
-      setTeamId(ctx.teamId);
+      //setTeamId(ctx.teamId);
     });
 
     microsoftTeams.settings.getSettings(settings => {
-      console.log(`entityId: ${settings.entityId}`);
       setEntityId(settings.entityId);
     });
     /**
@@ -165,9 +154,8 @@ import { v4 as uuid } from 'uuid';
 
   function handleCheckboxChange(_, item) {
     const { name, checked } = item;
-
-    console.log(`name: ${name} value: ${checked}`);
-
+    let currentFormErrors = formErrors;
+    
     switch (name) {
       case 'teamsChannel':
         setTeamsChannel(checked);
@@ -180,36 +168,41 @@ import { v4 as uuid } from 'uuid';
         break;
       case 'githubIntegration':
         setGithubIntegration(checked);
+        validateOrgName(githubOrg, checked, currentFormErrors);
         break;
       default:
         break;
     }
+    setFormErrors(currentFormErrors);
     isValid();    
   }
 
   function handleInputChange(e) {
-
-    console.log("handleInputChange called..");
-    //
     const { name, value } = e.target;
-    console.log(`name: ${name} value: ${value}`);
     let currentFormErrors = formErrors;
-    //
-    switch (name) {
+
+    switch (name) {      
       case 'maxTeamSize':
           setMaxTeamSize(value);          
           break;
-      case 'githubOrg':
+      case 'githubOrg':        
         setGithubOrg(value);
-        break;
-      case 'githubKey':
-        setGithubKey(value);
-        break;
+        validateOrgName(value, githubIntegration, currentFormErrors);
+        break;      
       default:
         break;
-    }
-    isValid();
+    }    
     setFormErrors(currentFormErrors);
+    isValid();
+  }
+
+  function validateOrgName(value, isChecked, formErrors) {
+    if ((!value || value === '') && isChecked) {
+      formErrors['githubOrg'] = 'Org Name cannot be empty!';      
+    }
+    else {
+      delete formErrors['githubOrg'];          
+    }
   }
 
   function handleSubmit(event) {
@@ -238,22 +231,13 @@ import { v4 as uuid } from 'uuid';
   }
 
   return (
-    <div>
-      <h3>Tab Configuration</h3>
+    <div className="configuration-page">
       <div>
-        {teamId}
-        <Flex padding="padding.medium">
-          <Form fields={fields} />
-          {/* <Form>
-            <FormCheckbox               
-              label='Use MS Teams'
-              name='teamsChannel'
-              id='teamsChannel'
-              key='teamsChannel'
-              required={false}
-              errorMessage={formErrors['teamsChannel']}
-              onChange={(e, val) => handleCheckboxChange(e, val)} />
-          </Form> */}
+        <Flex column fluid>
+          <h3>Teams Settings</h3>
+          <Form fields={teamFields} />
+          <h3>GitHub Settings</h3>
+          <Form fields={githubFields} />          
         </Flex>
         {/*
         We will add a form to hold and save the following configuration options:
