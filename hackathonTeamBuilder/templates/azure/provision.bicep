@@ -1,5 +1,31 @@
 @secure()
 param provisionParameters object
+
+module keyvaultProvision './provision/keyvault.bicep' = {
+  name: 'keyvaultProvision'
+  params: {
+    keyVaultName: '' // todo: generate from see in main
+    githubPrivateKeyVal: '' // todo: get from github secret
+  }
+}
+
+output keyvaultProvisionOutput object = {
+  kvName: keyvaultProvision.outputs.kvName
+}
+
+module serverlessProvision './provision/serverless.bicep' = {
+  name: ''
+  params: {
+    functionAppName: ''
+    appServicePlanName: ''
+    functionStorageAccountName: ''
+  }
+}
+
+output serverlessProvisionOutput object = {
+
+}
+
 // Resources for frontend hosting
 module frontendHostingProvision './provision/frontendHosting.bicep' = {
   name: 'frontendHostingProvision'
@@ -14,6 +40,7 @@ output frontendHostingOutput object = {
   endpoint: frontendHostingProvision.outputs.endpoint
   storageResourceId: frontendHostingProvision.outputs.resourceId
 }
+
 // Resources for identity
 module userAssignedIdentityProvision './provision/identity.bicep' = {
   name: 'userAssignedIdentityProvision'
@@ -57,4 +84,24 @@ output graphqlAPIOutput object = {
   apiEndpoint: graphqlAPIProvision.outputs.apiEndpoint
   webAppResourceId: graphqlAPIProvision.outputs.webAppResourceId
   eventGridTopicName: graphqlAPIProvision.outputs.eventGridTopicName
+}
+
+module githubApiProvision './provision/githubApi.bicep' = {
+  name: 'githubApiProvision'
+  params: {
+    provisionParameters: provisionParameters
+    serverFarmId: simpleAuthProvision.outputs.serverFarmId
+    userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
+    githubOrg: ''
+    githubProductHeaderValue: ''
+    githubInstallationId: ''
+    githubTeamId: ''
+    keyVaultName: keyvaultProvision.outputs.kvName
+    gitHubSecretName: ''
+    githubAppId: ''
+  }
+}
+
+output githubApiProvisionOutput object = {
+  webAppResourceId: graphqlAPIProvision.outputs.webAppResourceId
 }
