@@ -1,7 +1,4 @@
-﻿using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using GitHubJwt;
-using Microsoft.Extensions.Options;
+﻿using GitHubJwt;
 using Octokit;
 using System.Globalization;
 
@@ -15,26 +12,18 @@ public class GitHubClientFactory
     internal string Org { get; set; }
     internal int TeamId { get; set; }
 
-
-    public GitHubClientFactory(IOptions<GitHubClientFactoryOptions> options)
+    public GitHubClientFactory(GitHubClientFactoryOptions options, KeyVaultService keyVaultService)
     {
-        var secretUri = new Uri(options.Value.KeyVaultSecretUri);
-        var secretId = new KeyVaultSecretIdentifier(secretUri);
-        var gitHubAppId = int.Parse(options.Value.GitHubAppId, NumberStyles.Number);
+        var gitHubAppId = int.Parse(options.GitHubAppId, NumberStyles.Number);
 
-        _productHeaderVal = new ProductHeaderValue(options.Value.ProductHeaderValue);
-        _installationId = long.Parse(options.Value.InstallationId, NumberStyles.Number);
+        _productHeaderVal = new ProductHeaderValue(options.ProductHeaderValue);
+        _installationId = long.Parse(options.InstallationId, NumberStyles.Number);
 
-        var secretClient = new SecretClient(secretId.VaultUri, new DefaultAzureCredential());
-        KeyVaultSecret secretResponse = secretClient.GetSecretAsync(secretId.Name, secretId.Version).Result;
-
-        var secret = secretResponse.Value;
-
-        Org = options.Value.Org;
-        TeamId = int.Parse(options.Value.TeamId, NumberStyles.Number);
+        Org = options.Org;
+        TeamId = int.Parse(options.TeamId, NumberStyles.Number);
 
         _jwtFactory = new GitHubJwtFactory(
-            new StringPrivateKeySource(secret),
+            new StringPrivateKeySource(keyVaultService[options.KeyVaultSecret]),
             new GitHubJwtFactoryOptions
             {
                 AppIntegrationId = gitHubAppId,

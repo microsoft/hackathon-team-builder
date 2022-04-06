@@ -21,10 +21,12 @@ public class TeamMembersController : ControllerBase
     public async Task<IActionResult> GetTeamAsync(int teamId)
     {
         var client = await _factory.GetClientAsync();
+
         var team = await client.Organization.Team.Get(teamId);
 
         if (team == null)
             return NotFound();
+
         return Ok(team);
     }
 

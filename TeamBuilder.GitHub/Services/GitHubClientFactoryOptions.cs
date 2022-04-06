@@ -2,7 +2,7 @@
 
 public class GitHubClientFactoryOptions
 {
-    public string KeyVaultSecretUri { get; set; }
+    public string KeyVaultSecret { get; set; }
     public string Org { get; set; }
     public string GitHubAppId { get; set; }
     public string ProductHeaderValue { get; set; }
