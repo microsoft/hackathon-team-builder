@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Checkbox, Form, Input, Flex } from "@fluentui/react-northstar";
 import "./App.css";
 import * as microsoftTeams from "@microsoft/teams-js";
+import AppSettings from "./teambuilder/apis/settings";
 import { v4 as uuid } from 'uuid';
 
 /**
@@ -13,6 +14,8 @@ import { v4 as uuid } from 'uuid';
 function TabConfig() {
   const settingsClient = AppSettings();
 
+  const [teamId, setTeamId] = useState('');
+  const [entityId, setEntityId] = useState('');
   const [teamsChannel, setTeamsChannel] = useState(false);
   const [useTeamsPrivateChannel, setUseTeamsPrivateChannel] = useState(false);
   const [joinApprovalRequired, setJoinApprovalRequired] = useState(false);
