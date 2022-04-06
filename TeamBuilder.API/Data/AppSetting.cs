@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotChocolate;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +17,7 @@ namespace TeamBuilder.API.Data
     }
     public class AppSetting
     {
-
+        [GraphQLName("msTeamId")]
         [StringLength(100)]
         public string MSTeamId { get; set; }
      

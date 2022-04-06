@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Checkbox, Form, Input, Flex, FormMessage, dropdownSelectedItemClassName } from '@fluentui/react-northstar';
+import { Checkbox, Form, Input, Flex } from "@fluentui/react-northstar";
 import "./App.css";
 import * as microsoftTeams from "@microsoft/teams-js";
 import { v4 as uuid } from 'uuid';
@@ -10,7 +10,8 @@ import { v4 as uuid } from 'uuid';
  * make their choices and once they are done you will need to validate
  * their choices and communicate that to Teams to enable the save button.
  */
- function TabConfig(props) {
+function TabConfig() {
+  const settingsClient = AppSettings();
 
   const [teamsChannel, setTeamsChannel] = useState(false);
   const [useTeamsPrivateChannel, setUseTeamsPrivateChannel] = useState(false);
@@ -18,16 +19,8 @@ import { v4 as uuid } from 'uuid';
   const [maxTeamSize, setMaxTeamSize] = useState('');
   const [githubOrg, setGithubOrg] = useState('');
   const [githubIntegration, setGithubIntegration] = useState(false);
-  const [formErrors, setFormErrors] = useState(initValidation());
-  const [entityId, setEntityId] = useState('');
-
-  function initValidation() {
-    return {
-      // githubOrg: 'Github organization name cannot be empty.',
-      // githubKey: 'Github authorization key cannot be empty.',
-      // maxTeamSize: 'Max team size cannot be empty.'
-    }
-  }
+  const [formErrors, setFormErrors] = useState({});
+  const token = "abcdefg";
 
   const teamFields = [    
     {
@@ -41,8 +34,9 @@ import { v4 as uuid } from 'uuid';
       control: {
         as: Checkbox,
         value: teamsChannel,
-        onChange: handleCheckboxChange
-      }
+        checked: teamsChannel,
+        onChange: handleCheckboxChange,
+      },
     },
     {
       label: 'Use MS Teams private channels',
@@ -55,8 +49,9 @@ import { v4 as uuid } from 'uuid';
       control: {
         as: Checkbox,
         value: useTeamsPrivateChannel,
-        onChange: handleCheckboxChange
-      }
+        checked: useTeamsPrivateChannel,
+        onChange: handleCheckboxChange,
+      },
     },
     {
       label: 'Join approval required',
@@ -69,8 +64,9 @@ import { v4 as uuid } from 'uuid';
       control: {
         as: Checkbox,
         value: joinApprovalRequired,
-        onChange: handleCheckboxChange
-      }
+        checked: joinApprovalRequired,
+        onChange: handleCheckboxChange,
+      },
     },
     {
       label: 'Max team size',
@@ -101,8 +97,9 @@ import { v4 as uuid } from 'uuid';
       control: {
         as: Checkbox,
         value: githubIntegration,
-        onChange: handleCheckboxChange
-      }
+        checked: githubIntegration,
+        onChange: handleCheckboxChange,
+      },
     },
     {
       label: 'GitHub Organization',
@@ -116,27 +113,54 @@ import { v4 as uuid } from 'uuid';
         as: Input,
         value: githubOrg,
         showSuccessIndicator: false,
-        onChange: handleInputChange
-      }
-    }
-  ]; 
+        onChange: handleInputChange,
+      },
+    },
+  ];
+
+  function loadSettings(settings) {
+    //let teamIdSetting = settings.appSettingsByMSTeamId.find(i => i.setting == 'TEAM_ID');
+    setTeamsChannel(settings.appSettingsByMSTeamId.find((i) => i.setting === "USE_TEAMS")?.value === 'true' ? true : false);
+    setUseTeamsPrivateChannel(settings.appSettingsByMSTeamId.find((i) => i.setting === "USE_PRIVATE_CHANNELS")?.value === 'true' ? true : false);
+    setJoinApprovalRequired(settings.appSettingsByMSTeamId.find((i) => i.setting === "ENABLE_AUTH")?.value === 'true' ? true : false);
+    setMaxTeamSize(settings.appSettingsByMSTeamId.find((i) => i.setting === "MAX_TEAM_SIZE")?.value ?? "");
+    setGithubOrg(settings.appSettingsByMSTeamId.find((i) => i.setting === "GIT_HUB_ORG")?.value ?? "");
+    setGithubIntegration(settings.appSettingsByMSTeamId.find((i) => i.setting === "GIT_HUB_ENABLED")?.value === 'true' ? true : false);
+  }
 
   useEffect(() => {
+    const loadData = async () => {
+      microsoftTeams.getContext((ctx) => {
+        setTeamId(ctx.teamId);
+
+        microsoftTeams.settings.getSettings((settings) => {
+          setEntityId(settings.entityId ?? uuid().slice(0, 8));
+        });
+      });
+    };
+
     // Initialize the Microsoft Teams SDK
     microsoftTeams.initialize();
     microsoftTeams.getContext(ctx => {
       //setTeamId(ctx.teamId);
     });
 
-    microsoftTeams.settings.getSettings(settings => {
-      setEntityId(settings.entityId);
+    loadData();
+  }, [microsoftTeams]);
+
+  useEffect(() => {
+    if (!entityId) return;
+    settingsClient.getAppSettingsForTeam(token, entityId).then((results) => {
+      console.log(results);
+      loadSettings(results);
     });
-    /**
-     * When the user clicks "Save", save the url for your configured tab.
-     * This allows for the addition of query string parameters based on
-     * the settings selected by the user.
-     */
-    microsoftTeams.settings.registerOnSaveHandler((saveEvent) => {
+  }, [entityId]);
+
+  useEffect(() => {
+    microsoftTeams.settings.registerOnSaveHandler(saveHandler);
+  }, [entityId, teamId, teamsChannel, useTeamsPrivateChannel, joinApprovalRequired, maxTeamSize, githubOrg, githubIntegration])
+
+  const saveHandler = (saveEvent) => {    
       const baseUrl = `https://${window.location.hostname}:${window.location.port}`;
       microsoftTeams.settings.setSettings({
         suggestedDisplayName: "TeamBuilder",
@@ -146,11 +170,57 @@ import { v4 as uuid } from 'uuid';
       });
 
       //TODO store settings to DB
+      const input = [
+        {
+          msTeamId: entityId,
+          setting: "TEAM_ID",
+          value: teamId,
+        },
+        {
+          msTeamId: entityId,
+          setting: "USE_TEAMS",
+          value: teamsChannel.toString(),
+        },
+        {
+          msTeamId: entityId,
+          setting: "USE_PRIVATE_CHANNELS",
+          value: useTeamsPrivateChannel.toString(),
+        },
+        {
+          msTeamId: entityId,
+          setting: "ENABLE_AUTH",
+          value: joinApprovalRequired.toString(),
+        },
+        {
+          msTeamId: entityId,
+          setting: "MAX_TEAM_SIZE",
+          value: maxTeamSize,
+        },
+        {
+          msTeamId: entityId,
+          setting: "GIT_HUB_ENABLED",
+          value: githubIntegration.toString(),
+        },
+        {
+          msTeamId: entityId,
+          setting: "GIT_HUB_ORG",
+          value: githubOrg,
+        },
+      ];
 
-      saveEvent.notifySuccess();
-    });
+      console.log(input);
 
-  }, [])
+      settingsClient
+        .addAppSettings(token, input)
+        .then((result) => {
+          if (result.addAppSettings.appSettings) saveEvent.notifySuccess();
+          else saveEvent.notifyFailure();
+        })
+        .catch((error) => {
+          console.log(error);
+          saveEvent.notifyFailure();
+        });
+  };
 
   function handleCheckboxChange(_, item) {
     const { name, checked } = item;
@@ -196,43 +266,26 @@ import { v4 as uuid } from 'uuid';
     isValid();
   }
 
-  function validateOrgName(value, isChecked, formErrors) {
-    if ((!value || value === '') && isChecked) {
-      formErrors['githubOrg'] = 'Org Name cannot be empty!';      
-    }
-    else {
-      delete formErrors['githubOrg'];          
-    }
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    if (isValid()) {
-      // TODO: Save settings
-      return true;
+  function validateOrgName(value, isChecked, errors) {
+    if ((!value || value === "") && isChecked) {
+      errors["githubOrg"] = "Org Name cannot be empty!";
+    } else {
+      delete errors["githubOrg"];
     }
   }
 
   function isValid() {
     if (Object.entries(formErrors || {}).length > 0) {
       microsoftTeams.settings.setValidityState(false);
-      return false;
-    }
-    else {
-      /**
-     * After verifying that the settings for your tab are correctly
-     * filled in by the user you need to set the state of the dialog
-     * to be valid.  This will enable the save button in the configuration
-     * dialog.
-     */
-    microsoftTeams.settings.setValidityState(true);
-      return true;
+    } else {
+      microsoftTeams.settings.setValidityState(true);
     }
   }
 
   return (
     <div className="configuration-page">
       <div>
+        Settings ID: {entityId}
         <Flex column fluid>
           <h3>Teams Settings</h3>
           <Form fields={teamFields} />

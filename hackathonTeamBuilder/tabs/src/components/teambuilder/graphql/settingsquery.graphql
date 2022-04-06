@@ -1,0 +1,6 @@
+query getAppSettingsByTeam($entityId: String!) {
+  appSettingsByMSTeamId(msTeamId: $entityId)
+  {
+    msTeamId setting value
+  }
+}
