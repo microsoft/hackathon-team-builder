@@ -4,5 +4,5 @@ namespace TeamBuilder.API.AppSettings
 {
     public record RemoveAppSettingInput(
         string msTeamId,
-        AppSettingNames setting);
+        string setting);
 }
