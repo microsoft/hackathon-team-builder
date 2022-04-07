@@ -17,11 +17,20 @@ namespace TeamBuilder.API
         [UseTeamBuilderDbContext]
         public Task<List<Team>> GetTeams([ScopedService] TeamBuilderDbContext context) => context.Teams.ToListAsync();
 
+        [UseTeamBuilderDbContext]
+        public Task<List<AppSetting>> GetAppSettings([ScopedService] TeamBuilderDbContext context) => context.AppSettings.ToListAsync();
+
         public Task<Team> GetTeamAsync(
             int id,
             TeamByIdDataLoader dataLoader,
             CancellationToken cancellationToken
         ) => dataLoader.LoadAsync(id, cancellationToken);
+
+        public Task<AppSetting> GetAppSettingsAsync(
+            string msTeamId,
+            AppSettingByMSTeamIdDataLoader dataLoader,
+            CancellationToken cancellationToken
+        ) => dataLoader.LoadAsync(msTeamId, cancellationToken);
 
         public Task<Member> GetUserAsync(
             string userId,

@@ -1,0 +1,9 @@
+mutation setAppSettings($input: [AppSettingInput!]!) {
+  addAppSettings(input: $input)
+  {
+    errors { code message }
+    appSettings {
+      msTeamId setting value
+    }
+  }
+}
