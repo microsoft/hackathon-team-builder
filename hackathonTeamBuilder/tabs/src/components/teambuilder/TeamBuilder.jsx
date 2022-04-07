@@ -12,6 +12,7 @@ import CreateTeam from "./components/CreateTeam";
 import EditTeam from "./components/EditTeam";
 import TeamListItem from "./components/TeamListItem";
 import Team from "./apis/team";
+import { useSettings } from "./hooks/useSettings";
 import { createTeamButtonText } from "./components/Themes";
 
 function TeamBuilder() {
