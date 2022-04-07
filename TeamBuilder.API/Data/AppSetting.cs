@@ -23,7 +23,7 @@ namespace TeamBuilder.API.Data
      
         [Required]
         [StringLength(50)]
-        public AppSettingNames Setting { get; set; }
+        public string Setting { get; set; }
 
         [Required]
         [StringLength(250)]
