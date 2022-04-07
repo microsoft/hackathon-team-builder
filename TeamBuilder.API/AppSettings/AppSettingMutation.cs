@@ -1,11 +1,14 @@
 ﻿using HotChocolate;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TeamBuilder.API.Common;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.Services;
+using TeamBuilder.Models;
+
 namespace TeamBuilder.API.AppSettings
 {
     [ExtendObjectType(OperationTypeNames.Mutation)]

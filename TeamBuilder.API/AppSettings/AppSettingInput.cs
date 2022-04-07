@@ -4,7 +4,7 @@ namespace TeamBuilder.API.AppSettings
 {
     public record AppSettingInput(
         string msTeamId,
-        AppSettingNames setting,
+        string setting,
         string value
     );
 }
