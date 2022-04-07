@@ -1,24 +1,47 @@
+param tagVersion string
+param location string = resourceGroup().location
 @secure()
 param provisionParameters object
+@secure()
+param githubOrg string
+@secure()
+param githubProductHeaderValue string
+@secure()
+param githubInstallationId string
+@secure()
+param githubTeamId string
+@secure()
+param githubAppId string
+param keyVaultName string
+@secure()
+param githubPrivateKeyVal string
+param htbFunctionAppName string
+param htbFuctionsAppPlanName string
+param htbFunctionAppStorageName string
 
 module keyvaultProvision './provision/keyvault.bicep' = {
   name: 'keyvaultProvision'
   params: {
-    keyVaultName: '' // todo: generate from see in main
-    githubPrivateKeyVal: '' // todo: get from github secret
+    tagVersion: tagVersion
+    location: location
+    keyVaultName: keyVaultName
+    githubPrivateKeyVal: githubPrivateKeyVal
   }
 }
 
 output keyvaultProvisionOutput object = {
   kvName: keyvaultProvision.outputs.kvName
+  githubPrivateKeyName: keyvaultProvision.outputs.githubPrivateKeyName
 }
 
 module serverlessProvision './provision/serverless.bicep' = {
-  name: ''
+  name: 'teambuilder-serverless'
   params: {
-    functionAppName: ''
-    appServicePlanName: ''
-    functionStorageAccountName: ''
+    location: location
+    tagVersion: tagVersion
+    functionAppName: htbFunctionAppName
+    appServicePlanName: htbFuctionsAppPlanName
+    functionStorageAccountName: htbFunctionAppStorageName
   }
 }
 
@@ -30,6 +53,8 @@ output serverlessProvisionOutput object = {
 module frontendHostingProvision './provision/frontendHosting.bicep' = {
   name: 'frontendHostingProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
   }
 }
@@ -45,6 +70,8 @@ output frontendHostingOutput object = {
 module userAssignedIdentityProvision './provision/identity.bicep' = {
   name: 'userAssignedIdentityProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
   }
 }
@@ -59,6 +86,8 @@ output identityOutput object = {
 module simpleAuthProvision './provision/simpleAuth.bicep' = {
   name: 'simpleAuthProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
     userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
   }
@@ -74,6 +103,8 @@ output simpleAuthOutput object = {
 module graphqlAPIProvision './provision/teambuilderApi.bicep' = {
   name: 'graphqlAPIProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
     serverFarmId: simpleAuthProvision.outputs.serverFarmId
     userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
@@ -89,16 +120,18 @@ output graphqlAPIOutput object = {
 module githubApiProvision './provision/githubApi.bicep' = {
   name: 'githubApiProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
     serverFarmId: simpleAuthProvision.outputs.serverFarmId
     userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
-    githubOrg: ''
-    githubProductHeaderValue: ''
-    githubInstallationId: ''
-    githubTeamId: ''
+    githubOrg: githubOrg
+    githubProductHeaderValue: githubProductHeaderValue
+    githubInstallationId: githubInstallationId
+    githubTeamId: githubTeamId
     keyVaultName: keyvaultProvision.outputs.kvName
-    gitHubSecretName: ''
-    githubAppId: ''
+    gitHubSecretName: keyvaultProvision.outputs.githubPrivateKeyName
+    githubAppId: githubAppId
   }
 }
 

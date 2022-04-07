@@ -1,12 +1,20 @@
+param tagVersion string
+param location string = resourceGroup().location
 @secure()
 param provisionParameters object
 var resourceBaseName = provisionParameters.resourceBaseName
 var storageName = contains(provisionParameters, 'frontendHostingStorageName') ? provisionParameters['frontendHostingStorageName'] : '${resourceBaseName}tab'
 var storageSku = contains(provisionParameters, 'frontendHostingStorageSku') ? provisionParameters['frontendHostingStorageSku'] : 'Standard_LRS'
 
+var tagName = split(tagVersion, ':')[0]
+var tagValue = split(tagVersion, ':')[1]
+
 resource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   kind: 'StorageV2'
-  location: resourceGroup().location
+  location: location
+  tags: {
+    '${tagName}': tagValue
+  }
   name: storageName
   properties: {
     supportsHttpsTrafficOnly: true

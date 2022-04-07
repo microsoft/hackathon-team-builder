@@ -1,10 +1,18 @@
+param tagVersion string
+param location string = resourceGroup().location
 param keyVaultName string
 @secure()
 param githubPrivateKeyVal string
 
+var tagName = split(tagVersion, ':')[0]
+var tagValue = split(tagVersion, ':')[1]
+
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   name: keyVaultName
-  location: resourceGroup().location
+  tags: {
+    '${tagName}': tagValue
+  }
+  location: location
   properties: {
     enableRbacAuthorization: true
     tenantId: subscription().tenantId
@@ -23,6 +31,9 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
 resource secret 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
   parent: kv
   name: 'githubapp-privatekey'
+  tags: {
+    '${tagName}': tagValue
+  }
   properties: {
     value: githubPrivateKeyVal
   }
@@ -40,3 +51,4 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
 // }
 
 output kvName string = kv.name
+output githubPrivateKeyName string = secret.name

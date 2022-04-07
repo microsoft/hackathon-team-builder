@@ -1,3 +1,5 @@
+param tagVersion string
+param location string = resourceGroup().location
 @secure()
 param provisionParameters object
 param serverFarmId string
@@ -15,6 +17,9 @@ param gitHubSecretName string
 var githubApiName = 'TeambuilderAPI${uniqueString(resourceGroup().id)}'
 var githubApiPackageUri = contains(provisionParameters, 'githubApiPackageUri') ? provisionParameters['githubApiPackageUri'] : 'https://github.com/microsoft/hackathon-team-builder/releases/download/v0.0.15/Teambuilder.API_0.0.15.zip'
 
+var tagName = split(tagVersion, ':')[0]
+var tagValue = split(tagVersion, ':')[1]
+
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
   name: keyVaultName
 }
@@ -22,7 +27,10 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
 resource githubApi 'Microsoft.Web/sites@2021-02-01' = {
   kind: 'app'
   name: githubApiName
-  location: resourceGroup().location
+  tags: {
+    '${tagName}': tagValue
+  }
+  location: location
   properties: {
     serverFarmId: serverFarmId
     keyVaultReferenceIdentity: userAssignedIdentityId    

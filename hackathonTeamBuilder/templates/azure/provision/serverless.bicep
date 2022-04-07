@@ -1,3 +1,5 @@
+param tagVersion string
+param location string = resourceGroup().location
 param functionAppName string
 param appServicePlanName string
 param functionStorageAccountName string
@@ -5,12 +7,15 @@ param functionStorageAccountName string
 var appInsightsName = '${functionAppName}-ai'
 
 // todo: add event grid connection
+var tagName = split(tagVersion, ':')[0]
+var tagValue = split(tagVersion, ':')[1]
 
 resource functionStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: functionStorageAccountName
-  location: resourceGroup().location
+  location: location
   tags: {
     'ObjectName': functionAppName
+    '${tagName}': tagValue
   }
   kind: 'StorageV2'
   sku: {
@@ -20,9 +25,10 @@ resource functionStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' =
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
-  location: resourceGroup().location
+  location: location
   tags: {
     'ObjectName': functionAppName
+    '${tagName}': tagValue
   }
   kind: 'web'
   properties: {
@@ -34,18 +40,23 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 resource plan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: appServicePlanName
-  location: resourceGroup().location
+  location: location
+  tags: {
+    '${tagName}': tagValue
+  }
   kind: 'functionapp'
   sku: {
     name: 'Y1'
   }
-  properties: {}
 }
 
 resource functionApp 'Microsoft.Web/sites@2020-12-01' = {
   name: functionAppName
-  location: resourceGroup().location
+  location: location
   kind: 'functionapp'
+  tags: {
+    '${tagName}': tagValue
+  }
   properties: {
     siteConfig: {
       appSettings: [
