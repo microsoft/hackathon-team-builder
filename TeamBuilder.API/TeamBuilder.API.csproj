@@ -30,4 +30,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TeamBuilder.Models\TeamBuilder.Models.csproj" />
+  </ItemGroup>
+
 </Project>

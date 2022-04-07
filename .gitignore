@@ -5,3 +5,5 @@
 /TeamBuilder.GitHub/obj
 /TeamBuilder.GitHub/bin/Debug/net6.0
 /.vs/TeamBuilder
+/TeamBuilder.Models/bin/Debug/net5.0
+/TeamBuilder.Models/obj

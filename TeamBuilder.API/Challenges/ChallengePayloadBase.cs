@@ -1,4 +1,4 @@
-﻿using TeamBuilder.API.Data;
+﻿using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Challenges
 {

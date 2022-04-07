@@ -1,4 +1,4 @@
-﻿namespace TeamBuilder.API.Data
+﻿namespace TeamBuilder.Models
 {
     public class TeamMember
     {

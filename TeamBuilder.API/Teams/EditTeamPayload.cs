@@ -1,5 +1,5 @@
 ﻿using TeamBuilder.API.Common;
-using TeamBuilder.API.Data;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Teams
 {

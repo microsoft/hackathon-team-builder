@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.Services;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Challenges
 {

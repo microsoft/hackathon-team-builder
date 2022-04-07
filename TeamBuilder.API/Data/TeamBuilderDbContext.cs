@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Data
 {
