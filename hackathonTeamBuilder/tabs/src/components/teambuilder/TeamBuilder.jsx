@@ -34,10 +34,10 @@ function TeamBuilder() {
   }, {token: "123"})?.data;
   // Helper functions ----------------------------------------
 
-  useEffect(() => {
-    if (appSettings && appSettings.length > 0)
-        console.log(appSettings);
-  }, [appSettings]);
+  // useEffect(() => {
+  //   if (appSettings && appSettings.length > 0)
+  //       console.log(appSettings);
+  // }, [appSettings]);
 
   async function getTeams(authToken, userId) {
     let result = await teamClient.getAllTeams(authToken, userId);

@@ -149,7 +149,6 @@ function TabConfig() {
   useEffect(() => {
     if (!entityId) return;
     settingsClient.getAppSettingsForTeam(entityId).then((results) => {
-      console.log(results);
       loadSettings(results);
     });
   }, [entityId]);
@@ -206,8 +205,6 @@ function TabConfig() {
         },
       ];
 
-      console.log(input);
-
       settingsClient
         .addAppSettings(input)
         .then((result) => {
@@ -215,7 +212,6 @@ function TabConfig() {
           else saveEvent.notifyFailure();
         })
         .catch((error) => {
-          console.log(error);
           saveEvent.notifyFailure();
         });
   };
