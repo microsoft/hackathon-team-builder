@@ -9,7 +9,7 @@ export function useSettings(asyncFunc, options) {
     const { data, error, loading, reload } = useData(async () => {
         const client = new AppSettings(token);
         return await asyncFunc(client, context.entityId);
-    }, [context]);
+    }, { dependsOn: [context] });
 
     return { data, error, loading, reload };
 }
