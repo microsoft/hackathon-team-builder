@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 
-export function useData(asyncFn, options) {
+export function useData(asyncFn, dependsOn, options) {
   const { auto } = { auto: true, ...options };
   const [{ data, loading, error }, dispatch] = useReducer(
     ({ data: oldData }, { type, data, error }) => {
@@ -28,6 +28,6 @@ export function useData(asyncFn, options) {
   }
   useEffect(() => {
     if (auto) reload();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, dependsOn || []); // eslint-disable-line react-hooks/exhaustive-deps
   return { data, loading, error, reload };
 }

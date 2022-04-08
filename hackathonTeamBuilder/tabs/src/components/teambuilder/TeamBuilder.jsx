@@ -7,16 +7,13 @@ import {
   Loader,
 } from "@fluentui/react-northstar";
 import { TeamsUserCredential } from "@microsoft/teamsfx";
-import { useTeams } from "msteams-react-base-component";
 import TeamList from "./components/TeamList";
 import CreateTeam from "./components/CreateTeam";
 import EditTeam from "./components/EditTeam";
 import TeamListItem from "./components/TeamListItem";
 import Team from "./apis/team";
-import { useQuery } from "./hooks/query";
 import { useSettings } from "./hooks/settings";
 import { createTeamButtonText } from "./components/Themes";
-import { useTeamsFx } from "../sample/lib/useTeamsFx";
 
 function TeamBuilder() {
   const [teamList, setTeamList] = useState([]); // list of teams grouped by challenge
@@ -31,11 +28,10 @@ function TeamBuilder() {
   const teamClient = Team();
   const credential = new TeamsUserCredential();
 
-  const qs = useQuery();
   const appSettings = useSettings(async (settingsClient, entityId) => {
     const results = await settingsClient.getAppSettingsForTeam(entityId);
     return results.appSettingsByMSTeamId ?? [];
-  }, {entityId: qs.get("entityId"), token: "123"})?.data;
+  }, {token: "123"})?.data;
   // Helper functions ----------------------------------------
 
   useEffect(() => {

@@ -39,7 +39,7 @@
         {
             "entityId": "index",
             "name": "All Teams",
-            "contentUrl": "{{{localSettings.frontend.tabEndpoint}}}/index.html#/tab?entityId={entityId}",
+            "contentUrl": "{{{localSettings.frontend.tabEndpoint}}}/index.html#/tab",
             "websiteUrl": "{{{localSettings.frontend.tabEndpoint}}}/index.html#/tab",
             "scopes": [
                 "personal"
