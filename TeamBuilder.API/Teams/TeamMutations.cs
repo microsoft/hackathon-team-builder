@@ -1,6 +1,5 @@
 ﻿using HotChocolate;
 using HotChocolate.Types;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using TeamBuilder.API.Common;
 using TeamBuilder.API.Data;
@@ -46,7 +45,6 @@ namespace TeamBuilder.API.Teams
 
             team2Edit.Description = input.Description;
 
-            context.Entry(team2Edit).State = EntityState.Modified;
             await context.SaveChangesAsync();
 
             await messageService.SendAsync(team2Edit, MutationType.Update);
