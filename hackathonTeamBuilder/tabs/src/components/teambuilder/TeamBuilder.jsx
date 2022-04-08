@@ -12,6 +12,7 @@ import CreateTeam from "./components/CreateTeam";
 import EditTeam from "./components/EditTeam";
 import TeamListItem from "./components/TeamListItem";
 import Team from "./apis/team";
+import { useSettings } from "./hooks/settings";
 import { createTeamButtonText } from "./components/Themes";
 
 function TeamBuilder() {
@@ -27,7 +28,16 @@ function TeamBuilder() {
   const teamClient = Team();
   const credential = new TeamsUserCredential();
 
+  const appSettings = useSettings(async (settingsClient, entityId) => {
+    const results = await settingsClient.getAppSettingsForTeam(entityId);
+    return results.appSettingsByMSTeamId ?? [];
+  }, {token: "123"})?.data;
   // Helper functions ----------------------------------------
+
+  // useEffect(() => {
+  //   if (appSettings && appSettings.length > 0)
+  //       console.log(appSettings);
+  // }, [appSettings]);
 
   async function getTeams(authToken, userId) {
     let result = await teamClient.getAllTeams(authToken, userId);
@@ -107,7 +117,7 @@ function TeamBuilder() {
   let buttonText = !showCreate ? createTeamButtonText : "Never Mind";
 
   return (
-    <Flex column fluid>
+    <Flex column fluid>      
       <div id="TeamBuilder">
         {isLoading && (
           <div className="fullscreen">

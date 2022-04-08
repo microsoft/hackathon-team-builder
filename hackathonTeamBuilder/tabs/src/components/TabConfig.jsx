@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid';
  * their choices and communicate that to Teams to enable the save button.
  */
 function TabConfig() {
-  const settingsClient = AppSettings();
+  const settingsClient = AppSettings("notoken");
 
   const [teamId, setTeamId] = useState('');
   const [entityId, setEntityId] = useState('');
@@ -23,7 +23,6 @@ function TabConfig() {
   const [githubOrg, setGithubOrg] = useState('');
   const [githubIntegration, setGithubIntegration] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  const token = "abcdefg";
 
   const teamFields = [    
     {
@@ -122,7 +121,6 @@ function TabConfig() {
   ];
 
   function loadSettings(settings) {
-    //let teamIdSetting = settings.appSettingsByMSTeamId.find(i => i.setting == 'TEAM_ID');
     setTeamsChannel(settings.appSettingsByMSTeamId.find((i) => i.setting === "USE_TEAMS")?.value === 'true' ? true : false);
     setUseTeamsPrivateChannel(settings.appSettingsByMSTeamId.find((i) => i.setting === "USE_PRIVATE_CHANNELS")?.value === 'true' ? true : false);
     setJoinApprovalRequired(settings.appSettingsByMSTeamId.find((i) => i.setting === "ENABLE_AUTH")?.value === 'true' ? true : false);
@@ -143,18 +141,14 @@ function TabConfig() {
     };
 
     // Initialize the Microsoft Teams SDK
-    microsoftTeams.initialize();
-    microsoftTeams.getContext(ctx => {
-      //setTeamId(ctx.teamId);
-    });
+    microsoftTeams.initialize();    
 
     loadData();
   }, [microsoftTeams]);
 
   useEffect(() => {
     if (!entityId) return;
-    settingsClient.getAppSettingsForTeam(token, entityId).then((results) => {
-      console.log(results);
+    settingsClient.getAppSettingsForTeam(entityId).then((results) => {
       loadSettings(results);
     });
   }, [entityId]);
@@ -211,16 +205,13 @@ function TabConfig() {
         },
       ];
 
-      console.log(input);
-
       settingsClient
-        .addAppSettings(token, input)
+        .addAppSettings(input)
         .then((result) => {
           if (result.addAppSettings.appSettings) saveEvent.notifySuccess();
           else saveEvent.notifyFailure();
         })
         .catch((error) => {
-          console.log(error);
           saveEvent.notifyFailure();
         });
   };
