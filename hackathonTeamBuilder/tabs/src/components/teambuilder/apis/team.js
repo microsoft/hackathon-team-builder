@@ -1,7 +1,8 @@
 import graphapi from './graphapi';
 import { loader } from 'graphql.macro';
+import { useSettings } from '../hooks/settings';
 
-function Team() {
+function Team(authToken) {
   const TEAMSQUERY = loader('../graphql/teamquery.graphql');
   const ADDTEAM = loader('../graphql/addteam.graphql');
   const EDITTEAM = loader('../graphql/editteam.graphql');
@@ -9,9 +10,11 @@ function Team() {
   const LEAVETEAM = loader('../graphql/leaveteam.graphql');
   const LEADTEAM  = loader('../graphql/leadteam.graphql');
 
+  //const appSettings = useSettings({token: "123"});
+
   // authToken: jwt bearer token to call graphql api
   // email: email of the logged in user
-  async function getAllTeams(authToken, userId) {
+  async function getAllTeams(userId) {
     let client = graphapi(authToken);
     let response = await client.query({ query: TEAMSQUERY, variables: { userId } });
     if (response.data) {
@@ -19,7 +22,7 @@ function Team() {
     }
   }
 
-  async function createNewTeam(authToken, input) {
+  async function createNewTeam(input) {
     let client = graphapi(authToken);
 
     let response = await client.mutate({ mutation: ADDTEAM, variables: { input } });
@@ -28,7 +31,7 @@ function Team() {
     }
   }
 
-  async function editTeam(authToken, input) {
+  async function editTeam(input) {
     let client = graphapi(authToken);
 
     let response = await client.mutate({ mutation: EDITTEAM, variables: { input } });
@@ -37,21 +40,21 @@ function Team() {
     }
   }
 
-  async function joinTeam(authToken, input) {
+  async function joinTeam(input) {
     let client = graphapi(authToken);
 
     let response = await client.mutate({ mutation: JOINTEAM, variables: { input } });
     return (!response.data.joinTeam.errors);
   }
 
-  async function leaveTeam(authToken, input) {
+  async function leaveTeam(input) {
     let client = graphapi(authToken);
 
     let response = await client.mutate({ mutation: LEAVETEAM, variables: { input } });
     return response.data.leaveTeam;
   }
 
-  async function leadTeam(authToken, input) {
+  async function leadTeam(input) {
     let client = graphapi(authToken);
 
     let response = await client.mutate({ mutation: LEADTEAM, variables: { input } });

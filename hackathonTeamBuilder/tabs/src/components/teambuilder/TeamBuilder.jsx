@@ -19,19 +19,15 @@ function TeamBuilder() {
   const [teamList, setTeamList] = useState([]); // list of teams grouped by challenge
   const [myTeam, setMyTeam] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
-  const [hackToken, setHackToken] = useState("");
   const [existingTeamNames, setExistingTeamNames] = useState([]);
   const [challengeOptions, setChallengeOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState("");
 
-  const teamClient = Team();
+  const teamClient = Team("notoken");
   const credential = new TeamsUserCredential();
 
-  const appSettings = useSettings(async (settingsClient, entityId) => {
-    const results = await settingsClient.getAppSettingsForTeam(entityId);
-    return results.appSettingsByMSTeamId ?? [];
-  }, {token: "123"})?.data;
+  const appSettings = useSettings({token: "123"});
   // Helper functions ----------------------------------------
 
   // useEffect(() => {
@@ -39,8 +35,8 @@ function TeamBuilder() {
   //       console.log(appSettings);
   // }, [appSettings]);
 
-  async function getTeams(authToken, userId) {
-    let result = await teamClient.getAllTeams(authToken, userId);
+  async function getTeams(userId) {
+    let result = await teamClient.getAllTeams(userId);
     setChallengeOptions(result.challenges);
     setTeamList(result.teams);
     setExistingTeamNames(result.teamnames.map((t) => t.name)); // used to prevent duplicate team names on create
@@ -49,15 +45,15 @@ function TeamBuilder() {
   }
 
   async function CreateNewTeam(input) {
-    let newTeamId = await teamClient.createNewTeam(hackToken, input);
+    let newTeamId = await teamClient.createNewTeam(input);
     await updateTeamMembership(true, userId, newTeamId, true);
     setShowCreate(!showCreate);
   }
 
   async function editTeam(input) {
-    await teamClient.editTeam(hackToken, input);
+    await teamClient.editTeam(input);
     setShowCreate(!showCreate);
-    await getTeams(hackToken, userId);
+    await getTeams(userId);
   }
 
   async function handleChangeTeamMembership(join, id, name, isLead = false) {
@@ -71,8 +67,8 @@ function TeamBuilder() {
       userId: userId,
       isLead: isLead,
     };
-    await teamClient.leadTeam(hackToken, input);
-    await getTeams(hackToken, userId);
+    await teamClient.leadTeam(input);
+    await getTeams(userId);
   }
 
   async function updateTeamMembership(join, userId, teamId, isLead) {
@@ -83,11 +79,11 @@ function TeamBuilder() {
     };
     if (join) {
       input.isLead = isLead;
-      await teamClient.joinTeam(hackToken, input);
+      await teamClient.joinTeam(input);
     } else {
-      await teamClient.leaveTeam(hackToken, input);
+      await teamClient.leaveTeam(input);
     }
-    await getTeams(hackToken, userId);
+    await getTeams(userId);
   }
 
   function toggleShowCreate() {
@@ -100,19 +96,17 @@ function TeamBuilder() {
     const loadData = async () => {
       //credential.login(HackAPIScope); // uncomment for user consent
       //let tokenResp = await credential.getToken(HackAPIScope);
-      let token = "abcdefg";
       //setHackToken(tokenResp.token);
-      setHackToken(token);
-
+      
       // get info from current user
       let info = await credential.getUserInfo();
       setUserId(info.objectId);
 
-      await getTeams(token, info.objectId);
+      await getTeams(info.objectId);
     }; // End getUserInfo()
 
     loadData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   let buttonText = !showCreate ? createTeamButtonText : "Never Mind";
 
@@ -142,7 +136,6 @@ function TeamBuilder() {
             <Flex.Item size="size.half">
               <Button
                 icon={<TeamCreateIcon />}
-                loader="Generate interface"
                 primary
                 onClick={toggleShowCreate}
                 aria-label="Create Team or Cancel Create Team Button"
