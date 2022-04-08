@@ -24,6 +24,7 @@ export function useGraph(asyncFunc, options) {
       const graph = createMicrosoftGraphClient(credential, scope);
       return await asyncFunc(graph);
     },
+    [],
     { auto: false }
   );
 
