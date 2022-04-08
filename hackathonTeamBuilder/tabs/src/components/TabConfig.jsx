@@ -3,6 +3,7 @@ import { Checkbox, Form, Input, Flex } from "@fluentui/react-northstar";
 import "./App.css";
 import * as microsoftTeams from "@microsoft/teams-js";
 import AppSettings from "./teambuilder/apis/settings";
+import { useSettings } from "./teambuilder/hooks/settings";
 import { v4 as uuid } from 'uuid';
 
 /**
@@ -13,6 +14,7 @@ import { v4 as uuid } from 'uuid';
  */
 function TabConfig() {
   const settingsClient = AppSettings("notoken");
+  const savedSettings = useSettings();
 
   const [teamId, setTeamId] = useState('');
   const [entityId, setEntityId] = useState('');
@@ -120,15 +122,6 @@ function TabConfig() {
     },
   ];
 
-  function loadSettings(settings) {
-    setTeamsChannel(settings.appSettingsByMSTeamId.find((i) => i.setting === "USE_TEAMS")?.value === 'true' ? true : false);
-    setUseTeamsPrivateChannel(settings.appSettingsByMSTeamId.find((i) => i.setting === "USE_PRIVATE_CHANNELS")?.value === 'true' ? true : false);
-    setJoinApprovalRequired(settings.appSettingsByMSTeamId.find((i) => i.setting === "ENABLE_AUTH")?.value === 'true' ? true : false);
-    setMaxTeamSize(settings.appSettingsByMSTeamId.find((i) => i.setting === "MAX_TEAM_SIZE")?.value ?? "");
-    setGithubOrg(settings.appSettingsByMSTeamId.find((i) => i.setting === "GIT_HUB_ORG")?.value ?? "");
-    setGithubIntegration(settings.appSettingsByMSTeamId.find((i) => i.setting === "GIT_HUB_ENABLED")?.value === 'true' ? true : false);
-  }
-
   useEffect(() => {
     const loadData = async () => {
       microsoftTeams.getContext((ctx) => {
@@ -144,14 +137,18 @@ function TabConfig() {
     microsoftTeams.initialize();    
 
     loadData();
-  }, [microsoftTeams]);
+  }, []);
 
   useEffect(() => {
-    if (!entityId) return;
-    settingsClient.getAppSettingsForTeam(entityId).then((results) => {
-      loadSettings(results);
-    });
-  }, [entityId]);
+    if (savedSettings) {
+      setTeamsChannel(savedSettings.useTeams);
+      setUseTeamsPrivateChannel(savedSettings.usePrivateChannels);
+      setJoinApprovalRequired(savedSettings.authEnabled);
+      setMaxTeamSize(savedSettings.maxTeamSize);
+      setGithubOrg(savedSettings.gitHubOrg);
+      setGithubIntegration(savedSettings.gitHubEnabled);
+    }
+  }, [savedSettings]);
 
   useEffect(() => {
     microsoftTeams.settings.registerOnSaveHandler(saveHandler);
@@ -245,7 +242,7 @@ function TabConfig() {
     const { name, value } = e.target;
     let currentFormErrors = formErrors;
 
-    switch (name) {      
+    switch (name) {
       case 'maxTeamSize':
           setMaxTeamSize(value);          
           break;
@@ -285,16 +282,7 @@ function TabConfig() {
           <Form fields={teamFields} />
           <h3>GitHub Settings</h3>
           <Form fields={githubFields} />          
-        </Flex>
-        {/*
-        We will add a form to hold and save the following configuration options:
-        TeamsChannels (Enable Teams Integration?) -> Toggle Yes/No
-        TeamsPrivateChannels (Using Teams private channels?) -> Toggle Yes/No
-        MaxTeamSize (What's your max team size?) -> Textbox, 12
-        JoinApproval (Require approval to join a team?) -> Toggle Yes/No
-        GitHubOrg (What's your Github org name?) -> Textbox default:NULL
-        GitHubAuthKey (What's your Github auth key?) -> Textbox default:NULL
-        */}
+        </Flex>        
       </div>
     </div>
   );
