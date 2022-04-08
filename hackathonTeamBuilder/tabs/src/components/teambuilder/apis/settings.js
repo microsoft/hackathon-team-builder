@@ -1,14 +1,14 @@
 import graphapi from './graphapi';
 import { loader } from 'graphql.macro';
 
-function AppSettings() {
+function AppSettings(authToken) {
   const SETTINGSQUERY = loader('../graphql/settingsquery.graphql');
   const ADDSETTING = loader('../graphql/addsetting.graphql');
   const ADDSETTINGS = loader('../graphql/addsettings.graphql');
 
   // authToken: jwt bearer token to call graphql api
   // email: email of the logged in user
-  async function getAppSettingsForTeam(authToken, entityId) {
+  async function getAppSettingsForTeam(entityId) {
     let client = graphapi(authToken);
     let response = await client.query({ query: SETTINGSQUERY, variables: { entityId } });
     if (response.data) {
@@ -16,7 +16,7 @@ function AppSettings() {
     }
   } 
   
-  async function setAppSetting(authToken, input) {
+  async function setAppSetting(input) {
       let client = graphapi(authToken);
       let response = await client.mutate({ mutation: ADDSETTING, variables: { input }});
       if (response.data) {
@@ -24,7 +24,7 @@ function AppSettings() {
       }
   }
 
-  async function addAppSettings(authToken, input) {
+  async function addAppSettings(input) {
     let client = graphapi(authToken);
     let response = await client.mutate({ mutation: ADDSETTINGS, variables: { input }});
     if (response.data) {
