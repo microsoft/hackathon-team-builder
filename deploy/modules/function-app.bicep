@@ -3,6 +3,7 @@ param location string = resourceGroup().location
 param functionAppName string
 param appServicePlanName string
 param functionStorageAccountName string
+param appSettings array
 
 var appInsightsName = '${functionAppName}-ai'
 
@@ -59,7 +60,7 @@ resource functionApp 'Microsoft.Web/sites@2020-12-01' = {
   }
   properties: {
     siteConfig: {
-      appSettings: [
+      appSettings: concat(appSettings, [
         {
           name: 'AzureWebJobsStorage'
           value: 'DefaultEndpointsProtocol=https;AccountName=${functionStorageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(functionStorageAccount.id, functionStorageAccount.apiVersion).keys[0].value}'
@@ -84,7 +85,7 @@ resource functionApp 'Microsoft.Web/sites@2020-12-01' = {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: 'InstrumentationKey=${appInsights.properties.InstrumentationKey}'
         }
-      ]
+      ])
     }
     httpsOnly: true
   }

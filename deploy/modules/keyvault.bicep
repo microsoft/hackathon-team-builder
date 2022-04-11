@@ -7,6 +7,8 @@ param githubPrivateKeyVal string
 var tagName = split(tagVersion, ':')[0]
 var tagValue = split(tagVersion, ':')[1]
 
+// create anther user assigned identity and follow similar pattern to 
+
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   name: keyVaultName
   tags: {
@@ -52,3 +54,4 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
 
 output kvName string = kv.name
 output githubPrivateKeyName string = secret.name
+output vaultUri string = kv.properties.vaultUri
