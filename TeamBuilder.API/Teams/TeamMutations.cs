@@ -46,6 +46,9 @@ namespace TeamBuilder.API.Teams
 
             team2Edit.Description = input.Description;
 
+            if (!string.IsNullOrEmpty(input.ChannelId))
+                team2Edit.ChannelId = input.ChannelId;
+
             await context.SaveChangesAsync();
 
             await messageService.SendAsync(team2Edit, MutationType.Update);
