@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using GreenDonut;
+using Microsoft.Extensions.Logging;
+using Microsoft.Graph;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Graph;
-using GreenDonut;
-using TeamBuilder.API.Data;
-using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.DataLoader
 {

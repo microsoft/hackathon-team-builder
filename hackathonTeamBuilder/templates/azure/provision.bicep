@@ -1,9 +1,14 @@
+param tagVersion string
+param location string = resourceGroup().location
 @secure()
 param provisionParameters object
+
 // Resources for frontend hosting
 module frontendHostingProvision './provision/frontendHosting.bicep' = {
   name: 'frontendHostingProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
   }
 }
@@ -14,10 +19,13 @@ output frontendHostingOutput object = {
   endpoint: frontendHostingProvision.outputs.endpoint
   storageResourceId: frontendHostingProvision.outputs.resourceId
 }
+
 // Resources for identity
 module userAssignedIdentityProvision './provision/identity.bicep' = {
   name: 'userAssignedIdentityProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
   }
 }
@@ -32,6 +40,8 @@ output identityOutput object = {
 module simpleAuthProvision './provision/simpleAuth.bicep' = {
   name: 'simpleAuthProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
     userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
   }
@@ -47,6 +57,8 @@ output simpleAuthOutput object = {
 module graphqlAPIProvision './provision/teambuilderApi.bicep' = {
   name: 'graphqlAPIProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
     serverFarmId: simpleAuthProvision.outputs.serverFarmId
     userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId

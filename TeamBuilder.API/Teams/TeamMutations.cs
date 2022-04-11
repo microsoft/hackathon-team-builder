@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TeamBuilder.API.Common;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.Services;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Teams
 {

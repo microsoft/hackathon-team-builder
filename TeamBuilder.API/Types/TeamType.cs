@@ -1,11 +1,12 @@
+using HotChocolate;
+using HotChocolate.Types;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
-using HotChocolate;
-using HotChocolate.Types;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Types
 {

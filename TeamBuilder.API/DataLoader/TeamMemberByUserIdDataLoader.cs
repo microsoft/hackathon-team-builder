@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TeamBuilder.API.Data;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.DataLoader
 {

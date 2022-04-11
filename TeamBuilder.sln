@@ -6,6 +6,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamBuilder.GitHub", "TeamB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamBuilder.API", "TeamBuilder.API\TeamBuilder.API.csproj", "{32EADCF5-2545-4FE5-8DBD-6A2148F1BA4F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamBuilder.Serverless", "TeamBuilder.Serverless\TeamBuilder.Serverless.csproj", "{7F9CC8C9-AA1D-468C-B3F7-C08EED0C0AFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamBuilder.Models", "TeamBuilder.Models\TeamBuilder.Models.csproj", "{416FFC93-2739-4764-8DA0-A9AE3514F110}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,14 @@ Global
 		{32EADCF5-2545-4FE5-8DBD-6A2148F1BA4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32EADCF5-2545-4FE5-8DBD-6A2148F1BA4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32EADCF5-2545-4FE5-8DBD-6A2148F1BA4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F9CC8C9-AA1D-468C-B3F7-C08EED0C0AFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F9CC8C9-AA1D-468C-B3F7-C08EED0C0AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F9CC8C9-AA1D-468C-B3F7-C08EED0C0AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F9CC8C9-AA1D-468C-B3F7-C08EED0C0AFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{416FFC93-2739-4764-8DA0-A9AE3514F110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{416FFC93-2739-4764-8DA0-A9AE3514F110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{416FFC93-2739-4764-8DA0-A9AE3514F110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{416FFC93-2739-4764-8DA0-A9AE3514F110}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

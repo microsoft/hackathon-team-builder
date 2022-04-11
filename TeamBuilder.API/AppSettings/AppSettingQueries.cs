@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.AppSettings
 {

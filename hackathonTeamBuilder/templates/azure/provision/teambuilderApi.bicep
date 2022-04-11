@@ -1,3 +1,5 @@
+param tagVersion string
+param location string = resourceGroup().location
 @secure()
 param provisionParameters object
 param serverFarmId string
@@ -7,9 +9,15 @@ var teambuilderApiName = 'TeambuilderAPI${uniqueString(resourceGroup().id)}'
 var teambuilderPackageUri = contains(provisionParameters, 'teambuilderPackageUri') ? provisionParameters['teambuilderPackageUri'] : 'https://github.com/microsoft/hackathon-team-builder/releases/download/v0.0.15/Teambuilder.API_0.0.15.zip'
 var teambuilderEventGridTopicName = 'TeambuilderEventGrid${uniqueString(resourceGroup().id)}'
 
+var tagName = split(tagVersion, ':')[0]
+var tagValue = split(tagVersion, ':')[1]
+
 resource teambuilderEventGridTopic 'Microsoft.EventGrid/topics@2021-12-01' = {
   name: teambuilderEventGridTopicName
-  location: resourceGroup().location
+  location: location
+  tags: {
+    '${tagName}': tagValue
+  }
   identity: {
     type: 'None'
   }
@@ -23,7 +31,10 @@ resource teambuilderEventGridTopic 'Microsoft.EventGrid/topics@2021-12-01' = {
 resource teambuilderApi 'Microsoft.Web/sites@2021-02-01' = {
   kind: 'app'
   name: teambuilderApiName
-  location: resourceGroup().location
+  location: location
+  tags: {
+    '${tagName}': tagValue
+  }
   properties: {
     serverFarmId: serverFarmId
     keyVaultReferenceIdentity: userAssignedIdentityId    

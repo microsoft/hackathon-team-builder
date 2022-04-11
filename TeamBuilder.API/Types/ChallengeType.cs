@@ -1,13 +1,13 @@
+using HotChocolate;
+using HotChocolate.Types;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
-using HotChocolate;
-using HotChocolate.Resolvers;
-using HotChocolate.Types;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Types
 {

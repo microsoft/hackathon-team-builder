@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using HotChocolate;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using TeamBuilder.API.Data;
 using TeamBuilder.API.DataLoader;
-using HotChocolate;
-using System.Threading.Tasks;
-using System.Threading;
+using TeamBuilder.Models;
 
 namespace TeamBuilder.API
 {

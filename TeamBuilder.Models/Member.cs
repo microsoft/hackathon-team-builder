@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TeamBuilder.API.Data
+namespace TeamBuilder.Models
 {
     public class Member
     {             

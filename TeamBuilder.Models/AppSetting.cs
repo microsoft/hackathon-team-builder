@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TeamBuilder.API.Data
+namespace TeamBuilder.Models
 {
     public enum AppSettingNames
     {
