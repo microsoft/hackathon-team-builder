@@ -57,7 +57,6 @@ namespace TeamBuilder.API.AppSettings
                 var existing = settingsDb.FirstOrDefault(a => a.Setting == s.setting);
                 if (existing != null)
                 {
-                    var entry = context.Entry(existing);
                     existing.Value = s.value;
                     results.Add(existing);
                 }
@@ -95,7 +94,6 @@ namespace TeamBuilder.API.AppSettings
 
             appSetting2Edit.Value = input.value;
 
-            context.Entry(appSetting2Edit).State = EntityState.Modified;
             await context.SaveChangesAsync();
 
             await messageService.SendAsync(appSetting2Edit, MutationType.Update);

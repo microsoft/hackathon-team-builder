@@ -66,7 +66,7 @@ namespace TeamBuilder.API.TeamMembers
             }
 
             itemToUpdate.IsLead = input.IsLead;
-            context.Entry(itemToUpdate).State = EntityState.Modified;
+            
             await context.SaveChangesAsync();
 
             await messageService.SendAsync(itemToUpdate, MutationType.Update);

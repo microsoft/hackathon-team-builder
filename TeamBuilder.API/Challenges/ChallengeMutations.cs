@@ -89,7 +89,7 @@ namespace TeamBuilder.API.Challenges
             existingItem.Name = string.IsNullOrEmpty(input.Name) ? existingItem.Name : input.Name;
             existingItem.Prefix = string.IsNullOrEmpty(input.Prefix) ? existingItem.Prefix : input.Prefix;
             existingItem.Description = string.IsNullOrEmpty(input.Description) ? existingItem.Description : input.Description;
-            context.Entry(existingItem).State = EntityState.Modified;
+            
             await context.SaveChangesAsync();
 
             await messageService.SendAsync(existingItem, MutationType.Update);
