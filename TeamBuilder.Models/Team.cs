@@ -16,6 +16,7 @@ namespace TeamBuilder.Models
         [Required]
         public int ChallengeAreaId { get; set; }
         public ChallengeArea? Challenge { get; set; }
+        public string? ChannelId { get; set; }
         public ICollection<TeamMember>? TeamMembers { get; set; } = new List<TeamMember>();
     }
 }

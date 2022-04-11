@@ -2,6 +2,7 @@
 {
     public record EditTeamInput(
         int Id,
-        string? Description
+        string? Description,
+        string? ChannelId
     );
 }

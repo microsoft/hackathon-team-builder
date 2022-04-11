@@ -135,23 +135,10 @@ function TeamForm(props) {
     props.createTeam(input);
   }
 
-  function editTeam() {
-    let input = {
-      name: props.team.name,
-      description: teamDescription,
-      challengeAreaId: challengeAreaId
-    };
-    props.editTeam(input);
-  }
-
   function handleSubmit(event) {
     event.preventDefault();
     if (isValid()) {
-      if (!props.team) {
-        newTeam();
-      } else {
-        editTeam();
-      }
+      newTeam();
       return true;
     }
   }
