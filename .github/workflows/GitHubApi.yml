@@ -17,7 +17,7 @@ on:
 env:
   BUILDCONFIGURATION: 'Release'
   AZURE_SUBSCRIPTION_ID: 'da454a5b-6be8-4084-8841-b913918f9aa6'
-  AZURE_RESOURCE_GROUP: 'hackathonTeamBuilder-36mph-rg'
+  AZURE_RESOURCE_GROUP: 'hackathonTeamBuilder-github'
 
 jobs:
   build:
