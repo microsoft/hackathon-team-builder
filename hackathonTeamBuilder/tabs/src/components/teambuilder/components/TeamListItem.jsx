@@ -16,15 +16,22 @@ import {
   joinButtonText,
   leaveButtonText,
 } from "./Themes";
+import { useSettings } from '../hooks/settings';
 
 function TeamListItem(props) {
   const [team, setTeam] = useState(null);
+  const [enableJoin, setEnableJoin] = useState(true);
+  const appSettings = useSettings();
 
   useEffect(() => {
     if (props.team) {
       setTeam(props.team);
+
+      if (appSettings && appSettings.maxTeamSize > 0 && props.team.members.length > appSettings.maxTeamSize) {
+        setEnableJoin(false);
+      }
     }
-  }, [props.team]);
+  }, [props.team, appSettings]);
 
   function getHackers() {
     return (
@@ -59,6 +66,7 @@ function TeamListItem(props) {
     return (
       <Button
         aria-label="Join Team Button"
+        disabled={!enableJoin}
         onClick={() => {
           onClick(
             // handleChangeTeamMembership(join, id, name, islead = false)
