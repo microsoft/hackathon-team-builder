@@ -5,7 +5,7 @@ using TeamBuilder.GitHub.Services;
 namespace TeamBuilder.GitHub.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("Teams/{teamId}/[controller]")]
 public class TeamMembersController : ControllerBase
 {
     private readonly GitHubClientFactory _factory;
@@ -15,29 +15,14 @@ public class TeamMembersController : ControllerBase
         _factory = factory;
     }
 
-    [HttpGet]
-    [ProducesResponseType(typeof(List<Team>), 200)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetTeamAsync(int teamId)
-    {
-        var client = await _factory.GetClientAsync();
-
-        var team = await client.Organization.Team.Get(teamId);
-
-        if (team == null)
-            return NotFound();
-
-        return Ok(team);
-    }
-
-    [HttpGet("members")]
+    [HttpGet("Members")]
     [ProducesResponseType(typeof(List<User>), 200)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetTeamMembersAsync()
+    public async Task<IActionResult> GetTeamMembersAsync([FromRoute] int teamId)
     {
         var client = await _factory.GetClientAsync();
 
-        var teamMembers = await client.Organization.Team.GetAllMembers(_factory.TeamId);
+        var teamMembers = await client.Organization.Team.GetAllMembers(teamId);
 
         if (teamMembers == null)
             return NotFound();
@@ -45,24 +30,24 @@ public class TeamMembersController : ControllerBase
         return Ok(teamMembers);
     }
 
-    [HttpPost("members")]
+    [HttpPost("Members")]
     [ProducesResponseType(204)]
-    public async Task<IActionResult> AddTeamMemberAsync([FromBody] string login)
+    public async Task<IActionResult> AddTeamMemberAsync([FromRoute] int teamId, [FromBody] string login)
     {
         var client = await _factory.GetClientAsync();
 
-        await client.Organization.Team.AddOrEditMembership(_factory.TeamId, login, new UpdateTeamMembership(TeamRole.Member));
+        await client.Organization.Team.AddOrEditMembership(teamId, login, new UpdateTeamMembership(TeamRole.Member));
 
         return NoContent();
     }
 
-    [HttpDelete("members/{login}")]
+    [HttpDelete("Members/{login}")]
     [ProducesResponseType(204)]
-    public async Task<IActionResult> RemoveTeamMemberAsync([FromRoute] string login)
+    public async Task<IActionResult> RemoveTeamMemberAsync([FromRoute] int teamId, [FromRoute] string login)
     {
         var client = await _factory.GetClientAsync();
 
-        await client.Organization.Team.RemoveMembership(_factory.TeamId, login);
+        await client.Organization.Team.RemoveMembership(teamId, login);
 
         return NoContent();
     }

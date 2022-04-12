@@ -20,7 +20,6 @@ public class GitHubClientFactory
         _installationId = long.Parse(options.InstallationId, NumberStyles.Number);
 
         Org = options.Org;
-        TeamId = int.Parse(options.TeamId, NumberStyles.Number);
 
         _jwtFactory = new GitHubJwtFactory(
             new StringPrivateKeySource(keyVaultService[options.KeyVaultSecret]),
