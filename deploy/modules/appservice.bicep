@@ -49,7 +49,8 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
 }
 
 resource kvRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(keyVaultSecretsUserRoleDefinitionId,managedIdentity.id,kv.id)
+  // name: guid(keyVaultSecretsUserRoleDefinitionId,managedIdentity.id,kv.id)
+  name: 'TeamBuilder.GitHub.KeyVaultUser'
   scope: kv
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultSecretsUserRoleDefinitionId)
