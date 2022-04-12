@@ -7,5 +7,4 @@ public class GitHubClientFactoryOptions
     public string GitHubAppId { get; set; }
     public string ProductHeaderValue { get; set; }
     public string InstallationId { get; set; }
-    public string TeamId { get; set; }
 }

@@ -9,12 +9,9 @@ param githubProductHeaderValue string
 @secure()
 param githubInstallationId string
 @secure()
-param githubTeamId string
-@secure()
 param githubAppId string
 @secure()
 param githubPrivateKeyVal string
-param identityName string
 
 @allowed([
   'nonprod'
@@ -25,10 +22,12 @@ param environmentType string
 var cleanPrefix = replace(prefix, '-', '')
 var htbAPIAppPlanName = '${prefix}-appPlan'
 var htbAPIAppName = '${prefix}-api'
+var identityName = '${prefix}-api-identity'
 var htbFunctionAppName = '${prefix}-serverless'
 var htbFuctionsAppPlanName = '${prefix}-serverlessPlan'
 var htbFunctionAppStorageName = length(cleanPrefix) + 6 > 24 ? substring('${cleanPrefix}funcsa',0,24) : '${cleanPrefix}funcsa'
 var keyVaultName = length(cleanPrefix) + 2 > 24 ? substring('${cleanPrefix}kv',0,24) : '${cleanPrefix}kv'
+
 
 // goals:
 // create keyvault
@@ -56,7 +55,6 @@ module serverless './modules/function-app.bicep' = {
     ]
   }
 }
-
 
 module gitHubApi './modules/appservice.bicep' = {
   name: 'teambuilder.github'
@@ -93,10 +91,9 @@ module gitHubApi './modules/appservice.bicep' = {
         name: 'GitHub__InstallationId'
         value: githubInstallationId
       }
-      {
-        name: 'GitHub__TeamId'
-        value: githubTeamId
-      }
     ]
   }
 }
+
+output functionAppName string = serverless.outputs.functionAppName
+output appServiceAppName string = gitHubApi.outputs.appServiceAppName
