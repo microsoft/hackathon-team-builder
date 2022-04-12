@@ -18,7 +18,7 @@ export function useSettings(options) {
                     useTeams: data.find((i) => i.setting === "USE_TEAMS")?.value === 'true' ? true : false,
                     usePrivateChannels: data.find((i) => i.setting === "USE_PRIVATE_CHANNELS")?.value === 'true' ? true : false,
                     authEnabled: data.find((i) => i.setting === "ENABLE_AUTH")?.value === 'true' ? true : false,
-                    maxTeamSize: data.find((i) => i.setting === "MAX_TEAM_SIZE")?.value ?? "0",
+                    maxTeamSize: parseInt(data.find((i) => i.setting === "MAX_TEAM_SIZE")?.value) ?? 0,
                     gitHubOrg: data.find((i) => i.setting === "GIT_HUB_ORG")?.value ?? "",
                     gitHubEnabled: data.find((i) => i.setting === "GIT_HUB_ENABLED")?.value === 'true' ? true : false
                 };
