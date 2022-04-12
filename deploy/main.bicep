@@ -69,7 +69,7 @@ module gitHubApi './modules/appservice.bicep' = {
     appSettings: [
       {
         name: 'KeyVaultUri'
-        value: '${keyvaultProvision.outputs.vaultUri}'
+        value: keyvaultProvision.outputs.vaultUri
       }
       {
         name: 'GitHub__KeyVaultSecret'
