@@ -8,10 +8,9 @@ on:
     branches:
       - main
     paths:
-      - '.github\workflows\GitHubApi.yml'
       - 'TeamBuilder.GitHub/**'
       - 'TeamBuilder.Serverless/**'
-      - 'templates/**'
+      - 'deploy/**'
       - 'TeamBuilder.Models/**'
   workflow_dispatch:
 
