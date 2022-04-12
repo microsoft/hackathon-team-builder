@@ -64,6 +64,12 @@ resource appServiceApp 'Microsoft.Web/sites@2021-01-15' = {
   tags: {
     '${tagName}': tagValue
   }
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedIdentity.id}': {}
+    }
+  }
   properties: {
     serverFarmId: appServicePlan.id
     keyVaultReferenceIdentity: managedIdentity.id    
