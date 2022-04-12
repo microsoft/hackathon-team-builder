@@ -2,10 +2,6 @@
 
   export const noMemberFound ="No Team Members or Lead"
 
-  export const colorLead ="green"
-
-  export const colorMember ="black"
-
   export const joinButtonText ="Join"
 
   export const leadButtonText ="Lead"
