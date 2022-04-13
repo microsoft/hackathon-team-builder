@@ -1,12 +1,12 @@
 {
     "solution": {
-        "teamsAppTenantId": "{{solution.teamsAppTenantId}}",
+        "teamsAppTenantId": "",
         "resourceNameSuffix": "e948ef",
         "resourceGroupName": "hackathonTeamBuilder-rg",
         "tenantId": "f3dbb474-15ef-4465-a3a1-fff0e4c8146b",
         "subscriptionId": "96d816cf-e34a-48a3-af79-12e4f496010e",
         "location": "East US",
-        "provisionSucceeded": true
+        "provisionSucceeded": false
     },
     "fx-resource-frontend-hosting": {
         "storageName": "hackathonteambuifee948ef",

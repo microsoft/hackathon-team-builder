@@ -7,7 +7,7 @@
         "subscriptionName": "36MPH Dev - MSDN",
         "location": "Central US",
         "teamsAppTenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
-        "provisionSucceeded": true,
+        "provisionSucceeded": false,
         "needCreateResourceGroup": true
     },
     "fx-resource-appstudio": {
@@ -32,7 +32,7 @@
         "applicationIdUris": "api://hackathonteambui6c1859.z19.web.core.windows.net/529a0eef-990b-4fa0-a94f-b1aa2bd4b5d0",
         "clientId": "529a0eef-990b-4fa0-a94f-b1aa2bd4b5d0",
         "objectId": "db6d8824-6c00-4272-8a9f-b4b3c3f6d29b",
-        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}"
+        "clientSecret": ""
     },
     "fx-resource-simple-auth": {
         "endpoint": "https://hackathonteambuilder6c1859.azurewebsites.net",

@@ -5,7 +5,10 @@
             "User.Read"
         ],
         "application": [
-            "User.Read.All"
+            "User.Read.All",
+            "Channel.Create",
+            "Channel.ReadBasic.All",
+            "ChannelMember.ReadWrite.All"
         ]
     }
 ]

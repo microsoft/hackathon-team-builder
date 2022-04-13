@@ -8,16 +8,22 @@
         "capabilities": [
             "Tab"
         ],
-        "azureResources": [],
+        "azureResources": [
+            "function"
+        ],
         "activeResourcePlugins": [
             "fx-resource-frontend-hosting",
             "fx-resource-identity",
             "fx-resource-aad-app-for-teams",
+            "fx-resource-function",
             "fx-resource-local-debug",
             "fx-resource-appstudio",
-            "fx-resource-simple-auth"
+            "fx-resource-simple-auth",
+            "fx-resource-cicd",
+            "fx-resource-api-connector"
         ]
     },
     "programmingLanguage": "javascript",
-    "version": "2.1.0"
+    "version": "2.1.0",
+    "defaultFunctionName": "createTeamChannel"
 }

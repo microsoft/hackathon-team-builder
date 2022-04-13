@@ -7,13 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "devDependencies": {
-        "@microsoft/teamsfx-cli": "0.*"
+        "@microsoft/teamsfx-cli": "^0.12.1"
     },
-    "license": "MIT",
-    "dependencies": {
-        "@babel/runtime": "^7.15.4",
-        "@fluentui/code-sandbox": "^0.57.0",
-        "@fluentui/react": "^8.30.2",
-        "@stardust-ui/docs-components": "^0.40.0"        
-    }
+    "license": "MIT"    
 }

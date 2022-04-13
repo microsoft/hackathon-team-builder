@@ -21,7 +21,8 @@ namespace TeamBuilder.API.Teams
             {
                 Name = input.Name,
                 Description = input.Description,
-                ChallengeAreaId = input.ChallengeAreaId
+                ChallengeAreaId = input.ChallengeAreaId,
+                ChannelId = input.ChannelId,
             };
 
             context.Teams.Add(team);

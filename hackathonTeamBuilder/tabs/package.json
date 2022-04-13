@@ -7,8 +7,9 @@
     "@fluentui/docs-components": "^0.60.0",
     "@fluentui/react": "^8.49.5",
     "@fluentui/react-northstar": "^0.60.0",
+    "axios": "^0.21.1",
     "@microsoft/teams-js": "^1.11.0",
-    "@microsoft/teamsfx": "^0.4.1",
+    "@microsoft/teamsfx": "^0.6.0",
     "graphql": "^16.2.0",
     "graphql.macro": "^1.4.2",
     "msteams-react-base-component": "^3.1.1",
@@ -19,10 +20,17 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.4"
   },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "env-cmd": "^10.1.0",
+    "react-error-overlay": "6.0.9"
+  },
   "scripts": {
+    "dev:teamsfx": "env-cmd --silent -f .env.teamsfx.local npm run start",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "build:teamsfx": "cross-env-shell \"env-cmd -f .env.teamsfx.${TEAMS_FX_ENV} npm run build\"",
+    "build:teamsfx:dev": "cross-env TEAMS_FX_ENV=dev npm run build:teamsfx"
   },
   "eslintConfig": {
     "extends": [
