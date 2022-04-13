@@ -55,7 +55,7 @@ function TeamBuilder() {
         let result = await createChannel(context.groupId, {
           displayName: input.name,
           description: input.description,
-          membershipType: "standard"
+          membershipType: appSettings.usePrivateChannels ? "private" : "standard"
         });
         channelId = result.webUrl;
       }
