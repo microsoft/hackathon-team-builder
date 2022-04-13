@@ -49,16 +49,23 @@ function TeamBuilder() {
   }
 
   async function CreateNewTeam(input) {
-    let channelId = '';
-    let newTeamId = await teamClient.createNewTeam(input);
-    if (true) {
-      await createChannel(context.groupId, {
-        displayName: input.name,
-        description: input.description,
-        membershipType: "standard"
-      });
+    try {
+      let channelId;
+      if (appSettings.useTeams) {
+        let result = await createChannel(context.groupId, {
+          displayName: input.name,
+          description: input.description,
+          membershipType: "standard"
+        });
+        channelId = result.webUrl;
+      }
+      let newTeamId = await teamClient.createNewTeam({ channelId, ...input});
+      
+      await updateTeamMembership(true, userId, newTeamId, true);
+    } catch(err) {
+      // add error handling
     }
-    await updateTeamMembership(true, userId, newTeamId, true);
+
     setShowCreate(!showCreate);
   }
 

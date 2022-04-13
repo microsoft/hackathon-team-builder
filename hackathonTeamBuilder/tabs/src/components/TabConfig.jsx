@@ -144,7 +144,7 @@ function TabConfig() {
       setTeamsChannel(savedSettings.useTeams);
       setUseTeamsPrivateChannel(savedSettings.usePrivateChannels);
       setJoinApprovalRequired(savedSettings.authEnabled);
-      setMaxTeamSize(savedSettings.maxTeamSize);
+      setMaxTeamSize(''+savedSettings.maxTeamSize);
       setGithubOrg(savedSettings.gitHubOrg);
       setGithubIntegration(savedSettings.gitHubEnabled);
     }

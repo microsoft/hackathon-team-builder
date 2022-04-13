@@ -45,7 +45,7 @@ module.exports = async function (context, req, teamsfxContext) {
     teamsFx = new teamsfxSdk.TeamsFx("Application");
     const graphClient = teamsfxSdk.createMicrosoftGraphClient(teamsFx, [".default"]);
     const channel = await graphClient.api(`/teams/${createChannelInput.groupId}/channels`).post(createChannelInput.channel);
-    res.body.graphClientMessage = channel;
+    res.body = channel;
   } catch (e) {
     context.log.error(e);
     return {
