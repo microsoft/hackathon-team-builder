@@ -70,3 +70,18 @@ output graphqlAPIOutput object = {
   webAppResourceId: graphqlAPIProvision.outputs.webAppResourceId
   eventGridTopicName: graphqlAPIProvision.outputs.eventGridTopicName
 }
+
+// Resources for Azure Functions
+module functionProvision './provision/function.bicep' = {
+  name: 'functionProvision'
+  params: {
+    provisionParameters: provisionParameters
+    userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
+  }
+}
+
+output functionOutput object = {
+  teamsFxPluginId: 'fx-resource-function'
+  functionAppResourceId: functionProvision.outputs.functionAppResourceId
+  functionEndpoint: functionProvision.outputs.functionEndpoint
+}

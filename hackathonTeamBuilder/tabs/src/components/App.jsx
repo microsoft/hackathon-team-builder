@@ -3,7 +3,6 @@ import React from "react";
 import { Provider } from "@fluentui/react-northstar";
 import { HashRouter as Router, Redirect, Route } from "react-router-dom";
 import { useTeamsFx } from "./sample/lib/useTeamsFx";
-import { loadConfiguration } from "@microsoft/teamsfx";
 import Privacy from "./Privacy";
 import TermsOfUse from "./TermsOfUse";
 import "./App.css";
@@ -16,14 +15,6 @@ import TeamBuilder from "./teambuilder/TeamBuilder";
  */
 export default function App() {
   const { theme } = useTeamsFx();
-  
-  loadConfiguration({
-    authentication: {
-      initiateLoginEndpoint: process.env.REACT_APP_START_LOGIN_PAGE_URL,
-      simpleAuthEndpoint: process.env.REACT_APP_TEAMSFX_ENDPOINT,
-      clientId: process.env.REACT_APP_CLIENT_ID
-    }
-  });
   
   return (
     <Provider theme={theme}>

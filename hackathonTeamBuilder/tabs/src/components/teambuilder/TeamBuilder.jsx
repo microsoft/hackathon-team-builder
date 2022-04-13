@@ -6,13 +6,15 @@ import {
   TeamCreateIcon,
   Loader,
 } from "@fluentui/react-northstar";
-import { TeamsUserCredential } from "@microsoft/teamsfx";
+import { TeamsFx } from "@microsoft/teamsfx";
+import { useTeams } from "msteams-react-base-component";
 import TeamList from "./components/TeamList";
 import CreateTeam from "./components/CreateTeam";
 import EditTeam from "./components/EditTeam";
 import TeamListItem from "./components/TeamListItem";
 import Team from "./apis/team";
 import { useSettings } from "./hooks/settings";
+import { useCreateChannel } from "./hooks/createChannel";
 import { createTeamButtonText } from "./components/Themes";
 
 function TeamBuilder() {
@@ -25,8 +27,10 @@ function TeamBuilder() {
   const [userId, setUserId] = useState("");
 
   const teamClient = Team("notoken");
-  const credential = new TeamsUserCredential();
+  const teamsFx = new TeamsFx();
+  const [{ context }] = useTeams();
 
+  const createChannel = useCreateChannel();
   const appSettings = useSettings({token: "123"});
   // Helper functions ----------------------------------------
 
@@ -45,7 +49,15 @@ function TeamBuilder() {
   }
 
   async function CreateNewTeam(input) {
+    let channelId = '';
     let newTeamId = await teamClient.createNewTeam(input);
+    if (true) {
+      await createChannel(context.groupId, {
+        displayName: input.name,
+        description: input.description,
+        membershipType: "standard"
+      });
+    }
     await updateTeamMembership(true, userId, newTeamId, true);
     setShowCreate(!showCreate);
   }
@@ -94,12 +106,11 @@ function TeamBuilder() {
 
   useEffect(() => {
     const loadData = async () => {
-      //credential.login(HackAPIScope); // uncomment for user consent
-      //let tokenResp = await credential.getToken(HackAPIScope);
+      //let tokenResp = await teamsFx.getCredential().getToken(HackAPIScope);
       //setHackToken(tokenResp.token);
       
       // get info from current user
-      let info = await credential.getUserInfo();
+      let info = await teamsFx.getUserInfo();
       setUserId(info.objectId);
 
       await getTeams(info.objectId);

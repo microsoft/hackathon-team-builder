@@ -12,20 +12,21 @@
         {
             "label": "dependency check",
             "type": "shell",
-            "command": "echo ${command:fx-extension.validate-dependencies}"
+            "command": "exit ${command:fx-extension.validate-dependencies}"
         },
         {
             "label": "prepare dev env",
             "dependsOn": [
                 "prepare local environment",
-                "frontend npm install"
+                "frontend npm install",
+                "backend npm install"
             ],
             "dependsOrder": "parallel"
         },
         {
             "label": "prepare local environment",
             "type": "shell",
-            "command": "echo ${command:fx-extension.pre-debug-check}"
+            "command": "exit ${command:fx-extension.pre-debug-check}"
         },
         {
             "label": "Start Frontend",
@@ -38,18 +39,28 @@
         {
             "label": "frontend npm install",
             "type": "shell",
-            "command": "npm install",
+            "command": "npm install --no-audit",
             "options": {
                 "cwd": "${workspaceFolder}/tabs"
             }
         },
         {
-            "type": "teamsfx",
-            "command": "auth start",
-            "problemMatcher": [
-                "$teamsfx-auth-watch"
-            ],
-            "label": "teamsfx: auth start"
+            "label": "Start Backend",
+            "dependsOn": "teamsfx: backend start"
+        },
+        {
+            "label": "backend extensions install",
+            "type": "shell",
+            "command": "exit ${command:fx-extension.backend-extensions-install}"
+        },
+        {
+            "label": "backend npm install",
+            "type": "shell",
+            "command": "npm install --no-audit",
+            "options": {
+                "cwd": "${workspaceFolder}/api"
+            },
+            "dependsOn": "backend extensions install"
         }
     ]
 }
