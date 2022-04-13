@@ -35,17 +35,7 @@
             ]
         }
     ],
-    "staticTabs": [
-        {
-            "entityId": "index",
-            "name": "All Teams",
-            "contentUrl": "{{{localSettings.frontend.tabEndpoint}}}/index.html#/tab",
-            "websiteUrl": "{{{localSettings.frontend.tabEndpoint}}}/index.html#/tab",
-            "scopes": [
-                "personal"
-            ]
-        }
-    ],
+    "staticTabs": [],
     "permissions": [
         "identity",
         "messageTeamMembers"

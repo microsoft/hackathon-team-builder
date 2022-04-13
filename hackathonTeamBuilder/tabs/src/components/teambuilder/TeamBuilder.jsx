@@ -64,6 +64,7 @@ function TeamBuilder() {
       await updateTeamMembership(true, userId, newTeamId, true);
     } catch(err) {
       // add error handling
+      console.log(err);
     }
 
     setShowCreate(!showCreate);
