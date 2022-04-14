@@ -20,14 +20,20 @@ namespace TeamBuilder.GitHub.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetTeamsAsync()
         {
-            var client = await _factory.GetClientAsync();
+            try
+            {
+                var client = await _factory.GetClientAsync();
 
-            var team = await client.Organization.Team.GetAll(_factory.Org);
+                var team = await client.Organization.Team.GetAll(_factory.Org);
 
-            if (team == null)
-                return NotFound();
+                if (team == null)
+                    return NotFound();
 
-            return Ok(team);
+                return Ok(team);
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{teamId}")]
