@@ -8,11 +8,14 @@ public class KeyVaultService
     private readonly IDictionary<string, string> _secrets;
     private readonly SecretClient _client;
 
-    public KeyVaultService(string vaultUri)
+    public KeyVaultService(string vaultUri, string userAssignedClientId)
     {
         var uri = new Uri(vaultUri);
 
-        _client = new SecretClient(uri, new DefaultAzureCredential());
+
+        var credentialOptions = new DefaultAzureCredentialOptions { ManagedIdentityClientId = userAssignedClientId };
+
+        _client = new SecretClient(uri, new DefaultAzureCredential(credentialOptions));
         _secrets = new Dictionary<string, string>();
     }
 

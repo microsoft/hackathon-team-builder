@@ -76,7 +76,12 @@ resource appServiceApp 'Microsoft.Web/sites@2021-01-15' = {
     httpsOnly: true
     siteConfig: {
       linuxFxVersion: 'DOTNETCORE|6.0'
-      appSettings: appSettings
+      appSettings: concat(appSettings, [
+        {
+          name: 'UserAssignedClientId'
+          value: managedIdentity.properties.clientId
+        }
+      ])
     }
   }
 }
