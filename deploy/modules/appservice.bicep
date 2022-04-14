@@ -89,6 +89,4 @@ resource appServiceApp 'Microsoft.Web/sites@2021-01-15' = {
   ]
 }
 
-var x = appServiceApp.identity.
-
 output appServiceAppName string = appServiceApp.name
