@@ -5,7 +5,9 @@ using TeamBuilder.GitHub.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 var options = builder.Configuration.GetSection("GitHub").Get<GitHubClientFactoryOptions>();
-var keyVaultService = new KeyVaultService(builder.Configuration.GetValue<string>("KeyVaultUri"));
+var kvUri = builder.Configuration.GetValue<string>("KeyVaultUri");
+var userAssignedClientId = builder.Configuration.GetValue<string>("UserAssignedClientId");
+var keyVaultService = new KeyVaultService(kvUri, userAssignedClientId);
 
 await keyVaultService.PersistSecretAsync(options.KeyVaultSecret);
 
