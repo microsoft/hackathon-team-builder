@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var options = builder.Configuration.GetSection("GitHub").Get<GitHubClientFactoryOptions>();
 var kvUri = builder.Configuration.GetValue<string>("KeyVaultUri");
-var userAssignedClientId = builder.Configuration.GetValue<string>("UserAssignedClientId");
-var keyVaultService = new KeyVaultService(kvUri, userAssignedClientId);
+
+var keyVaultService = new KeyVaultService(kvUri);
 
 await keyVaultService.PersistSecretAsync(options.KeyVaultSecret);
 

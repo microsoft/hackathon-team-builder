@@ -67,7 +67,7 @@ resource appServiceApp 'Microsoft.Web/sites@2021-01-15' = {
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${managedIdentity.id}': {}
+      '${managedIdentity.id}': { }
     }
   }
   properties: {
@@ -78,12 +78,17 @@ resource appServiceApp 'Microsoft.Web/sites@2021-01-15' = {
       linuxFxVersion: 'DOTNETCORE|6.0'
       appSettings: concat(appSettings, [
         {
-          name: 'UserAssignedClientId'
+          name: 'AZURE_CLIENT_ID'
           value: managedIdentity.properties.clientId
         }
       ])
     }
   }
+  dependsOn: [
+    kvRoleAssignment
+  ]
 }
+
+var x = appServiceApp.identity.
 
 output appServiceAppName string = appServiceApp.name
