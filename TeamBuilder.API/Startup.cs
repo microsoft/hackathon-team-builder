@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Graph;
+using Microsoft.Identity.Web;
 using TeamBuilder.API.AppSettings;
 using TeamBuilder.API.Challenges;
 using TeamBuilder.API.Common;
@@ -33,6 +34,8 @@ namespace TeamBuilder.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
+            services.AddMicrosoftIdentityWebApiAuthentication(Configuration);
+            services.AddAuthorization();
 
             services.AddPooledDbContextFactory<TeamBuilderDbContext>(options => options.UseSqlite("Data Source=teambuilder.db"));
 
@@ -62,6 +65,7 @@ namespace TeamBuilder.API
 
             services
                 .AddGraphQLServer()
+                .AddAuthorization()
                 .AddQueryType<Query>()
                     .AddTypeExtension<TeamMemberQueries>()
                     .AddTypeExtension<AppSettingQueries>()
@@ -93,9 +97,14 @@ namespace TeamBuilder.API
 
             app.UseCors(MyAllowSpecificOrigins);
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGraphQL();
+                endpoints
+                    .MapGraphQL();
             });
         }
     }

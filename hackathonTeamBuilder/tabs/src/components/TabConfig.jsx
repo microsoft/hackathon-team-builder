@@ -13,7 +13,7 @@ import { v4 as uuid } from 'uuid';
  * their choices and communicate that to Teams to enable the save button.
  */
 function TabConfig() {
-  const settingsClient = AppSettings("notoken");
+  const settingsClient = AppSettings();
   const savedSettings = useSettings();
 
   const [teamId, setTeamId] = useState('');
@@ -21,7 +21,7 @@ function TabConfig() {
   const [teamsChannel, setTeamsChannel] = useState(false);
   const [useTeamsPrivateChannel, setUseTeamsPrivateChannel] = useState(false);
   const [joinApprovalRequired, setJoinApprovalRequired] = useState(false);
-  const [maxTeamSize, setMaxTeamSize] = useState('');
+  const [maxTeamSize, setMaxTeamSize] = useState('0');
   const [githubOrg, setGithubOrg] = useState('');
   const [githubIntegration, setGithubIntegration] = useState(false);
   const [formErrors, setFormErrors] = useState({});
@@ -154,7 +154,7 @@ function TabConfig() {
     microsoftTeams.settings.registerOnSaveHandler(saveHandler);
   }, [entityId, teamId, teamsChannel, useTeamsPrivateChannel, joinApprovalRequired, maxTeamSize, githubOrg, githubIntegration])
 
-  const saveHandler = (saveEvent) => {    
+  const saveHandler = async (saveEvent) => {    
       const baseUrl = `https://${window.location.hostname}:${window.location.port}`;
       microsoftTeams.settings.setSettings({
         suggestedDisplayName: "TeamBuilder",
@@ -201,17 +201,10 @@ function TabConfig() {
           value: githubOrg,
         },
       ];
-
-      settingsClient
-        .addAppSettings(input)
-        .then((result) => {
-          if (result.addAppSettings.appSettings) saveEvent.notifySuccess();
-          else saveEvent.notifyFailure();
-        })
-        .catch((error) => {
-          saveEvent.notifyFailure();
-        });
-  };
+      
+      if (await settingsClient.addAppSettings.request(input)) saveEvent.notifySuccess();
+      else saveEvent.notifyFailure();
+  };  
 
   function handleCheckboxChange(_, item) {
     const { name, checked } = item;
