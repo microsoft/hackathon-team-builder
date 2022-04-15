@@ -6,7 +6,7 @@ param serverFarmId string
 param userAssignedIdentityId string
 
 var teambuilderApiName = 'TeambuilderAPI${uniqueString(resourceGroup().id)}'
-var teambuilderPackageUri = contains(provisionParameters, 'teambuilderPackageUri') ? provisionParameters['teambuilderPackageUri'] : 'https://github.com/microsoft/hackathon-team-builder/releases/download/v2.3.0/Teambuilder.API_2.3.0.zip'
+var teambuilderPackageUri = contains(provisionParameters, 'teambuilderPackageUri') ? provisionParameters['teambuilderPackageUri'] : 'https://github.com/microsoft/hackathon-team-builder/releases/download/v2.4.0/Teambuilder.API_2.4.0.zip'
 var teambuilderEventGridTopicName = 'TeambuilderEventGrid${uniqueString(resourceGroup().id)}'
 
 var tagName = split(tagVersion, ':')[0]
