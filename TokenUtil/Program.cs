@@ -1,15 +1,21 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
 
 Console.WriteLine("<--TeamBuilder.API token generator-->");
 
-var application = PublicClientApplicationBuilder.Create("be5398d9-de1e-4fb5-bcc1-46e940a8c7b6")
-    .WithAuthority("https://login.microsoftonline.com/2e6a1980-3b67-497b-90c1-b8a3409dfa64")
+var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+
+IConfiguration configuration = builder.Build();
+
+var application = PublicClientApplicationBuilder.Create(configuration["ClientId"])
+    .WithAuthority(string.Concat(configuration["Instance"], configuration["TenantId"]))
     .WithDefaultRedirectUri()
     .Build();
 
 AuthenticationResult result;
-string[] scopes = new[] { "api://localhost/5d6db6cd-cce5-47c4-8700-000efa22e068/access_as_user" };
+string[] scopes = new[] { configuration["DefaultScope"] };
 
 
 result = await application.AcquireTokenWithDeviceCode(scopes, deviceCodeResult =>
