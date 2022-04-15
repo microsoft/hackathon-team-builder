@@ -1,4 +1,5 @@
 ﻿using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using System.Threading.Tasks;
 using TeamBuilder.API.Common;
@@ -8,6 +9,7 @@ using TeamBuilder.Models;
 
 namespace TeamBuilder.API.Teams
 {
+    [Authorize]
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class TeamMutations
     {

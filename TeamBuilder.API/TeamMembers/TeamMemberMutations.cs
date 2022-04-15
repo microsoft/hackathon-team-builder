@@ -1,4 +1,5 @@
 ﻿using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -9,6 +10,7 @@ using TeamBuilder.Models;
 
 namespace TeamBuilder.API.TeamMembers
 {
+    [Authorize]
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class TeamMemberMutations
     {

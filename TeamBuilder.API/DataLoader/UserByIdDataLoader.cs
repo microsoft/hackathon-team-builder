@@ -32,8 +32,7 @@ namespace TeamBuilder.API.DataLoader
             var result = new Dictionary<string, Member>();
 
             try
-            {
-                _logger.LogInformation("Fetching user information from GraphAPI");
+            {                
                 var batchReq = new BatchRequestContent();
                 var reqIds = new List<GraphBatchRequest>(); // userid, requestid
 
@@ -64,7 +63,6 @@ namespace TeamBuilder.API.DataLoader
                     result.Add(req.UserId, member);
                 }
 
-                _logger.LogInformation("Response from graphclient success");
                 return result;
             }
             catch (Exception ex)
