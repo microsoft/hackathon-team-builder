@@ -1,6 +1,9 @@
 ﻿using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using TeamBuilder.API.Data;
@@ -9,6 +12,7 @@ using TeamBuilder.Models;
 
 namespace TeamBuilder.API
 {
+    [Authorize]
     public class Query
     {
         [UseTeamBuilderDbContext]
@@ -29,5 +33,15 @@ namespace TeamBuilder.API
             string userId,
             UserByIdDataLoader dataLoader,
             CancellationToken cancellationToken) => dataLoader.LoadAsync(userId, cancellationToken);
+
+        public IDictionary<string, string> GetMe(ClaimsPrincipal claimsPrincipal)
+        {
+            var results = new Dictionary<string, string>();
+            foreach (var claim in claimsPrincipal.Claims)
+            {
+                results.Add(claim.Type, claim.Value);
+            }
+            return results;
+        }
     }
 }

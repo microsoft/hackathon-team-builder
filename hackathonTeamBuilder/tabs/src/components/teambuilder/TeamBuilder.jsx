@@ -25,53 +25,64 @@ function TeamBuilder() {
   const [challengeOptions, setChallengeOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState("");
+  const [enableCreateChannel, setEnableCreateChannel] = useState(false);
 
-  const teamClient = Team("notoken");
+  const teamClient = Team();
   const teamsFx = new TeamsFx();
   const [{ context }] = useTeams();
 
   const createChannel = useCreateChannel();
-  const appSettings = useSettings({token: "123"});
+  const appSettings = useSettings();
   // Helper functions ----------------------------------------
 
-  // useEffect(() => {
-  //   if (appSettings && appSettings.length > 0)
-  //       console.log(appSettings);
-  // }, [appSettings]);
+  useEffect(() => {
+    if (appSettings)
+        setEnableCreateChannel(appSettings.useTeams);
+  }, [appSettings]);
 
   async function getTeams(userId) {
-    let result = await teamClient.getAllTeams(userId);
-    setChallengeOptions(result.challenges);
-    setTeamList(result.teams);
-    setExistingTeamNames(result.teamnames.map((t) => t.name)); // used to prevent duplicate team names on create
-    setMyTeam(result.myteams[0] ?? null);
-    setIsLoading(false);
+    await teamClient.getAllTeams.request(userId);
   }
+
+  useEffect(() => {
+    if (teamClient.getAllTeams.data) {
+      let result = teamClient.getAllTeams.data;
+      setChallengeOptions(result.challenges);
+      setTeamList(result.teams);
+      setExistingTeamNames(result.teamnames.map((t) => t.name)); // used to prevent duplicate team names on create
+      setMyTeam(result.myteams[0] ?? null);
+      setIsLoading(false);
+    }
+  }, [teamClient.getAllTeams.data]);
 
   async function CreateNewTeam(input) {
     try {
       let channelId;
-      if (appSettings.useTeams) {
+      if (enableCreateChannel) {
         let result = await createChannel(context.groupId, {
           displayName: input.name,
           description: input.description,
-          membershipType: "standard"
+          membershipType: "standard",
         });
         channelId = result.webUrl;
       }
-      let newTeamId = await teamClient.createNewTeam({ channelId, ...input});
-      
-      await updateTeamMembership(true, userId, newTeamId, true);
-    } catch(err) {
+      await teamClient.createNewTeam.request({ channelId, ...input });
+    } catch (err) {
       // add error handling
       console.log(err);
     }
-
     setShowCreate(!showCreate);
   }
 
+  useEffect(() => {
+    if (teamClient.createNewTeam.data) {
+      let newTeamId = teamClient.createNewTeam.data.addTeam.team.id;
+      updateTeamMembership(true, userId, newTeamId, true);
+    }
+  }, [teamClient.createNewTeam.data]);
+
   async function editTeam(input) {
-    await teamClient.editTeam(input);
+    await teamClient.editTeam.request(input);
     setShowCreate(!showCreate);
     await getTeams(userId);
   }
@@ -87,7 +98,7 @@ function TeamBuilder() {
       userId: userId,
       isLead: isLead,
     };
-    await teamClient.leadTeam(input);
+    await teamClient.leadTeam.request(input);
     await getTeams(userId);
   }
 
@@ -99,9 +110,9 @@ function TeamBuilder() {
     };
     if (join) {
       input.isLead = isLead;
-      await teamClient.joinTeam(input);
+      await teamClient.joinTeam.request(input);
     } else {
-      await teamClient.leaveTeam(input);
+      await teamClient.leaveTeam.request(input);
     }
     await getTeams(userId);
   }
@@ -113,10 +124,7 @@ function TeamBuilder() {
   // End Helper Functions-------------------------------------
 
   useEffect(() => {
-    const loadData = async () => {
-      //let tokenResp = await teamsFx.getCredential().getToken(HackAPIScope);
-      //setHackToken(tokenResp.token);
-      
+    const loadData = async () => {      
       // get info from current user
       let info = await teamsFx.getUserInfo();
       setUserId(info.objectId);
@@ -130,7 +138,7 @@ function TeamBuilder() {
   let buttonText = !showCreate ? createTeamButtonText : "Never Mind";
 
   return (
-    <Flex column fluid>      
+    <Flex column fluid>
       <div id="TeamBuilder">
         {isLoading && (
           <div className="fullscreen">
@@ -178,14 +186,14 @@ function TeamBuilder() {
         )}
         {showCreate && myTeam && (
           <Flex gap="gap.medium" padding="padding.medium">
-          <EditTeam
-            teamNames={existingTeamNames}
-            team={myTeam.team}
-            editTeam={editTeam}
-            cancel={toggleShowCreate}
-            challengeOptions={challengeOptions}
-          />
-        </Flex>
+            <EditTeam
+              teamNames={existingTeamNames}
+              team={myTeam.team}
+              editTeam={editTeam}
+              cancel={toggleShowCreate}
+              challengeOptions={challengeOptions}
+            />
+          </Flex>
         )}
         <hr />
         <Flex column gap="gap.medium" padding="padding.medium">

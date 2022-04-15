@@ -15,5 +15,8 @@ resource apiWebAppSettings 'Microsoft.Web/sites/config@2021-02-01' = {
     'GraphClient:ClientId': aadGraphClientId
     'GraphClient:ClientSecret': aadGraphClientSecret
     'GraphClient:TenantId': aadGraphClientTenantId
+    'AzureAd:ClientId': aadGraphClientId
+    'AzureAd:ClientSecret': aadGraphClientSecret
+    'AzureAd:TenantId': aadGraphClientTenantId
   }, currentAppSettings)
 }

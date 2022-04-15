@@ -1,4 +1,5 @@
 ﻿using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using TeamBuilder.Models;
 
 namespace TeamBuilder.API.AppSettings
 {
+    [Authorize]
     [ExtendObjectType(OperationTypeNames.Mutation)]
     public class AppSettingMutation
     {
