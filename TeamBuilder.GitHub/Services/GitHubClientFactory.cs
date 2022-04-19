@@ -1,4 +1,5 @@
 ﻿using GitHubJwt;
+using Microsoft.Extensions.Options;
 using Octokit;
 using System.Globalization;
 
@@ -9,20 +10,20 @@ public class GitHubClientFactory
     private readonly long _installationId;
     private readonly GitHubJwtFactory _jwtFactory;
     private readonly ProductHeaderValue _productHeaderVal;
-    internal string Org { get; set; }
-    internal int TeamId { get; set; }
+    public string Org { get; set; }
+    public int TeamId { get; set; }
 
-    public GitHubClientFactory(GitHubClientFactoryOptions options, KeyVaultService keyVaultService)
+    public GitHubClientFactory(IOptions<GitHubClientFactoryOptions> options, KeyVaultService keyVaultService)
     {
-        var gitHubAppId = int.Parse(options.GitHubAppId, NumberStyles.Number);
+        var gitHubAppId = int.Parse(options.Value.GitHubAppId, NumberStyles.Number);
 
-        _productHeaderVal = new ProductHeaderValue(options.ProductHeaderValue);
-        _installationId = long.Parse(options.InstallationId, NumberStyles.Number);
+        _productHeaderVal = new ProductHeaderValue(options.Value.ProductHeaderValue);
+        _installationId = long.Parse(options.Value.InstallationId, NumberStyles.Number);
 
-        Org = options.Org;
+        Org = options.Value.Org;
 
         _jwtFactory = new GitHubJwtFactory(
-            new StringPrivateKeySource(keyVaultService[options.KeyVaultSecret]),
+            new StringPrivateKeySource(keyVaultService[options.Value.KeyVaultSecret]),
             new GitHubJwtFactoryOptions
             {
                 AppIntegrationId = gitHubAppId,
@@ -31,7 +32,7 @@ public class GitHubClientFactory
         );
     }
 
-    internal async Task<GitHubClient> GetClientAsync()
+    public async Task<GitHubClient> GetClientAsync()
     {
         var jwtToken = _jwtFactory.CreateEncodedJwtToken();
 

@@ -1,0 +1,1452 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "TeamBuilder.GitHub",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Teams/{teamId}/Repositories": {
+      "get": {
+        "tags": [
+          "Repositories"
+        ],
+        "summary": "Get all repositories",
+        "description": "Get all repositories belonging to a team as denoted by the teamId",
+        "operationId": "GetRepositoriesAsync",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Repository"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Repository"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Repository"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Repositories"
+        ],
+        "summary": "Create a repository",
+        "description": "Creates a new GitHub repository for a GitHub team",
+        "operationId": "CreateRepositoryAsync",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRepositoryRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRepositoryRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRepositoryRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRepositoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Repository"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Repository"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Repository"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Teams/{teamId}/Repositories/{repositoryId}": {
+      "get": {
+        "tags": [
+          "Repositories"
+        ],
+        "summary": "Get a repository",
+        "description": "Gets a repository as denoted by repositoryId. In theory, the teamId provided should be the team to which the repository belongs but currently there is no validation against that route parameter.",
+        "operationId": "GetRepositoryAsync",
+        "parameters": [
+          {
+            "name": "repositoryId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Repository"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Repository"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Repository"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Repositories"
+        ],
+        "summary": "Update a repository",
+        "operationId": "UpdateRepositoryAsync",
+        "parameters": [
+          {
+            "name": "repositoryId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRepositoryRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRepositoryRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRepositoryRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRepositoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/Teams/{teamId}/Repositories/{id}": {
+      "delete": {
+        "tags": [
+          "Repositories"
+        ],
+        "summary": "Delete a repository",
+        "description": "Deletes an existig GitHub repository based on the repositoryId.",
+        "operationId": "DeleteRepositoryAsync",
+        "parameters": [
+          {
+            "name": "repositoryId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/Teams/{teamId}/TeamMembers/Members": {
+      "get": {
+        "tags": [
+          "TeamMembers"
+        ],
+        "summary": "Get all team members",
+        "description": "Get all team members based on the provided team ID",
+        "operationId": "GetTeamMembersAsync",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TeamMembers"
+        ],
+        "summary": "Add a team member",
+        "description": "Adds an existing GitHub user to an existing GitHub team",
+        "operationId": "AddTeamMemberAsync",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/Teams/{teamId}/TeamMembers/Members/{login}": {
+      "delete": {
+        "tags": [
+          "TeamMembers"
+        ],
+        "summary": "Remove a team member",
+        "description": "Removes a GitHub user from a GitHub team to which they currently belong.",
+        "operationId": "RemoveTeamMemberAsync",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "login",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/Teams": {
+      "get": {
+        "tags": [
+          "Teams"
+        ],
+        "summary": "Retrieve all GitHub Teams",
+        "description": "The application is currently designed to only have one team setup in GitHub and have all repositories and Hackathon team builders assigned so this endpoint will always currently return one team in the list",
+        "operationId": "GetTeamsAsync",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Teams/{teamId}": {
+      "get": {
+        "tags": [
+          "Teams"
+        ],
+        "summary": "Retreieve a team",
+        "description": "Fetches a team by the team's id in GitHub. Teams belong to organizations. Currently the application is only designed to run against one organization at a time by configuration.",
+        "operationId": "GetTeamAsync",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "CreateRepositoryRequest": {
+        "required": [
+          "repositoryName"
+        ],
+        "type": "object",
+        "properties": {
+          "repositoryName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "homepage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LicenseMetadata": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "nodeId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "spdxId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "featured": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Organization": {
+        "type": "object",
+        "properties": {
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "blog": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "collaborators": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "readOnly": true
+          },
+          "company": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "diskUsage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "readOnly": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "followers": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "following": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "hireable": {
+            "type": "boolean",
+            "nullable": true,
+            "readOnly": true
+          },
+          "htmlUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "nodeId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "login": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/AccountType"
+          },
+          "ownedPrivateRepos": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "plan": {
+            "$ref": "#/components/schemas/Plan"
+          },
+          "privateGists": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "readOnly": true
+          },
+          "publicGists": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "publicRepos": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totalPrivateRepos": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "billingAddress": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "reposUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "eventsUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "hooksUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "issuesUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "membersUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "publicMembersUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "isVerified": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "hasOrganizationProjects": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "hasRepositoryProjects": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PermissionLevel": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "PermissionLevelStringEnum": {
+        "type": "object",
+        "properties": {
+          "stringValue": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "value": {
+            "$ref": "#/components/schemas/PermissionLevel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Plan": {
+        "type": "object",
+        "properties": {
+          "collaborators": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "privateRepos": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "space": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "billingEmail": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Repository": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "htmlUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "cloneUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "gitUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "sshUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "svnUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "mirrorUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "nodeId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "owner": {
+            "$ref": "#/components/schemas/User"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "isTemplate": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "homepage": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "private": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "fork": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "forksCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "stargazersCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "watchersCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "defaultBranch": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "openIssuesCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "pushedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/RepositoryPermissions"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/Repository"
+          },
+          "source": {
+            "$ref": "#/components/schemas/Repository"
+          },
+          "license": {
+            "$ref": "#/components/schemas/LicenseMetadata"
+          },
+          "hasIssues": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "hasWiki": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "hasDownloads": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "allowRebaseMerge": {
+            "type": "boolean",
+            "nullable": true,
+            "readOnly": true
+          },
+          "allowSquashMerge": {
+            "type": "boolean",
+            "nullable": true,
+            "readOnly": true
+          },
+          "allowMergeCommit": {
+            "type": "boolean",
+            "nullable": true,
+            "readOnly": true
+          },
+          "hasPages": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "subscribersCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true,
+            "deprecated": true
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "archived": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "deleteBranchOnMerge": {
+            "type": "boolean",
+            "nullable": true,
+            "readOnly": true
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/RepositoryVisibility"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RepositoryPermissions": {
+        "type": "object",
+        "properties": {
+          "admin": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "push": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "pull": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RepositoryVisibility": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Team": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "htmlUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "nodeId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "privacy": {
+            "$ref": "#/components/schemas/TeamPrivacyStringEnum"
+          },
+          "permission": {
+            "$ref": "#/components/schemas/PermissionLevelStringEnum"
+          },
+          "membersCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "reposCount": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "organization": {
+            "$ref": "#/components/schemas/Organization"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/Team"
+          },
+          "ldapDistinguishedName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TeamPrivacy": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "TeamPrivacyStringEnum": {
+        "type": "object",
+        "properties": {
+          "stringValue": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "value": {
+            "$ref": "#/components/schemas/TeamPrivacy"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateRepositoryRequest": {
+        "type": "object",
+        "properties": {
+          "repositoryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "homepage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "blog": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "collaborators": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "readOnly": true
+          },
+          "company": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "diskUsage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "readOnly": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "followers": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "following": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "hireable": {
+            "type": "boolean",
+            "nullable": true,
+            "readOnly": true
+          },
+          "htmlUrl": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "nodeId": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "login": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/AccountType"
+          },
+          "ownedPrivateRepos": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "plan": {
+            "$ref": "#/components/schemas/Plan"
+          },
+          "privateGists": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "readOnly": true
+          },
+          "publicGists": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "publicRepos": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totalPrivateRepos": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/RepositoryPermissions"
+          },
+          "siteAdmin": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "suspendedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true
+          },
+          "suspended": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "ldapDistinguishedName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -43,6 +43,13 @@ public class KeyVaultService
         _secrets.Add(secret.Name, secret.Value);
     }
 
+    public void PersistSecret(string secretName)
+    {
+        KeyVaultSecret secret = _client.GetSecretAsync(secretName).Result;
+
+        _secrets.Add(secret.Name, secret.Value);
+    }
+
     public async Task PersistSecretAsync(Uri secretUri)
     {
         var secretId = new KeyVaultSecretIdentifier(secretUri);
