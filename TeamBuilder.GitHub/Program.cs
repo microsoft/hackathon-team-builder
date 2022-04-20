@@ -1,18 +1,24 @@
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
 using TeamBuilder.GitHub;
 using TeamBuilder.GitHub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var options = builder.Configuration.GetSection("GitHub").Get<GitHubClientFactoryOptions>();
-var kvUri = builder.Configuration.GetValue<string>("KeyVaultUri");
+builder.Services.Configure<GitHubClientFactoryOptions>(builder.Configuration.GetSection("GitHub"));
+builder.Services.AddSingleton(sp => {
+    var kvUri = builder.Configuration.GetValue<string>("KeyVaultUri");
 
-var keyVaultService = new KeyVaultService(kvUri);
+    var keyVaultService = new KeyVaultService(kvUri);
 
-await keyVaultService.PersistSecretAsync(options.KeyVaultSecret);
+    var options = sp.GetRequiredService<IOptions<GitHubClientFactoryOptions>>();
 
-builder.Services.AddSingleton(options);
-builder.Services.AddSingleton(keyVaultService);
+    keyVaultService.PersistSecret(options.Value.KeyVaultSecret);
+
+    return keyVaultService;
+});
 builder.Services.AddScoped<GitHubClientFactory>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(jsonOptions =>
@@ -23,7 +29,17 @@ builder.Services.AddControllers().AddNewtonsoftJson(jsonOptions =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(o =>
+{
+    
+    o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}\\{Assembly.GetAssembly(typeof(Program)).GetName().Name}.xml");
+    o.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = $"{Assembly.GetAssembly(typeof(Program)).GetName().Name}",
+        Version = "v1"
+    });
+});
 
 var app = builder.Build();
 

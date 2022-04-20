@@ -16,10 +16,16 @@ public class RepositoriesController : ControllerBase
         _factory = factory;
     }
 
-    [HttpGet]
+    /// <summary>
+    /// Get all repositories 
+    /// </summary>
+    /// <param name="teamId"></param>
+    /// <remarks>Get all repositories belonging to a team as denoted by the teamId</remarks>
+    /// <returns></returns>
+    [HttpGet(Name = nameof(GetRepositoriesAsync))]
     [ProducesResponseType(typeof(List<Repository>), 200)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetRepositoriesAsync([FromRoute] int teamId)
+    public async Task<ActionResult<List<Repository>>> GetRepositoriesAsync([FromRoute] int teamId)
     {
         var client = await _factory.GetClientAsync();
 
@@ -31,10 +37,16 @@ public class RepositoriesController : ControllerBase
         return Ok(repos);
     }
 
-    [HttpGet("{repositoryId}")]
+    /// <summary>
+    /// Get a repository
+    /// </summary>
+    /// <param name="repositoryId"></param>
+    /// <remarks>Gets a repository as denoted by repositoryId. In theory, the teamId provided should be the team to which the repository belongs but currently there is no validation against that route parameter.</remarks>
+    /// <returns></returns>
+    [HttpGet("{repositoryId}", Name = nameof(GetRepositoryAsync))]
     [ProducesResponseType(typeof(Repository), 200)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetRepositoryAsync([FromRoute] long repositoryId)
+    public async Task<ActionResult<Repository>> GetRepositoryAsync([FromRoute] long repositoryId)
     {
         var client = await _factory.GetClientAsync();
 
@@ -46,10 +58,17 @@ public class RepositoriesController : ControllerBase
         return Ok(repository);
     }
 
-    [HttpPost]
+    /// <summary>
+    /// Create a repository
+    /// </summary>
+    /// <param name="teamId"></param>
+    /// <param name="request"></param>
+    /// <remarks>Creates a new GitHub repository for a GitHub team</remarks>
+    /// <returns></returns>
+    [HttpPost(Name = nameof(CreateRepositoryAsync))]
     [ProducesResponseType(typeof(Repository), 201)]
     [ProducesResponseType(409)]
-    public async Task<IActionResult> CreateRepositoryAsync([FromRoute] int teamId, [FromBody] CreateRepositoryRequest request)
+    public async Task<ActionResult<Repository>> CreateRepositoryAsync([FromRoute] int teamId, [FromBody] CreateRepositoryRequest request)
     {
         var client = await _factory.GetClientAsync();
 
@@ -70,7 +89,14 @@ public class RepositoriesController : ControllerBase
         return CreatedAtAction(nameof(GetRepositoryAsync), new { repositoryId = repository.Id }, repository);
     }
 
-    [HttpPut("{repositoryId}")]
+    /// <summary>
+    /// Update a repository
+    /// </summary>
+    /// <param name="repositoryId"></param>
+    /// <param name="request"></param>
+    /// Updates an existing GitHub repository based on provided values. Always overrides - even if the values provided are null.
+    /// <returns></returns>
+    [HttpPut("{repositoryId}", Name = nameof(UpdateRepositoryAsync))]
     [ProducesResponseType(204)]
     public async Task<IActionResult> UpdateRepositoryAsync([FromRoute] long repositoryId, [FromBody] UpdateRepositoryRequest request)
     {
@@ -90,7 +116,13 @@ public class RepositoriesController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    /// <summary>
+    /// Delete a repository
+    /// </summary>
+    /// <param name="repositoryId"></param>
+    /// <remarks>Deletes an existig GitHub repository based on the repositoryId.</remarks>
+    /// <returns></returns>
+    [HttpDelete("{id}", Name = nameof(DeleteRepositoryAsync))]
     [ProducesResponseType(204)]
     public async Task<IActionResult> DeleteRepositoryAsync([FromRoute] long repositoryId)
     {

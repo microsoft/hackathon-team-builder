@@ -1,23 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>disable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>416839d9-7957-4791-9d68-be8df87251dc</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>416839d9-7957-4791-9d68-be8df87251dc</UserSecretsId>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="Azure.Identity" Version="1.5.0" />
-	  <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.3.0" />
-	  <PackageReference Include="GitHubJwt" Version="0.0.5" />
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
-	  <PackageReference Include="Octokit" Version="0.50.0" />
-	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Identity" Version="1.5.0" />
+		<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.3.0" />
+		<PackageReference Include="GitHubJwt" Version="0.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
+		<PackageReference Include="Octokit" Version="0.50.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TeamBuilder.Models\TeamBuilder.Models.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\TeamBuilder.Models\TeamBuilder.Models.csproj" />
+	</ItemGroup>
+
+	<Target Name="Generate OpenAPI Specification Document" AfterTargets="Build">
+		<Exec Command="dotnet tool run swagger tofile --output swagger.json $(OutputPath)$(AssemblyName).dll v1" ContinueOnError="true" />
+	</Target>
 
 </Project>

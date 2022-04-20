@@ -15,10 +15,16 @@ public class TeamMembersController : ControllerBase
         _factory = factory;
     }
 
-    [HttpGet("Members")]
+    /// <summary>
+    /// Get all team members
+    /// </summary>
+    /// <param name="teamId"></param>
+    /// <remarks>Get all team members based on the provided team ID</remarks>
+    /// <returns></returns>
+    [HttpGet("Members", Name = nameof(GetTeamMembersAsync))]
     [ProducesResponseType(typeof(List<User>), 200)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetTeamMembersAsync([FromRoute] int teamId)
+    public async Task<ActionResult<List<User>>> GetTeamMembersAsync([FromRoute] int teamId)
     {
         var client = await _factory.GetClientAsync();
 
@@ -30,7 +36,14 @@ public class TeamMembersController : ControllerBase
         return Ok(teamMembers);
     }
 
-    [HttpPost("Members")]
+    /// <summary>
+    /// Add a team member
+    /// </summary>
+    /// <param name="teamId"></param>
+    /// <param name="login"></param>
+    /// <remarks>Adds an existing GitHub user to an existing GitHub team</remarks>
+    /// <returns></returns>
+    [HttpPost("Members", Name = nameof(AddTeamMemberAsync))]
     [ProducesResponseType(204)]
     public async Task<IActionResult> AddTeamMemberAsync([FromRoute] int teamId, [FromBody] string login)
     {
@@ -41,7 +54,14 @@ public class TeamMembersController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("Members/{login}")]
+    /// <summary>
+    /// Remove a team member
+    /// </summary>
+    /// <param name="teamId"></param>
+    /// <param name="login"></param>
+    /// <remarks>Removes a GitHub user from a GitHub team to which they currently belong.</remarks>
+    /// <returns></returns>
+    [HttpDelete("Members/{login}", Name = nameof(RemoveTeamMemberAsync))]
     [ProducesResponseType(204)]
     public async Task<IActionResult> RemoveTeamMemberAsync([FromRoute] int teamId, [FromRoute] string login)
     {
