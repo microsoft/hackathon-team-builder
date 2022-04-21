@@ -12,6 +12,8 @@ param githubInstallationId string
 param githubAppId string
 @secure()
 param githubPrivateKeyVal string
+@secure()
+param gitHubTeamId string
 
 @allowed([
   'nonprod'
@@ -39,20 +41,6 @@ module keyvaultProvision './modules/keyvault.bicep' = {
     location: location
     keyVaultName: keyVaultName
     githubPrivateKeyVal: githubPrivateKeyVal
-  }
-}
-
-module serverless './modules/function-app.bicep' = {
-  name: 'teambuilder-serverless'
-  params: {
-    location: location
-    tagVersion: tagVersion
-    functionAppName: htbFunctionAppName
-    appServicePlanName: htbFuctionsAppPlanName
-    functionStorageAccountName: htbFunctionAppStorageName
-    appSettings: [
-      // add any custom appsettings here
-    ]
   }
 }
 
@@ -91,6 +79,35 @@ module gitHubApi './modules/appservice.bicep' = {
         name: 'GitHub__InstallationId'
         value: githubInstallationId
       }
+    ]
+  }
+}
+
+// resource teamBuilderApi 'Microsoft.Web/sites/extensions@2021-02-01' existing = {
+//   name: ''
+// }
+
+module serverless './modules/function-app.bicep' = {
+  name: 'teambuilder-serverless'
+  params: {
+    location: location
+    tagVersion: tagVersion
+    functionAppName: htbFunctionAppName
+    appServicePlanName: htbFuctionsAppPlanName
+    functionStorageAccountName: htbFunctionAppStorageName
+    appSettings: [
+      {
+        name: 'GitHubApiUrl'
+        value: gitHubApi.outputs.url
+      }
+      {
+        name: 'GitHubTeamId'
+        value: gitHubTeamId
+      }
+      // {
+      //   name: 'TeamBuilderApiUrl'
+      //   value: teamBuilderApi.properties. // ??
+      // }
     ]
   }
 }

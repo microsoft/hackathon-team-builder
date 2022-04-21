@@ -80,7 +80,7 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
         template: ./deploy/main.bicep  # Set this to the location of your template file
-        parameters: 'environmentType=nonprod githubOrg="${{ secrets.HTB_GITHUB_ORG }}" githubProductHeaderValue="${{ secrets.HTB_GITHUB_PROD_HEAD_VAL }}" githubInstallationId="${{ secrets.HTB_GITHUB_INSTALL_ID }}" githubAppId="${{ secrets.HTB_GITHUB_APP_ID }}" githubPrivateKeyVal="${{ secrets.HTB_GITHUB_PRIV_KEY }}"'
+        parameters: 'environmentType=nonprod githubOrg="${{ secrets.HTB_GITHUB_ORG }}" githubProductHeaderValue="${{ secrets.HTB_GITHUB_PROD_HEAD_VAL }}" githubInstallationId="${{ secrets.HTB_GITHUB_INSTALL_ID }}" githubAppId="${{ secrets.HTB_GITHUB_APP_ID }}" githubPrivateKeyVal="${{ secrets.HTB_GITHUB_PRIV_KEY }}"  githubTeamId="${{ secrets.HTB_GITHUB_TEAM_ID }}"'
 
   deploy_webapp:
     name: Deploy TeamBuilder.GitHub
