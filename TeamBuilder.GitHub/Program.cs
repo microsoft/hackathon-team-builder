@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using TeamBuilder.GitHub;
+using TeamBuilder.GitHub.Middleware;
 using TeamBuilder.GitHub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,8 @@ builder.Services.AddSwaggerGen(o =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
