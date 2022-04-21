@@ -90,3 +90,4 @@ resource appServiceApp 'Microsoft.Web/sites@2021-01-15' = {
 }
 
 output appServiceAppName string = appServiceApp.name
+output url string = 'https://${appServiceApp.properties.defaultHostName}'

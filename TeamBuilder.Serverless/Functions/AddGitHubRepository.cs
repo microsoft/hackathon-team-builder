@@ -3,26 +3,49 @@
 using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
-using Microsoft.Extensions.Logging;
-using TeamBuilder.Models;
+using System;
+using System.Threading.Tasks;
+using TeamBuilder.Serverless.Services;
 
 namespace TeamBuilder.Serverless.Functions;
 
-public static class AddGitHubRepository
+public class AddGitHubRepository
 {
-    [FunctionName("AddGitHubRepository")]
-    public static void Run([EventGridTrigger]EventGridEvent eventGridEvent, ILogger log)
+    private readonly GitHubApiClient _gitHubApiClient;
+    private readonly TeamBuilderApiClient _teamBuilderApiClient;
+    private readonly int _gitHubTeamId;
+
+    public AddGitHubRepository(GitHubApiClient gitHubApiClient, TeamBuilderApiClient teamBuilderApiClient)
     {
-        //log.LogInformation(eventGridEvent.Data.ToString());
+        // currently mapping many teambuilder teams to one github team in the github org
+        var teamIdStr = Environment.GetEnvironmentVariable("GitHubTeamId");
 
-        //var appSetting = eventGridEvent.Data as AppSetting;
+        _gitHubTeamId = int.Parse(teamIdStr);
 
-        //// only interested in changes to this appsetting where value is not null
-        //if (appSetting == null || appSetting?.Setting != "GIT_HUB_ORG" || string.IsNullOrEmpty(appSetting?.Value))
-        //    return; 
+        _gitHubApiClient = gitHubApiClient;
+        _teamBuilderApiClient= teamBuilderApiClient;
+    }
 
-        // call github api to create repository and add to the org team
+    [FunctionName("AddGitHubRepository")]
+    public async Task RunAsync([EventGridTrigger]EventGridEvent eventGridEvent)
+    {
+        var teamBuilderTeam = eventGridEvent.Data as Models.Team;
+
+        if (teamBuilderTeam == null) return;
+
+        var gitHubTeam = await _gitHubApiClient.GetTeamAsync(_gitHubTeamId);
+
+        if (gitHubTeam == null) return; // todo: throw exception
+
+        var request = new CreateRepositoryRequest
+        {
+            RepositoryName = teamBuilderTeam.Name,
+            Description = teamBuilderTeam.Description,
+            Homepage =  string.Empty
+        };
+
+        await _gitHubApiClient.CreateRepositoryAsync(gitHubTeam.Id, request);
+
+        // todo: write back to TeamBuilder the GitHub repository URL using TeamBuilderApiClient
     }
 }
-
-//df500a57

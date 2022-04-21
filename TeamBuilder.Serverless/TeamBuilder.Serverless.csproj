@@ -7,6 +7,8 @@
     <OpenApiReference Include="..\TeamBuilder.GitHub\swagger.json" CodeGenerator="NSwagCSharp" Namespace="TeamBuilder.Serverless.Services" ClassName="GitHubApiClient" Link="OpenAPIs\swagger.json" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="GraphQL.Client" Version="4.0.2" />
+    <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="4.0.2" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.EventGrid" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="3.0.0">

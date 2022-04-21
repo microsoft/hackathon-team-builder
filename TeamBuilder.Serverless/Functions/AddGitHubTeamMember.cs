@@ -3,27 +3,40 @@
 using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+using TeamBuilder.Serverless.Services;
 
 namespace TeamBuilder.Serverless.Functions;
 
-public static class AddGitHubTeamMember
+public class AddGitHubTeamMember
 {
-    [FunctionName("AddGitHubTeamMember")]
-    public static void Run([EventGridTrigger]EventGridEvent eventGridEvent, ILogger log)
+    private readonly GitHubApiClient _gitHubApiClient;
+    private readonly TeamBuilderApiClient _teamBuilderApiClient;
+    private readonly int _gitHubTeamId;
+
+    public AddGitHubTeamMember(GitHubApiClient gitHubApiClient, TeamBuilderApiClient teamBuilderApiClient)
     {
-        log.LogInformation(eventGridEvent.Data.ToString());
+        // currently mapping many teambuilder teams to one github team in the github org
+        var teamIdStr = Environment.GetEnvironmentVariable("GitHubTeamId");
 
-        eventGridEvent.Data = eventGridEvent.Data.ToString();
+        _gitHubTeamId = int.Parse(teamIdStr);
 
-        // todo: read model from data
+        _gitHubApiClient = gitHubApiClient;
+        _teamBuilderApiClient = teamBuilderApiClient;
+    }
 
-        // call GitHub API
+    [FunctionName("AddGitHubTeamMember")]
+    public async Task RunAsync([EventGridTrigger]EventGridEvent eventGridEvent)
+    {
+        var teamBuilderUser = eventGridEvent.Data as Models.TeamMember;
 
-        // anything else?
+        if(teamBuilderUser == null) return;
 
-        // generate service from swagger json once github api is deployed
+        // todo: capture github login during team member add in team builder and use here
 
-        // determine how to emulate properly with azurite
+        var gitHubLogin = string.Empty;
+
+        await _gitHubApiClient.AddTeamMemberAsync(_gitHubTeamId, gitHubLogin);
     }
 }
