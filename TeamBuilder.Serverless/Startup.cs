@@ -1,8 +1,14 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Azure.Core.Serialization;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using TeamBuilder.Serverless;
 using TeamBuilder.Serverless.Services;
 
@@ -28,5 +34,16 @@ public class Startup : FunctionsStartup
 
         builder.Services.AddScoped(o => new GitHubApiClient(gitHubApiUrlStr, new HttpClient()));
         builder.Services.AddScoped(o => new TeamBuilderApiClient(gitHubApiUrlStr));
+
+        builder.Services.Configure<WorkerOptions>(workerOptions =>
+        {
+            var settings = NewtonsoftJsonObjectSerializer.CreateJsonSerializerSettings();
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            settings.NullValueHandling = NullValueHandling.Ignore;
+
+            settings.Converters.Add(new PermissionLevelStingEnumJsonConverter());
+
+            workerOptions.Serializer = new NewtonsoftJsonObjectSerializer(settings);
+        });
     }
 }
