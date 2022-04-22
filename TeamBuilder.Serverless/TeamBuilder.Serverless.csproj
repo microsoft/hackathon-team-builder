@@ -21,7 +21,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Octokit" Version="0.50.0" />
   </ItemGroup>
   <ItemGroup>
 	  <ProjectReference Include="..\TeamBuilder.GitHub\TeamBuilder.GitHub.csproj">
