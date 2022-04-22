@@ -84,7 +84,7 @@ public class RepositoriesController : ControllerBase
             TeamId = teamId
         };
 
-        var repository = await client.Repository.Create(newRepo);
+        var repository = await client.Repository.Create(_factory.Org, newRepo);
 
         return CreatedAtAction(nameof(GetRepositoryAsync), new { repositoryId = repository.Id }, repository);
     }
