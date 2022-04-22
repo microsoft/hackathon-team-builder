@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
 using TeamBuilder.GitHub;
@@ -26,6 +27,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(jsonOptions =>
 {
     jsonOptions.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
     jsonOptions.SerializerSettings.Converters.Add(new PermissionLevelJsonConverter());
+    jsonOptions.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
