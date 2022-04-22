@@ -1,0 +1,16 @@
+{
+  "url": "https://api.github.com/organizations/51488903/team/5869989",
+  "htmlUrl": "https://github.com/orgs/36mph/teams/demo-team",
+  "id": 5869989,
+  "nodeId": "T_kwDOAxGoh84AWZGl",
+  "slug": "demo-team",
+  "name": "Demo Team",
+  "description": "",
+  "privacy": {
+    "stringValue": "closed",
+    "value": 1
+  },
+  "permission": "pull",
+  "membersCount": 0,
+  "reposCount": 0
+}
