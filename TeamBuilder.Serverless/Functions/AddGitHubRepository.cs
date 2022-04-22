@@ -3,6 +3,8 @@
 using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TeamBuilder.Serverless.Services;
@@ -23,29 +25,46 @@ public class AddGitHubRepository
         _gitHubTeamId = int.Parse(teamIdStr);
 
         _gitHubApiClient = gitHubApiClient;
-        _teamBuilderApiClient= teamBuilderApiClient;
+        _teamBuilderApiClient = teamBuilderApiClient;
     }
 
     [FunctionName("AddGitHubRepository")]
-    public async Task RunAsync([EventGridTrigger]EventGridEvent eventGridEvent)
+    public async Task RunAsync([EventGridTrigger] EventGridEvent eventGridEvent, ILogger logger)
     {
-        var teamBuilderTeam = eventGridEvent.Data as Models.Team;
-
-        if (teamBuilderTeam == null) return;
-
-        var gitHubTeam = await _gitHubApiClient.GetTeamAsync(_gitHubTeamId);
-
-        if (gitHubTeam == null) return; // todo: throw exception
-
-        var request = new CreateRepositoryRequest
+        try
         {
-            RepositoryName = teamBuilderTeam.Name,
-            Description = teamBuilderTeam.Description,
-            Homepage =  string.Empty
-        };
+            var json = eventGridEvent.Data.ToString();
 
-        await _gitHubApiClient.CreateRepositoryAsync(gitHubTeam.Id, request);
+            var teamBuilderTeam = JsonConvert.DeserializeObject<Models.Team>(json);
 
-        // todo: write back to TeamBuilder the GitHub repository URL using TeamBuilderApiClient
+            if (teamBuilderTeam == null)
+                throw new Exception($"Cannot read {eventGridEvent.Data} as a Team");
+
+            var gitHubTeam = await _gitHubApiClient.GetTeamAsync(_gitHubTeamId);
+
+            if (gitHubTeam == null)
+                throw new Exception($"Could not find GitHub team with ID {_gitHubTeamId}");
+
+            var request = new CreateRepositoryRequest
+            {
+                RepositoryName = teamBuilderTeam.Name,
+                Description = teamBuilderTeam.Description,
+                Homepage = string.Empty
+            };
+
+            await _gitHubApiClient.CreateRepositoryAsync(gitHubTeam.Id, request);
+
+            // todo: write back to TeamBuilder the GitHub repository URL using TeamBuilderApiClient
+        }
+        catch (Exception ex)
+        {
+            if (!string.IsNullOrWhiteSpace(ex?.Message))
+                logger.LogError(ex.Message);
+
+            if (!string.IsNullOrWhiteSpace(ex?.InnerException?.Message))
+                logger.LogError(ex.InnerException.Message);
+
+            throw;
+        }
     }
 }
