@@ -34,7 +34,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
 {
     
-    o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}\\{Assembly.GetAssembly(typeof(Program)).GetName().Name}.xml");
+    o.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{Assembly.GetAssembly(typeof(Program)).GetName().Name}.xml"));
     o.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = $"{Assembly.GetAssembly(typeof(Program)).GetName().Name}",
