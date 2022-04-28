@@ -7,12 +7,13 @@
         "subscriptionName": "36MPH Dev - MSDN",
         "location": "Central US",
         "teamsAppTenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64",
-        "provisionSucceeded": false,
-        "needCreateResourceGroup": true
+        "provisionSucceeded": true,
+        "needCreateResourceGroup": false
     },
     "fx-resource-appstudio": {
         "teamsAppId": "652dd31a-9b24-4448-bcb3-58fe8fffb28f",
-        "teamsAppUpdatedAt": 1642981237071
+        "teamsAppUpdatedAt": 1651150507127,
+        "tenantId": "2e6a1980-3b67-497b-90c1-b8a3409dfa64"
     },
     "fx-resource-frontend-hosting": {
         "domain": "hackathonteambui6c1859.z19.web.core.windows.net",
@@ -32,11 +33,17 @@
         "applicationIdUris": "api://hackathonteambui6c1859.z19.web.core.windows.net/529a0eef-990b-4fa0-a94f-b1aa2bd4b5d0",
         "clientId": "529a0eef-990b-4fa0-a94f-b1aa2bd4b5d0",
         "objectId": "db6d8824-6c00-4272-8a9f-b4b3c3f6d29b",
-        "clientSecret": ""
+        "clientSecret": "{{fx-resource-aad-app-for-teams.clientSecret}}"
     },
     "fx-resource-simple-auth": {
         "endpoint": "https://hackathonteambuilder6c1859.azurewebsites.net",
         "webAppResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-rg/providers/Microsoft.Web/sites/hackathonteambuilder6c1859",
         "serverFarmId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-rg/providers/Microsoft.Web/serverfarms/hackathonteambuilder6c1859"
-    }
+    },
+    "fx-resource-function": {
+        "functionAppResourceId": "/subscriptions/da454a5b-6be8-4084-8841-b913918f9aa6/resourceGroups/hackathonTeamBuilder-36mph-rg/providers/Microsoft.Web/sites/hackathont36mp6c1859api",
+        "functionEndpoint": "https://hackathont36mp6c1859api.azurewebsites.net"
+    },
+    "fx-resource-cicd": {},
+    "fx-resource-api-connector": {}
 }

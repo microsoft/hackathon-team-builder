@@ -1,6 +1,6 @@
 $appId = "04b07795-8ddb-461a-bbee-02f9e1bf7b46" #global appId for az CLI
-$apiId = "5d6db6cd-cce5-47c4-8700-000efa22e068" #appId of teams app registration
-$requestScope = "api://localhost/5d6db6cd-cce5-47c4-8700-000efa22e068/.default"
+$apiId = "529a0eef-990b-4fa0-a94f-b1aa2bd4b5d0" #appId of teams app registration
+$requestScope = "api://hackathonteambui6c1859.z19.web.core.windows.net/529a0eef-990b-4fa0-a94f-b1aa2bd4b5d0/.default"
 
 ## First time only
 az login
