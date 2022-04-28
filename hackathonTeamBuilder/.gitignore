@@ -9,3 +9,5 @@ build
 .fx/states/*.userdata
 .backup
 .vs/
+.fx/configs/config.local.json
+.fx/states/state.local.json
