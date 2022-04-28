@@ -75,6 +75,8 @@ output graphqlAPIOutput object = {
 module functionProvision './provision/function.bicep' = {
   name: 'functionProvision'
   params: {
+    tagVersion: tagVersion
+    location: location
     provisionParameters: provisionParameters
     userAssignedIdentityId: userAssignedIdentityProvision.outputs.identityResourceId
   }

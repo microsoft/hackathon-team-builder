@@ -2,6 +2,7 @@
 param provisionParameters object
 param userAssignedIdentityId string
 param location string = resourceGroup().location
+param tagVersion string
 
 var resourceBaseName = provisionParameters.resourceBaseName
 var serverfarmsName = contains(provisionParameters, 'functionServerfarmsName') ? provisionParameters['functionServerfarmsName'] : '${resourceBaseName}api' // Try to read name for App Service Plan from parameters
@@ -10,11 +11,17 @@ var functionAppName = contains(provisionParameters, 'functionWebappName') ? prov
 var storageName = contains(provisionParameters, 'functionStorageName') ? provisionParameters['functionStorageName'] : '${resourceBaseName}api' // Try to read name for Azure Storage from parameters
 var storageSku = contains(provisionParameters, 'functionStorageSku') ? provisionParameters['functionStorageSku'] : 'Standard_LRS' // Try to read SKU for Azure Storage from parameters
 
+var tagName = split(tagVersion, ':')[0]
+var tagValue = split(tagVersion, ':')[1]
+
 // Compute resources for Azure Functions
 resource serverfarms 'Microsoft.Web/serverfarms@2021-02-01' = {
   name: serverfarmsName
   kind: 'functionapp'
   location: location
+  tags: {
+    '${tagName}': tagValue
+  }
   sku: {
     name: serverfarmsSku // You can follow https://aka.ms/teamsfx-bicep-add-param-tutorial to add functionServerfarmsSku property to provisionParameters to override the default value "Y1".
   }
@@ -25,6 +32,9 @@ resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
   name: functionAppName
   kind: 'functionapp'
   location: location
+  tags: {
+    '${tagName}': tagValue
+  }
   properties: {
     serverFarmId: serverfarms.id
     keyVaultReferenceIdentity: userAssignedIdentityId // Use given user assigned identity to access Key Vault
@@ -74,6 +84,9 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageName
   kind: 'StorageV2'
   location: location
+  tags: {
+    '${tagName}': tagValue
+  }
   sku: {
     name: storageSku // You can follow https://aka.ms/teamsfx-bicep-add-param-tutorial to add functionStorageSku property to provisionParameters to override the default value "Standard_LRS".
   }

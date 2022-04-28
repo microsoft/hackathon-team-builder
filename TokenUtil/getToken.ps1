@@ -1,4 +1,4 @@
-$requestScope = "api://localhost/5d6db6cd-cce5-47c4-8700-000efa22e068/.default"
+$requestScope = "api://hackathonteambui6c1859.z19.web.core.windows.net/529a0eef-990b-4fa0-a94f-b1aa2bd4b5d0/.default"
 
 ## Get new token
 az login
