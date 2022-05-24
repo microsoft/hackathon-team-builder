@@ -12,6 +12,7 @@ The app deploys all assets needed for users to:
     * Join a hackathon team
     * Leave a hackathon team
     * Lead a hackathon team
+There is also optional GitHub integration through event grid that will automatically create GitHub repositories for teams.
 
 You can use this app as sample code, or run a simple hackathon with it.
 
